@@ -206,6 +206,7 @@ function beginSurvey(){
 window.beginSurvey = beginSurvey;
 
 function handleEliminate(id){
+  if(state.survivors.length <= 1) return;
   state.survivors = state.survivors.filter(t => t.id !== id);
   render();
 }
@@ -283,7 +284,7 @@ function render(){
 
     app.innerHTML =
       '<div class="step2-title">그나마 덜 끌리는 것을 지워주세요</div>' +
-      '<div class="step2-sub">' + TARGET_COUNT + '개 이하가 남을 때까지 터치하세요</div>' +
+      '<div class="step2-sub">' + TARGET_COUNT + '개 이하가 되면 멈춰도 됩니다.<br>확실히 더 끌리는 게 있다면 계속 지워도 됩니다.</div>' +
       '<div class="readout">' +
         '<div class="cell"><span class="k">남은 대상</span><span class="v">' + remaining + ' / ' + state.initialSurvivorCount + '</span></div>' +
       '</div>' +
