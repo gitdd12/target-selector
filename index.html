@@ -85,6 +85,15 @@ button.complete{
 .result-item .name{font-size:15px;font-weight:600}
 
 .hint{font-size:12.5px;color:var(--dim);margin:10px 0 6px}
+.question-box{
+  border:1.5px solid var(--ink);background:#fff;padding:12px 14px;
+  font-size:14px;line-height:1.6;margin:14px 0 10px;
+}
+.question-box b{display:block;margin-bottom:6px;font-size:14.5px}
+textarea.answer-box{
+  width:100%;min-height:90px;font:14px/1.5 -apple-system,sans-serif;
+  border:1.5px solid var(--ink);background:#fff;padding:10px;resize:vertical;margin-bottom:4px;
+}
 textarea.out{
   width:100%;height:120px;font:11.5px/1.4 ui-monospace,Menlo,monospace;
   border:1.5px solid var(--ink);background:#fff;padding:8px;resize:none;margin-bottom:10px;
@@ -215,15 +224,17 @@ window.handleEliminate = handleEliminate;
 function goToResults(){ state.step = 3; render(); }
 window.goToResults = goToResults;
 
-function buildExport(){
+function buildExport(answer1, answer2){
   const timedOutCount = Object.values(state.timedOut).filter(Boolean).length;
   const eliminatedCount = state.initialSurvivorCount - state.survivors.length;
   const lines = {
+    '최종 후보': state.survivors.map(s => s.name),
+    '경험 답변(1번-최소2개)': answer1 && answer1.trim() ? answer1.trim() : null,
+    '경험 답변(2번-파고들기)': answer2 && answer2.trim() ? answer2.trim() : null,
     '총 소요시간': Math.round((Date.now()-state.runStart)/1000) + 's',
     '5점 이상 통과 개수': state.initialSurvivorCount,
     '제거 단계에서 지운 개수': eliminatedCount,
     '시간초과로 자동 4점 처리된 항목 수': timedOutCount,
-    '최종 후보': state.survivors.map(s => s.name),
     '전체 점수': TARGET_LIST.map(t => t.name + ': ' + (state.scores[t.id] ?? '-') + (state.timedOut[t.id] ? ' (시간초과)' : '')),
   };
   return JSON.stringify(lines, null, 1);
@@ -284,7 +295,7 @@ function render(){
 
     app.innerHTML =
       '<div class="step2-title">그나마 덜 끌리는 것을 지워주세요</div>' +
-      '<div class="step2-sub">' + TARGET_COUNT + '개 이하가 되면 멈춰도 됩니다.<br>확실히 더 끌리는 게 있다면 계속 지워도 됩니다.</div>' +
+      '<div class="step2-sub">' + TARGET_COUNT + '개 이하가 되면 멈춰도 되지만<br>확실히 더 끌리는 게 있다면 계속 지워도 됩니다.</div>' +
       '<div class="readout">' +
         '<div class="cell"><span class="k">남은 대상</span><span class="v">' + remaining + ' / ' + state.initialSurvivorCount + '</span></div>' +
       '</div>' +
@@ -297,19 +308,43 @@ function render(){
     const list = state.survivors.map((item, i) =>
       '<div class="result-item"><span class="num">#' + (i+1) + '</span><span class="name">' + item.name + '</span></div>'
     ).join('');
+    const namesLine = state.survivors.map(s => s.name).join(', ');
 
     app.innerHTML =
       '<div class="result-title">최종 후보</div>' +
       '<div class="result-sub">이 안에서 태스크(게임)를 진행합니다.</div>' +
       '<div class="result-list">' + list + '</div>' +
-      '<p class="hint">아래 내용을 복사해서 보내주세요.</p>' +
-      '<textarea class="out" id="res" readonly>' + buildExport() + '</textarea>' +
+      '<div class="question-box">' +
+        '<b>' + namesLine + '</b><br>' +
+        '이 대상들이 끌린다고 했잖아요. 그거랑 관련해서 좋았거나 재미있었거나 몰입했었던 경험을 최소 2개만 말해줘요.<br>' +
+        '잘 안 떠오르면 꼭 이 안에서 안 골라도 돼요. 머릿속에서 바로 떠오르는 걸 말해주면 돼요.' +
+      '</div>' +
+      '<textarea class="answer-box" id="answerBox" placeholder="여기에 답을 적어주세요"></textarea>' +
+      '<div id="q2block" style="display:none">' +
+        '<div class="question-box">' +
+          '방금 말한 것들, 정확히 뭐가 좋았는지 한번만 더 파고들어서 말해줘요. 그냥 좋았다 말고요.<br>' +
+          '예를 들어 게임 하는 게 좋다고 하면, 상대와 심리전 하는 게 좋을 수도 있고, 전략 짜는 게 좋을 수도 있는 것 처럼요.<br>' +
+          '생각해봤는데도 안 나오면 그냥 좋았다로 끝내도 돼요.' +
+        '</div>' +
+        '<textarea class="answer-box" id="answerBox2" placeholder="여기에 답을 적어주세요"></textarea>' +
+      '</div>' +
+      '<p class="hint">답을 다 적은 뒤 아래를 눌러 전체 내용을 복사해서 보내주세요.</p>' +
+      '<textarea class="out" id="res" readonly>' + buildExport('','') + '</textarea>' +
       '<button class="complete" id="copyBtn">복사하기</button>' +
       '<div style="height:8px"></div>' +
       '<button class="ghost" onclick="location.reload()">처음부터 다시하기</button>';
 
+    const box1 = document.getElementById('answerBox');
+    const box2 = document.getElementById('answerBox2');
+    box1.addEventListener('input', () => {
+      document.getElementById('q2block').style.display = box1.value.trim() ? 'block' : 'none';
+    });
+
     document.getElementById('copyBtn').onclick = () => {
+      const a1 = box1.value;
+      const a2 = box2.value;
       const ta = document.getElementById('res');
+      ta.value = buildExport(a1, a2);
       const btn = document.getElementById('copyBtn');
       ta.focus();
       ta.select();
