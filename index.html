@@ -62,9 +62,8 @@ body{
 .quote-box .label{font-size:11px;color:var(--dim);margin-bottom:4px;font-weight:600}
 
 /* ── 인트로 ───────────────────────── */
-.intro-hero{padding:20px 0 10px}
+.intro-hero{padding:10px 0 0px}
 .intro-title{font-family:var(--font-serif);font-size:22px;font-weight:700;line-height:1.55;word-break:keep-all;margin-bottom:14px}
-.intro-sub{color:var(--dim);font-size:14.5px;line-height:1.65;word-break:keep-all}
 
 .practice-tag{
   display:inline-block;background:var(--accent-soft);color:var(--accent);
@@ -567,11 +566,11 @@ function render(direction){
     html =
       '<div class="checkpoint">' +
         '<div class="checkpoint-icon">☺</div>' +
-        '<div class="q-title">좋아요, 하나 들었어요.</div>' +
-        '<div class="q-sub">비슷한 경험 하나만 더 들려주시면 끝나요.</div>' +
+        '<div class="q-title">좋아요! 하나 끝났습니다.</div>' +
+        '<div class="q-sub">시간 괜찮으시면, 비슷한 경험 하나만 더 들려주세요!</div>' +
         '<div class="checkpoint-btns">' +
-          '<button class="btn-primary" onclick="continueToScene2()">계속할게요</button>' +
-          '<button class="btn-ghost" onclick="finishHere()">여기까지 할게요</button>' +
+          '<button class="btn-primary" onclick="continueToScene2()">하나만 더 해볼게요</button>' +
+          '<button class="btn-ghost" onclick="finishHere()">더 생각나는게 없어요./button>' +
         '</div>' +
       '</div>';
     transitionTo(html, direction);
@@ -580,8 +579,8 @@ function render(direction){
 
   if(state.step === 'final'){
     html =
-      '<div class="q-title">다 됐어요</div>' +
-      '<div class="q-sub">아래 내용을 복사해서 보내주세요.</div>' +
+      '<div class="q-title">수고하셨습니다!</div>' +
+      '<div class="q-sub">아래 내용을 복사해서 보내주시면 감사하겠습니다.</div>' +
       '<textarea class="out" id="res" readonly style="margin-top:16px">' + buildExport() + '</textarea>' +
       '<div style="height:14px"></div>' +
       '<button class="btn-primary" id="copyBtn">복사하기</button>' +
