@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>대상 선별</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700&family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F6F5F0;
+  --card:#FFFFFF;
+  --card-soft:#FBFAF6;
+  --ink:#23282A;
+  --ink-soft:#454B4A;
+  --dim:#7A7F76;
+  --line:#E7E4D9;
+  --accent:#2F6B63;
+  --accent-soft:#E4EEEC;
+  --accent-ink:#F6F5F0;
+  --warn:#B2543F;
+  --warn-soft:#F5E7E1;
+  --font-serif:'Noto Serif KR', serif;
+  --font-sans:'Pretendard', -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:var(--bg);color:var(--ink);
+  font-family:var(--font-sans);
+  display:flex;justify-content:center;
+  min-height:100vh;
+}
+#stage{width:100%;max-width:460px;position:relative;overflow:hidden;min-height:100vh}
+#app{width:100%;padding:22px 18px 28px;will-change:transform,opacity}
+#app.sliding{transition:transform .32s cubic-bezier(.22,.61,.36,1), opacity .32s ease}
+.incoming{position:absolute;top:0;left:0;width:100%;padding:22px 18px 28px}
+
+/* ── 상단 진행 표시 ───────────────────────── */
+.topline{display:flex;align-items:center;gap:10px;margin-bottom:22px}
+.topline .track{flex:1;height:4px;background:var(--line);border-radius:99px;overflow:hidden}
+.topline .fill{height:100%;background:var(--accent);border-radius:99px;transition:width .25s ease}
+.topline .fill.warn{background:var(--warn)}
+.topline .meta{font-size:12px;color:var(--dim);font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* ── 카드 공통 ───────────────────────── */
+.card{background:var(--card);border-radius:16px;padding:18px 18px;box-shadow:0 1px 2px rgba(35,40,42,.04), 0 8px 24px rgba(35,40,42,.05)}
+.card + .card{margin-top:10px}
+
+/* ── 텍스트 ───────────────────────── */
+.eyebrow{font-size:13px;color:var(--accent);font-weight:600;margin-bottom:8px}
+.q-title{font-family:var(--font-serif);font-size:21px;font-weight:700;line-height:1.5;word-break:keep-all;letter-spacing:-.01em}
+.q-sub{font-size:14px;color:var(--dim);line-height:1.6;margin-top:8px;word-break:keep-all}
+.q-note{font-size:13px;color:var(--dim);line-height:1.65;margin-top:14px;word-break:keep-all}
+
+.quote-box{
+  background:var(--card-soft);border-left:3px solid var(--accent);
+  border-radius:4px 10px 10px 4px;padding:12px 14px;margin:16px 0;
+  font-size:13.5px;line-height:1.6;color:var(--ink-soft);
+}
+.quote-box .label{font-size:11px;color:var(--dim);margin-bottom:4px;font-weight:600}
+
+/* ── 인트로 ───────────────────────── */
+.intro-hero{padding:20px 0 10px}
+.intro-title{font-family:var(--font-serif);font-size:25px;font-weight:700;line-height:1.55;word-break:keep-all;margin-bottom:14px}
+.intro-sub{color:var(--dim);font-size:14.5px;line-height:1.65;word-break:keep-all}
+
+.practice-tag{
+  display:inline-block;background:var(--accent-soft);color:var(--accent);
+  font-size:12px;font-weight:600;padding:5px 10px;border-radius:99px;margin-bottom:14px;
+}
+
+/* ── 척도 버튼 ───────────────────────── */
+.scale-container{display:flex;flex-direction:column;gap:8px;margin-top:18px}
+.scale-btn{
+  background:var(--card);border:1.5px solid var(--line);border-radius:12px;color:var(--ink);
+  padding:14px 16px;font-size:15px;cursor:pointer;
+  display:flex;justify-content:space-between;align-items:center;
+  font-family:var(--font-sans);width:100%;text-align:left;transition:border-color .15s,background .15s;
+}
+.scale-btn:active{background:var(--accent-soft);border-color:var(--accent)}
+.scale-btn.picked{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.scale-btn .n{font-size:12px;color:var(--dim);font-variant-numeric:tabular-nums}
+.scale-btn.picked .n{color:var(--bg);opacity:.7}
+
+/* ── 칩(제거 단계) ───────────────────────── */
+.chip-grid{display:flex;flex-wrap:wrap;gap:9px;margin-top:18px}
+.chip{
+  background:var(--card);border:1.5px solid var(--line);border-radius:99px;color:var(--ink);
+  padding:10px 14px 10px 16px;font-size:14px;cursor:pointer;
+  display:flex;align-items:center;gap:8px;font-family:var(--font-sans);
+}
+.chip:active{background:var(--warn-soft);border-color:var(--warn);color:var(--warn)}
+.chip .x{font-weight:700;opacity:.5;font-size:13px}
+
+/* ── 결과 리스트 ───────────────────────── */
+.result-list{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+.result-item{
+  background:var(--card-soft);border-radius:10px;
+  padding:12px 14px;display:flex;gap:10px;align-items:baseline;
+}
+.result-item .num{font-size:11px;color:var(--accent);font-weight:700;flex:none;width:16px}
+.result-item .name{font-size:14.5px;font-weight:500}
+
+/* ── 입력창 ───────────────────────── */
+textarea.answer-box{
+  width:100%;min-height:130px;font:15px/1.6 var(--font-sans);
+  border:1.5px solid var(--line);border-radius:12px;background:var(--card);
+  padding:14px;resize:vertical;margin-top:16px;color:var(--ink);
+}
+textarea.answer-box:focus{outline:none;border-color:var(--accent)}
+textarea.answer-box::placeholder{color:#B9B6AA}
+textarea.out{
+  width:100%;height:130px;font:11.5px/1.4 ui-monospace,Menlo,monospace;
+  border:1.5px solid var(--line);border-radius:12px;background:var(--card-soft);color:var(--ink-soft);
+  padding:10px;resize:none;
+}
+
+/* ── 버튼 ───────────────────────── */
+button{font-family:var(--font-sans)}
+.btn-primary{
+  width:100%;background:var(--ink);color:var(--bg);border:none;border-radius:12px;
+  padding:15px;font-size:15.5px;font-weight:600;cursor:pointer;
+}
+.btn-primary:disabled{opacity:.35}
+.btn-ghost{
+  background:transparent;color:var(--ink-soft);border:1.5px solid var(--line);border-radius:12px;
+  padding:15px;font-size:14.5px;cursor:pointer;width:100%;
+}
+
+/* ── 하단 이전/다음 내비게이션 ───────────────────────── */
+.nav-row{display:flex;gap:9px;margin-top:20px}
+.nav-row .btn-back{
+  flex:0 0 84px;background:transparent;color:var(--ink-soft);border:1.5px solid var(--line);
+  border-radius:12px;padding:15px 0;font-size:14.5px;cursor:pointer;
+}
+.nav-row .btn-next{flex:1}
+
+.skip-link{
+  display:block;text-align:center;color:var(--dim);font-size:13px;
+  margin-top:14px;background:none;border:none;text-decoration:underline;cursor:pointer;font-family:var(--font-sans);
+}
+
+/* ── 체크포인트 ───────────────────────── */
+.checkpoint-icon{font-size:30px;margin-bottom:10px}
+.checkpoint{text-align:center;padding:30px 6px 10px}
+.checkpoint .q-title{margin-bottom:8px}
+.checkpoint-btns{display:flex;flex-direction:column;gap:9px;margin-top:26px}
+</style>
+</head>
+<body>
+<div id="stage"><div id="app"></div></div>
+
+<script>
+(function(){
+
+const TARGET_LIST = [
+  { id:1,  category:'물질', name:'신체 (움직임, 자세, 체력)' },
+  { id:2,  category:'물질', name:'재료 (음식, 나무, 천, 흙, 금속)' },
+  { id:3,  category:'물질', name:'기계·장비 (가전, 차량, 공구, 설비)' },
+  { id:4,  category:'물질', name:'공간 (방, 매장, 건물, 무대)' },
+  { id:5,  category:'물질', name:'물건 (수집품, 옷, 장비, 상품)' },
+  { id:6,  category:'물질', name:'생물 (식물, 동물)' },
+  { id:7,  category:'사람', name:'사람, 관계' },
+  { id:8,  category:'기호', name:'글, 문서' },
+  { id:9,  category:'기호', name:'데이터, 숫자' },
+  { id:10, category:'기호', name:'코드' },
+  { id:11, category:'기호', name:'수식' },
+  { id:12, category:'기호', name:'개념, 전략, 규칙' },
+  { id:13, category:'기호', name:'그림, 이미지, 디자인' },
+  { id:14, category:'기호', name:'소리, 음악' },
+  { id:15, category:'기호', name:'영상' },
+];
+
+const SCALE_LABELS = {
+  1:'매우 안 끌린다', 2:'안 끌린다', 3:'아주 조금 안 끌린다',
+  4:'보통이다',
+  5:'아주 조금 끌린다', 6:'끌린다', 7:'매우 끌린다'
+};
+const DURATION = 10.0;
+const TARGET_COUNT = 4;
+
+let state = {
+  step: 'intro',
+  history: [],
+  currentIndex: 0,
+  scores: {},
+  timedOut: {},
+  answerMs: {},
+  itemStart: 0,
+  survivors: [],
+  initialSurvivorCount: 0,
+  timeLeft: DURATION,
+  timerId: null,
+  runStart: Date.now(),
+  answers: { scene1:'', action1:'', highlight1:'', scene2:'', action2:'', highlight2:'' },
+};
+
+const appEl = document.getElementById('app');
+const stageEl = document.getElementById('stage');
+
+/* ────────────────────────────────────────────
+   화면 전환 (좌우 슬라이드)
+──────────────────────────────────────────── */
+function transitionTo(html, direction, onDone){
+  // direction: 'forward' | 'backward' | null(전환없음)
+  if(!direction){
+    appEl.innerHTML = html;
+    afterRender();
+    if(onDone) onDone();
+    return;
+  }
+
+  const incoming = document.createElement('div');
+  incoming.className = 'incoming';
+  incoming.innerHTML = html;
+  incoming.style.transform = 'translateX(' + (direction === 'forward' ? '100%' : '-100%') + ')';
+  stageEl.appendChild(incoming);
+
+  const startHeight = appEl.offsetHeight;
+  stageEl.style.minHeight = startHeight + 'px';
+
+  requestAnimationFrame(() => {
+    appEl.classList.add('sliding');
+    incoming.style.transition = 'transform .32s cubic-bezier(.22,.61,.36,1)';
+    appEl.style.transform = 'translateX(' + (direction === 'forward' ? '-100%' : '100%') + ')';
+    incoming.style.transform = 'translateX(0)';
+  });
+
+  setTimeout(() => {
+    appEl.classList.remove('sliding');
+    appEl.style.transform = '';
+    appEl.innerHTML = html;
+    stageEl.removeChild(incoming);
+    stageEl.style.minHeight = '';
+    afterRender();
+    // 실제 DOM이 교체된 뒤에만 이벤트를 건다 — incoming 레이어에 걸면
+    // 전환 종료 시 그 엘리먼트가 통째로 버려져서 리스너가 함께 사라짐
+    if(onDone) onDone();
+  }, 340);
+}
+
+function afterRender(){
+  window.scrollTo(0,0);
+  if(state.step === 'rating') updateTimerUI();
+}
+
+function goTo(step, direction){
+  state.history.push(state.step);
+  state.step = step;
+  render(direction || 'forward');
+}
+window.goTo = goTo;
+function goBack(fallback){
+  saveCurrentTextarea();
+  const prev = state.history.pop() || fallback;
+  if(!prev) return;
+  state.step = prev;
+  render('backward');
+}
+window.goBack = goBack;
+
+function saveCurrentTextarea(){
+  if(state.step === 'scene1'){
+    const s = document.getElementById('ta-scene1');
+    if(s) state.answers.scene1 = s.value;
+  } else if(state.step === 'detail1'){
+    const a = document.getElementById('ta-action1'), h = document.getElementById('ta-highlight1');
+    if(a) state.answers.action1 = a.value;
+    if(h) state.answers.highlight1 = h.value;
+  } else if(state.step === 'scene2'){
+    const s = document.getElementById('ta-scene2');
+    if(s) state.answers.scene2 = s.value;
+  } else if(state.step === 'detail2'){
+    const a = document.getElementById('ta-action2'), h = document.getElementById('ta-highlight2');
+    if(a) state.answers.action2 = a.value;
+    if(h) state.answers.highlight2 = h.value;
+  }
+}
+
+/* ────────────────────────────────────────────
+   대상 평가 (기존 로직 유지)
+──────────────────────────────────────────── */
+function startTimer(){
+  if(state.timerId) clearInterval(state.timerId);
+  state.itemStart = Date.now();
+  state.timeLeft = DURATION;
+  state.timerId = setInterval(() => {
+    const elapsed = (Date.now() - state.itemStart) / 1000;
+    state.timeLeft = Math.max(0, DURATION - elapsed);
+    updateTimerUI();
+    if(state.timeLeft <= 0){
+      clearInterval(state.timerId);
+      handleRate(4, true);
+    }
+  }, 60);
+}
+
+function updateTimerUI(){
+  const fill = document.getElementById('progress-fill');
+  const timeText = document.getElementById('time-text');
+  if(!fill || !timeText) return;
+  const percent = (state.timeLeft / DURATION) * 100;
+  fill.style.width = percent + '%';
+  fill.classList.toggle('warn', state.timeLeft <= 3);
+  timeText.textContent = Math.ceil(state.timeLeft) + '초';
+}
+
+function handleRate(score, isTimeout){
+  if(state.timerId) clearInterval(state.timerId);
+  const item = TARGET_LIST[state.currentIndex];
+  state.scores[item.id] = score;
+  state.timedOut[item.id] = !!isTimeout;
+  state.answerMs[item.id] = Date.now() - state.itemStart;
+
+  if(state.currentIndex < TARGET_LIST.length - 1){
+    state.currentIndex++;
+    render(null);
+    startTimer();
+  } else {
+    let passed = TARGET_LIST.filter(t => state.scores[t.id] >= 5);
+    if(passed.length === 0) passed = TARGET_LIST.slice();
+    state.initialSurvivorCount = passed.length;
+    state.survivors = passed;
+    goTo(passed.length <= TARGET_COUNT ? 'candidates' : 'eliminate');
+  }
+}
+window.handleRate = handleRate;
+
+function ratingGoBack(){
+  if(state.currentIndex === 0){ goBack('intro'); return; }
+  state.currentIndex--;
+  render(null);
+  startTimer();
+}
+window.ratingGoBack = ratingGoBack;
+
+function beginSurvey(){ goTo('rating'); startTimer(); }
+window.beginSurvey = beginSurvey;
+
+function handleEliminate(id){
+  if(state.survivors.length <= 1) return;
+  state.survivors = state.survivors.filter(t => t.id !== id);
+  render(null);
+}
+window.handleEliminate = handleEliminate;
+
+/* ────────────────────────────────────────────
+   경험 루프 진행
+──────────────────────────────────────────── */
+function goScene1(){ goTo('scene1'); }
+window.goScene1 = goScene1;
+
+function submitScene1(){
+  const v = document.getElementById('ta-scene1').value.trim();
+  if(!v) return;
+  state.answers.scene1 = v;
+  goTo('detail1');
+}
+window.submitScene1 = submitScene1;
+
+function submitDetail1(){
+  const actionEl = document.getElementById('ta-action1');
+  const highlightEl = document.getElementById('ta-highlight1');
+  const actionV = actionEl.value.trim(), highlightV = highlightEl.value.trim();
+  if(!actionV || !highlightV) return;
+  state.answers.action1 = actionV;
+  state.answers.highlight1 = highlightV;
+  goTo('checkpoint');
+}
+window.submitDetail1 = submitDetail1;
+
+function continueToScene2(){ goTo('scene2'); }
+window.continueToScene2 = continueToScene2;
+
+function submitScene2(){
+  const v = document.getElementById('ta-scene2').value.trim();
+  if(!v) return;
+  state.answers.scene2 = v;
+  goTo('detail2');
+}
+window.submitScene2 = submitScene2;
+
+function submitDetail2(){
+  const actionEl = document.getElementById('ta-action2');
+  const highlightEl = document.getElementById('ta-highlight2');
+  const actionV = actionEl.value.trim(), highlightV = highlightEl.value.trim();
+  if(!actionV || !highlightV) return;
+  state.answers.action2 = actionV;
+  state.answers.highlight2 = highlightV;
+  goTo('final');
+}
+window.submitDetail2 = submitDetail2;
+
+function finishHere(){ goTo('final'); }
+window.finishHere = finishHere;
+
+/* ────────────────────────────────────────────
+   결과 내보내기
+──────────────────────────────────────────── */
+function buildExport(){
+  const timedOutCount = Object.values(state.timedOut).filter(Boolean).length;
+  const eliminatedCount = state.initialSurvivorCount - state.survivors.length;
+  const lines = {
+    '최종 후보': state.survivors.map(s => s.name),
+    '경험1 - 장면': state.answers.scene1 || null,
+    '경험1 - 구체적 행동': state.answers.action1 || null,
+    '경험1 - 좋았던 부분': state.answers.highlight1 || null,
+    '경험2 - 장면': state.answers.scene2 || null,
+    '경험2 - 구체적 행동': state.answers.action2 || null,
+    '경험2 - 좋았던 부분': state.answers.highlight2 || null,
+    '총 소요시간': Math.round((Date.now()-state.runStart)/1000) + 's',
+    '5점 이상 통과 개수': state.initialSurvivorCount,
+    '제거 단계에서 지운 개수': eliminatedCount,
+    '시간초과로 자동 4점 처리된 항목 수': timedOutCount,
+    '전체 점수': TARGET_LIST.map(t => t.name + ': ' + (state.scores[t.id] ?? '-') + (state.timedOut[t.id] ? ' (시간초과)' : '')),
+  };
+  return JSON.stringify(lines, null, 1);
+}
+
+function truncate(s, n){
+  if(!s) return '';
+  return s.length > n ? s.slice(0, n) + '…' : s;
+}
+
+/* ────────────────────────────────────────────
+   렌더링
+──────────────────────────────────────────── */
+function topline(percent, metaText, warn){
+  return '<div class="topline">' +
+    '<div class="track"><div class="fill' + (warn?' warn':'') + '" style="width:' + percent + '%"></div></div>' +
+    '<div class="meta">' + metaText + '</div>' +
+  '</div>';
+}
+
+function render(direction){
+  let html = '';
+
+  if(state.step === 'intro'){
+    const scaleHtml = [7,6,5,4,3,2,1].map(score =>
+      '<button class="scale-btn practice-btn" onclick="document.querySelectorAll(\'.practice-btn\').forEach(b=>b.classList.remove(\'picked\'));this.classList.add(\'picked\')">' +
+        '<span>' + SCALE_LABELS[score] + '</span><span class="n">' + score + '점</span>' +
+      '</button>'
+    ).join('');
+    html =
+      '<div class="intro-hero">' +
+        '<div class="intro-title">돈이 더 이상 문제가 안됩니다.<br> 각 대상을 다루는 일을 하게 된다면 어떨지 10초안에 대답해주세요.</div>' +
+      '</div>' +
+      '<div class="card" style="margin-top:22px">' +
+        '<div class="practice-tag">연습 · 결과에 반영되지 않음</div>' +
+        '<div class="q-title">역사</div>' +
+        '<div class="q-sub">한 번 눌러서 감을 잡아보세요</div>' +
+        '<div class="scale-container">' + scaleHtml + '</div>' +
+      '</div>' +
+      '<div style="height:16px"></div>' +
+      '<button class="btn-primary" onclick="beginSurvey()">시작하기</button>';
+    transitionTo(html, direction);
+    return;
+  }
+
+  if(state.step === 'rating'){
+    const item = TARGET_LIST[state.currentIndex];
+    const scaleHtml = [7,6,5,4,3,2,1].map(score =>
+      '<button class="scale-btn" onclick="handleRate(' + score + ')">' +
+        '<span>' + SCALE_LABELS[score] + '</span><span class="n">' + score + '점</span>' +
+      '</button>'
+    ).join('');
+    const percent = (state.timeLeft / DURATION) * 100;
+    html =
+      topline(percent, (state.currentIndex+1) + ' / ' + TARGET_LIST.length, state.timeLeft<=3) +
+      '<div id="time-row" style="text-align:right;margin-bottom:14px">' +
+        '<span style="font-size:12px;color:var(--dim)">남은 시간 </span>' +
+        '<span id="time-text" style="font-size:13px;font-weight:700;font-variant-numeric:tabular-nums">' + Math.ceil(state.timeLeft) + '초</span>' +
+      '</div>' +
+      '<div class="card">' +
+        '<div class="eyebrow">' + item.category + '</div>' +
+        '<div class="q-title">' + item.name + '</div>' +
+        '<div class="q-sub">이 대상을 자주 다루는 일을 한다면 어떨까요?<br>생각하지 말고 떠오른 느낌 그대로 골라주세요.</div>' +
+        '<div class="scale-container">' + scaleHtml + '</div>' +
+      '</div>' +
+      '<button class="skip-link" onclick="ratingGoBack()">이전으로</button>';
+    // NOTE: progress-fill id는 rating 화면 전용으로 다시 매핑
+    html = html.replace('class="fill', 'id="progress-fill" class="fill');
+    transitionTo(html, direction);
+    return;
+  }
+
+  if(state.step === 'eliminate'){
+    const remaining = state.survivors.length;
+    const percent = Math.max(0, Math.min(100, (remaining / state.initialSurvivorCount) * 100));
+    const chips = state.survivors.map(item =>
+      '<button class="chip" onclick="handleEliminate(' + item.id + ')"><span>' + item.name + '</span><span class="x">✕</span></button>'
+    ).join('');
+    const readyBtn = remaining <= TARGET_COUNT
+      ? '<div style="height:14px"></div><button class="btn-primary" onclick="goTo(\'candidates\')">결과 확인하기 (' + remaining + '개 남음)</button>'
+      : '';
+    html =
+      topline(percent, remaining + ' / ' + state.initialSurvivorCount) +
+      '<div class="q-title">그나마 덜 끌리는 것을<br>지워주세요</div>' +
+      '<div class="q-sub">' + TARGET_COUNT + '개 이하가 되면 멈춰도 되지만<br>확실히 더 끌리는 게 있다면 계속 지워도 됩니다.</div>' +
+      '<div class="chip-grid">' + chips + '</div>' +
+      readyBtn;
+    transitionTo(html, direction);
+    return;
+  }
+
+  if(state.step === 'candidates'){
+    const list = state.survivors.map((item) =>
+      '<div class="result-item"><span class="name">' + item.name + '</span></div>'
+    ).join('');
+    html =
+      '<div class="q-title">이 안에서 이야기를<br>들어볼게요</div>' +
+      '<div class="q-sub">골라주신 대상들이에요. 이 중 하나와 관련해서 기억나는 경험을 여쭤볼게요.</div>' +
+      '<div class="result-list">' + list + '</div>' +
+      '<div style="height:8px"></div>' +
+      '<button class="btn-primary" onclick="goScene1()">시작할게요</button>';
+    transitionTo(html, direction);
+    return;
+  }
+
+  if(state.step === 'scene1' || state.step === 'scene2'){
+    const isSecond = state.step === 'scene2';
+    const val = isSecond ? state.answers.scene2 : state.answers.scene1;
+    const eyebrowLines = state.survivors.map(s => s.name).join('<br>');
+    html =
+      topline(isSecond ? 60 : 30, isSecond ? '경험 2 / 2' : '경험 1 / 2') +
+      '<div class="eyebrow">' + eyebrowLines + '</div>' +
+      (isSecond
+        ? '<div class="q-title">이번엔 다른 경험 하나를 들려주세요</div>' +
+          '<div class="q-sub">잘 안 떠오르면 꼭 위의 대상에 안 골라도 돼요. 머릿속에서 바로 떠오르는 걸 말해주세요.</div>'
+        : '<div class="q-title">골랐던 대상들과 관련해서 좋았거나 재미있었거나 몰입했었던 경험을 말해줘요.</div>' +
+          '<div class="q-sub">잘 안 떠오르면 꼭 위의 대상에 안 골라도 돼요. 머릿속에서 바로 떠오르는 걸 말해주세요.</div>') +
+      '<textarea class="answer-box" id="ta-scene' + (isSecond?'2':'1') + '" placeholder="여기에 적어주세요">' + (val||'') + '</textarea>' +
+      '<div class="nav-row">' +
+        '<button class="btn-back" onclick="goBack()">이전</button>' +
+        '<button class="btn-primary btn-next" id="next-btn" onclick="' + (isSecond?'submitScene2()':'submitScene1()') + '">다음</button>' +
+      '</div>';
+    transitionTo(html, direction, () => wireNextButton('ta-scene' + (isSecond?'2':'1')));
+    return;
+  }
+
+  if(state.step === 'detail1' || state.step === 'detail2'){
+    const isSecond = state.step === 'detail2';
+    const actionVal = isSecond ? state.answers.action2 : state.answers.action1;
+    const highlightVal = isSecond ? state.answers.highlight2 : state.answers.highlight1;
+    const eyebrowLines = state.survivors.map(s => s.name).join('<br>');
+    html =
+      topline(isSecond ? 80 : 45, isSecond ? '경험 2 / 2' : '경험 1 / 2') +
+      '<div class="eyebrow">' + eyebrowLines + '</div>' +
+      '<div class="q-title">그 경험에서 구체적으로<br>무엇을 하고 있었나요?</div>' +
+      '<div class="q-sub">(직접 움직이거나 만든 것뿐 아니라, 보고 들은 것, 머릿속으로 생각하거나 판단한 것도 기억나는 만큼 말해주세요.)</div>' +
+      '<textarea class="answer-box" id="ta-action' + (isSecond?'2':'1') + '" placeholder="여기에 적어주세요">' + (actionVal||'') + '</textarea>' +
+      '<div style="height:26px"></div>' +
+      '<div class="q-title">그중에서 특히 좋았던 부분이<br>있었다면 같이 알려주세요</div>' +
+      '<div class="q-sub">전체 과정이 다 비슷하게 좋았다면 그렇게 말해도 괜찮아요.</div>' +
+      '<textarea class="answer-box" id="ta-highlight' + (isSecond?'2':'1') + '" placeholder="여기에 적어주세요">' + (highlightVal||'') + '</textarea>' +
+      '<div class="nav-row">' +
+        '<button class="btn-back" onclick="goBack()">이전</button>' +
+        '<button class="btn-primary btn-next" id="next-btn" onclick="' + (isSecond?'submitDetail2()':'submitDetail1()') + '">' + (isSecond?'완료':'다음') + '</button>' +
+      '</div>';
+    transitionTo(html, direction, () => wireTwoButtons('ta-action'+(isSecond?'2':'1'), 'ta-highlight'+(isSecond?'2':'1')));
+    return;
+  }
+
+  if(state.step === 'checkpoint'){
+    html =
+      '<div class="checkpoint">' +
+        '<div class="checkpoint-icon">☺</div>' +
+        '<div class="q-title">좋아요, 하나 들었어요.</div>' +
+        '<div class="q-sub">비슷한 경험 하나만 더 들려주시면 끝나요.</div>' +
+        '<div class="checkpoint-btns">' +
+          '<button class="btn-primary" onclick="continueToScene2()">계속할게요</button>' +
+          '<button class="btn-ghost" onclick="finishHere()">여기까지 할게요</button>' +
+        '</div>' +
+      '</div>';
+    transitionTo(html, direction);
+    return;
+  }
+
+  if(state.step === 'final'){
+    html =
+      '<div class="q-title">다 됐어요</div>' +
+      '<div class="q-sub">아래 내용을 복사해서 보내주세요.</div>' +
+      '<textarea class="out" id="res" readonly style="margin-top:16px">' + buildExport() + '</textarea>' +
+      '<div style="height:14px"></div>' +
+      '<button class="btn-primary" id="copyBtn">복사하기</button>' +
+      '<div style="height:8px"></div>' +
+      '<button class="btn-ghost" onclick="location.reload()">처음부터 다시하기</button>';
+    transitionTo(html, direction, wireCopyButton);
+    return;
+  }
+}
+
+function escapeHtml(s){
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function wireNextButton(taId){
+  setTimeout(() => {
+    const ta = document.getElementById(taId);
+    const btn = document.getElementById('next-btn');
+    if(!ta || !btn) return;
+    const sync = () => { btn.disabled = !ta.value.trim(); };
+    ta.addEventListener('input', sync);
+    sync();
+  }, 0);
+}
+
+function wireTwoButtons(idA, idB){
+  setTimeout(() => {
+    const a = document.getElementById(idA);
+    const b = document.getElementById(idB);
+    const btn = document.getElementById('next-btn');
+    if(!a || !b || !btn) return;
+    const sync = () => { btn.disabled = !(a.value.trim() && b.value.trim()); };
+    a.addEventListener('input', sync);
+    b.addEventListener('input', sync);
+    sync();
+  }, 0);
+}
+
+function wireCopyButton(){
+  const btn = document.getElementById('copyBtn');
+  if(!btn) return;
+  btn.onclick = () => {
+    const ta = document.getElementById('res');
+    ta.value = buildExport();
+    ta.focus(); ta.select(); ta.setSelectionRange(0, ta.value.length);
+    let ok = false;
+    try{ ok = document.execCommand('copy'); }catch(e){ ok = false; }
+    if(ok){ btn.textContent = '복사됨'; }
+    else if(navigator.clipboard && window.isSecureContext){
+      navigator.clipboard.writeText(ta.value).then(()=>{btn.textContent='복사됨';})
+        .catch(()=>{btn.textContent='복사 실패 · 위 내용을 직접 길게 눌러 복사해주세요';});
+    } else { btn.textContent = '복사 실패 · 위 내용을 직접 길게 눌러 복사해주세요'; }
+  };
+}
+
+render(null);
+
+})();
+</script>
+</body>
+</html>
