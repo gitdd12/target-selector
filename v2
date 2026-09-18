@@ -63,7 +63,7 @@ body{
 
 /* ── 인트로 ───────────────────────── */
 .intro-hero{padding:20px 0 10px}
-.intro-title{font-family:var(--font-serif);font-size:25px;font-weight:700;line-height:1.55;word-break:keep-all;margin-bottom:14px}
+.intro-title{font-family:var(--font-serif);font-size:22px;font-weight:700;line-height:1.55;word-break:keep-all;margin-bottom:14px}
 .intro-sub{color:var(--dim);font-size:14.5px;line-height:1.65;word-break:keep-all}
 
 .practice-tag{
@@ -445,7 +445,7 @@ function render(direction){
     ).join('');
     html =
       '<div class="intro-hero">' +
-        '<div class="intro-title">돈이 더 이상 문제가 안됩니다.<br> 각 대상을 다루는 일을 하게 된다면 어떨지 10초안에 대답해주세요.</div>' +
+        '<div class="intro-title">돈이 더 이상 문제가 안됩니다. <br> 각 대상을 다루는 일을 하게 되면 어떨지 10초안에 대답해주세요.</div>' +
       '</div>' +
       '<div class="card" style="margin-top:22px">' +
         '<div class="practice-tag">연습 · 결과에 반영되지 않음</div>' +
