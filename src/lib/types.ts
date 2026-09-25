@@ -36,7 +36,7 @@ export interface ChatMessage {
   kind?: "restatement";
 }
 
-// 경험 창에서 스펙의 "확보 원칙" 열 가지 항목. 재진술 카드를 띄우기 전에 각각 확보됐거나 답 없음이어야 한다.
+// 경험 창에서 스펙의 "확보 원칙" 아홉 가지 항목. 재진술 카드를 띄우기 전에 각각 확보됐거나 답 없음이어야 한다.
 export const COVERAGE_KEYS = [
   "scene",
   "actions",
@@ -46,7 +46,6 @@ export const COVERAGE_KEYS = [
   "stopping_reason",
   "fulfillment",
   "reengagement",
-  "same_object_diff_action",
   "same_action_diff_object",
 ] as const;
 export type CoverageKey = (typeof COVERAGE_KEYS)[number];
@@ -58,8 +57,7 @@ export const COVERAGE_LABEL: Record<CoverageKey, string> = {
   extra_effort: "요구 이상으로 들인 수고",
   stopping_reason: "그만둔 계기",
   fulfillment: "'됐다' 싶은 순간과 직전과의 차이",
-  reengagement: "이후 비슷한 일을 다시 한 적",
-  same_object_diff_action: "같은 대상·다른 행동",
+  reengagement: "이후 비슷한 일(그때 어떻게 했나)",
   same_action_diff_object: "같은 행동·다른 대상",
 };
 export type CoverageValue = "미확보" | "확보" | "답 없음";
@@ -129,10 +127,10 @@ export const ExperienceFieldsSchema = z.object({
     result: z.enum(["확인됨", "미확인", "불명확"]),
     reasoning: z.string(),
   }),
-  // 무게 신호 세 가지(스펙 "확정의 실제 조건"). 두 개 이상이면 단일 경험으로 확정 가능. status는 코드가 이 값으로 다시 계산한다.
+  // 무게 신호 세 가지(스펙 "확정의 실제 조건"). 하나 이상이면 단일 경험으로 확정 가능. status는 코드가 이 값으로 다시 계산한다.
   // 근거 하나는 신호 하나에만 쓴다(같은 발화를 두 신호의 근거로 겹쳐 쓰지 않는다).
   weight_signals: z.object({
-    extra_effort: WeightSignal.describe("① 그 자리(같은 일 안)에서 요구·필요를 넘어 스스로 더 들인 수고(따로 알아보기, 더 잘하려고 다시 해보기, 돈·도구 마련). 오래 걸렸다는 것, 마감·평가 때문에 한 것은 제외"),
+    extra_effort: WeightSignal.describe("① 이번에 포착한 방식(본인이 정한 부분)에 요구·필요보다 더 들인 수고(그 자리에서 더 오래·더 여러 번, 그 방식을 위해 따로 알아보기·도구 마련). 일 전체에 들인 시간·수고와 마감·평가 때문에 한 것은 제외"),
     repeated: WeightSignal.describe("② 방식의 반복: 이번 경험에서 본인이 정한 방식이 다른 때에도 다시 나왔다(같은 대상이든 다른 대상이든). 일 자체를 다시 한 것, 특히 해야 해서 한 것(취업 준비라 자소서를 또 씀)은 제외. 하고 싶다는 의향도 제외"),
     fulfillment_on_action: WeightSignal.describe("③ '됐다' 싶은 순간이 결과·칭찬·마감이 아니라 그 행동 자체에 붙어 있다. 외부 제약 때문에 멈춘 것은 제외"),
   }),
@@ -312,8 +310,8 @@ export interface Session {
   jobCandidates?: JobCandidate[];
   jobPick?: JobPick;
   report?: Report;
-  // 코어별 신뢰도(report.cores와 같은 순서). 무게 신호 개수로 코드가 정한다: 2개 = 상, 3개 이상 = 최상
-  reliability?: { grade: "상" | "최상"; met: string[]; quotes?: string[] }[];
+  // 코어별 신뢰도(report.cores와 같은 순서). 무게 신호 개수로 코드가 정한다: 1개 = 중, 2개 = 상, 3개 = 최상
+  reliability?: { grade: "중" | "상" | "최상"; met: string[]; quotes?: string[] }[];
   celebDraft?: CelebDraft;
   // 운영자가 검토를 마치고 결과지를 공개했는지, 그리고 출처를 확인해 승인한 인물 사례(candidates 순번)
   published?: boolean;

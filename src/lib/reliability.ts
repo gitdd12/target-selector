@@ -1,7 +1,7 @@
 import type { Session } from "./types";
 
-// 신뢰도 기준(스펙 "확정의 실제 조건"의 무게 신호 세 가지): 두 개 이상 충족하면 확정이고, 그 개수로 등급을 나눈다.
-//   2개 = 상, 3개 = 최상
+// 신뢰도 기준(스펙 "확정의 실제 조건"의 무게 신호 세 가지): 하나 이상 충족하면 확정이고, 그 개수로 등급을 나눈다.
+//   1개 = 중, 2개 = 상, 3개 = 최상
 // 신호 문구는 참가자에게 그대로 보인다.
 export const SIGNAL_LABEL = {
   extra_effort: "요구된 것보다 더 들인 수고",
@@ -13,7 +13,7 @@ export type SignalKey = keyof typeof SIGNAL_LABEL;
 export type Reliability = NonNullable<Session["reliability"]>[number];
 
 export function gradeOf(n: number): Reliability["grade"] {
-  return n >= 3 ? "최상" : "상";
+  return n >= 3 ? "최상" : n === 2 ? "상" : "중";
 }
 
 // 근거 문장: 기록에 적힌 근거에서 참가자가 실제로 한 말(따옴표 안)만 짧게 뽑는다. 없으면 빈 문자열.

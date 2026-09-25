@@ -25,6 +25,7 @@
 .rel{display:flex;flex-direction:column;align-items:flex-start;gap:10px;margin-top:16px}
 .badge{display:inline-block;padding:7px 14px;border-radius:10px;font-size:14.5px;font-weight:800;letter-spacing:-.01em}
 .badgeSilver{background:#ececea;color:var(--ink)}
+.badgePlain{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px #d6d6d2}
 .badgeGold{background:#f2d47c;color:#3a2a00}
 .relList{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:4px;font-size:15px;line-height:1.5;color:var(--ink)}
 .relList li::before{content:"✓";margin-right:7px;font-weight:800;color:var(--ink)}

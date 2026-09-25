@@ -152,7 +152,7 @@ export default function ResultView({ session, contact, preview = false }: { sess
                   ))}
                 </ul>
               ) : null;
-            const badge = rel && <span className={`${styles.badge} ${rel.grade === "최상" ? styles.badgeGold : styles.badgeSilver}`}>신뢰도 {rel.grade}</span>;
+            const badge = rel && <span className={`${styles.badge} ${rel.grade === "최상" ? styles.badgeGold : rel.grade === "상" ? styles.badgeSilver : styles.badgePlain}`}>신뢰도 {rel.grade}</span>;
             // 코어가 하나면 전부 펼쳐서 보여주고, 여러 개면 제목과 신뢰도만 보이고 나머지는 접어 둔다
             return (
               <section className={styles.block} key={c.core}>
@@ -180,7 +180,7 @@ export default function ResultView({ session, contact, preview = false }: { sess
                       <span className={styles.coreNo}>코어 {i + 1}</span>
                       <b>{coreBehavior(c)}</b>
                       {rel && (
-                        <span className={`${styles.badge} ${rel.grade === "최상" ? styles.badgeGold : styles.badgeSilver}`}>신뢰도 {rel.grade}</span>
+                        <span className={`${styles.badge} ${rel.grade === "최상" ? styles.badgeGold : rel.grade === "상" ? styles.badgeSilver : styles.badgePlain}`}>신뢰도 {rel.grade}</span>
                       )}
                       {rel && rel.met.length > 0 && (
                         <ul className={styles.relList}>
