@@ -1,0 +1,15 @@
+{
+  "_note": "직업 추천에서 빼는 직업(직업 코드로 정확히 제외). 2026-09-25 결정: 종교·장례만. 철학·종교학 교수(25-1126.00)는 대학 교육이라 남긴다.",
+  "religion": {
+    "21-2011.00": "Clergy",
+    "21-2021.00": "Directors, Religious Activities and Education",
+    "21-2099.00": "Religious Workers, All Other"
+  },
+  "funeral": {
+    "11-9171.00": "Funeral Home Managers",
+    "39-4011.00": "Embalmers",
+    "39-4012.00": "Crematory Operators",
+    "39-4021.00": "Funeral Attendants",
+    "39-4031.00": "Morticians, Undertakers, and Funeral Arrangers"
+  }
+}
