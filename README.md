@@ -33,7 +33,7 @@ AI 인터뷰어와 채팅으로 경험을 이야기하면, 스펙(질문흐름 v
 ## 내 컴퓨터에서 돌려보기
 
 1. Node.js 설치(이미 되어 있음).
-2. `.env.example`을 복사해 `.env.local`을 만들고 `ANTHROPIC_API_KEY=` 뒤에 키를 붙여넣기.
+2. `.env.example`을 복사해 `.env.local`을 만들고 `LLM_API_KEY=` 뒤에 Anthropic 키를 붙여넣기.
 3. 터미널에서:
    ```
    npm install
@@ -56,7 +56,7 @@ AI 인터뷰어와 채팅으로 경험을 이야기하면, 스펙(질문흐름 v
 ## 배포 (베타 링크 만들기)
 
 1. Supabase 프로젝트를 만들고 `supabase/schema.sql`을 SQL Editor에서 한 번 실행.
-2. Vercel에 이 폴더를 올리고 환경변수 `ANTHROPIC_API_KEY`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, (선택) `BETA_CODE`, `CONTACT_EMAIL` 입력.
+2. Vercel에 이 폴더를 올리고 환경변수 `LLM_API_KEY`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, (선택) `BETA_CODE`, `CONTACT_EMAIL` 입력.
 3. 나온 주소를 베타 참가자에게 전달.
 
 ## 알아둘 점
@@ -101,7 +101,7 @@ npm run review -- <세션id>       # 결과 검토용 원고 만들기
 
 - 주소: https://core-finder-alpha.vercel.app (Vercel 프로젝트 `wai18/core-finder`, Supabase 프로젝트 `xmnwqemvuqgdvwtnksdf`)
 - 코드를 고친 뒤 다시 올리기: `npx vercel deploy --prod --yes`
-- 환경변수(Vercel에 저장됨): ANTHROPIC_API_KEY, SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, CONTACT_EMAIL, REVIEW_PASSWORD. 값을 바꾸려면 Vercel 화면(Settings → Environment Variables)에서 고치고 다시 배포해야 반영됩니다.
+- 환경변수(Vercel에 저장됨): LLM_API_KEY, SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, CONTACT_EMAIL, REVIEW_PASSWORD. 값을 바꾸려면 Vercel 화면(Settings → Environment Variables)에서 고치고 다시 배포해야 반영됩니다.
 - 배포된 주소로 인터뷰 한 판 전체 시험: `npm run e2e -- https://core-finder-alpha.vercel.app` (AI 비용 약 $2, 시험 참가자가 저장소에 남으니 끝나고 `npm run cleanup -- <세션id>`로 지우기)
 - 실측 시간(서버 제한 300초): 인터뷰 한 턴 수 초, 창 종료 기록 정리 8~45초, 결과지 초안 단계 34~77초.
 - 시험 중 잡은 문제: Vercel에 옮긴 비밀 값 앞에 눈에 안 보이는 표식이 붙어 저장소 접속이 실패 → 코드가 값 앞뒤를 정리하도록 방어(`src/lib/env.ts`). AI가 형식 밖 값을 쓰면 한 번 다시 요청.
