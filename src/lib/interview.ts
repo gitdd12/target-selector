@@ -87,6 +87,17 @@ export interface TurnResult {
 
 const FALLBACK_REPLY = "조금만 더 자세히 들려줄 수 있어요?";
 
+// 일부 최신 모델(예: opus-5.5)은 thinking.type "disabled"를 지원하지 않고 adaptive만 받는다.
+// 모델별로 한 번만 확인하면 되므로 그 결과를 기억해 둔다(과정 안에서는 유지, 서버는 오래 떠 있으니 도움이 된다).
+const disabledThinkingUnsupported = new Set<string>();
+function isDisabledThinkingError(e: unknown): boolean {
+  // 원문 오류 메시지 속 따옴표가 JSON 이스케이프(\")로 들어오므로 따옴표 없이 검사한다
+  return e instanceof Error && e.message.includes("thinking.type.disabled") && e.message.includes("is not supported");
+}
+function interviewerThinking(model: string): { type: "disabled" } | { type: "adaptive" } {
+  return disabledThinkingUnsupported.has(model) ? { type: "adaptive" } : { type: "disabled" };
+}
+
 function toApiMessages(s: Session, kind: WindowKind): Anthropic.MessageParam[] {
   const msgs = s.windows[kind].messages;
   // API는 첫 메시지가 사용자여야 한다. 첫 질문은 화면에서 이미 나간 AI 발화이므로 시작 신호를 앞에 붙인다.
@@ -107,12 +118,16 @@ export async function interviewTurn(s: Session, kind: WindowKind): Promise<TurnR
 
   for (let attempt = 0; attempt < 3; attempt++) {
     const last = attempt === 2; // 마지막 시도에서는 확보 조건 때문에 대화가 막히지 않게 한다
-    const res = await anthropic().messages.parse({
+    const callParams = (thinking: ReturnType<typeof interviewerThinking>) => ({
       model: MODELS.interviewer,
       max_tokens: 4000,
       // 인터뷰어는 사고를 끈다. 적응형 사고를 켜면 시험에서 세 번에 한 번꼴로 답변에 자기 생각 메모·가짜 참가자 대사가 섞였다.
-      thinking: { type: "disabled" },
-      output_config: { format: zodOutputFormat(isExp ? ExpTurnSchema : ValuesTurnSchema) },
+      // (disabled를 안 받는 모델에서는 adaptive에 낮은 effort로 최대한 비슷하게 맞춘다)
+      thinking,
+      output_config:
+        thinking.type === "disabled"
+          ? { format: zodOutputFormat(isExp ? ExpTurnSchema : ValuesTurnSchema) }
+          : { effort: "low" as const, format: zodOutputFormat(isExp ? ExpTurnSchema : ValuesTurnSchema) },
       system: [
         cached(interviewerSystem(kind)),
         plain(
@@ -128,6 +143,15 @@ export async function interviewTurn(s: Session, kind: WindowKind): Promise<TurnR
       ],
       messages: toApiMessages(s, kind),
     });
+
+    let res;
+    try {
+      res = await anthropic().messages.parse(callParams(interviewerThinking(MODELS.interviewer)));
+    } catch (e) {
+      if (!isDisabledThinkingError(e)) throw e;
+      disabledThinkingUnsupported.add(MODELS.interviewer);
+      res = await anthropic().messages.parse(callParams(interviewerThinking(MODELS.interviewer)));
+    }
 
     addUsage(s, res.usage);
     if (res.stop_reason === "refusal") throw new LlmRefusal("모델이 응답을 거부했습니다");

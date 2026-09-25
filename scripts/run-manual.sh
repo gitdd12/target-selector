@@ -12,5 +12,8 @@ fi
 export MODEL_JUDGE=claude-opus-5-5
 export MODEL_WRITER=claude-opus-5-5
 export ANTHROPIC_API_KEY="$LLM_API_KEY"
+# Node의 내장 fetch(Supabase 클라이언트가 씀)는 기본적으로 HTTPS_PROXY를 안 읽어서
+# 이 세션의 프록시 기반 네트워크 허용 목록을 그냥 지나쳐 버리고 직접 접속을 시도하다 막힌다.
+export NODE_USE_ENV_PROXY=1
 cd "$(dirname "$0")/.."
 npx tsx scripts/manual-interview.ts "$@"
