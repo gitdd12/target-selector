@@ -44,6 +44,3 @@ next-env.d.ts
 
 # 운영자 검토용 원고(참가자 대화·이메일이 들어감)
 /review/
-
-.vercel
-.env*
