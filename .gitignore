@@ -1,0 +1,46 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# 비밀 키 파일 (절대 공유·업로드 금지). 예시 파일만 허용
+.env*
+!.env.example
+
+# 로컬 개발용 세션 저장소 (참가자 대화 내용이 들어감)
+/.data/
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# 운영자 검토용 원고(참가자 대화·이메일이 들어감)
+/review/
