@@ -8,7 +8,7 @@ const kinds = ["exp1", "exp2", "hardship", "advice"] as const;
 for (const k of kinds) {
   const t = interviewerSystem(k);
   console.log(`인터뷰어[${k}] ${t.length}자`, "| 결과지 규칙 섞임?", /가치관·성향\(통합\)/.test(t), "| 실명?", /영훈|박종경/.test(t),
-    "| 기록필드 표?", t.includes("experience_id"), "| 7단계 표?", t.includes("장면 선택"), "| 판별표?", t.includes("알기 ↔ 짜기"),
+    "| 기록필드 표?", t.includes("experience_id"), "| 7단계 표?", t.includes("장면 선택"), "| 판별표(없어야 함)?", t.includes("알기 ↔ 짜기"),
     "| 여섯 단어 내부태그 안내?", t.includes("내부 태그일 뿐"));
 }
 console.log("기록정리[exp1]", recorderSystem("exp1").length, "자 | 코어판정", judgeSystem().length, "자 | 직업선정", jobPickerSystem().length, "자");

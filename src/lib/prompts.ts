@@ -55,7 +55,7 @@ const INTERVIEWER_RULES = `당신은 "코어 찾기"라는 커리어 탐색 서�
 reply나 restatement 안에서 coverage·finish·이 형식을 언급하지 않습니다.`;
 
 const KEYS_GUIDE =
-  "coverage 항목: scene(장면), actions(그 장면에서 실제로 한 행동), required_parts(꼭 해야 했던 부분), chosen_parts(본인이 정해서 한 부분), extra_effort(요구·필요 이상으로 더 들인 수고), stopping_reason(그날 그만둔 계기), fulfillment(됐다 싶은 순간과 직전과의 차이), reengagement(이후 비슷한 일과 그때 어떻게 했나 — 다르게 했다면 같은 대상 다른 행동으로서 비교까지), same_action_diff_object(같은 행동·다른 대상).";
+  "coverage 항목: scene(장면과 시작 상태 — 손대기 전 대상의 모습. 사용자가 이미 말했으면 확보), actions(그 장면에서 실제로 한 행동), required_parts(꼭 해야 했던 부분), chosen_parts(본인이 정해서 한 부분), extra_effort(요구·필요 이상으로 더 들인 수고), stopping_reason(그날 그만둔 계기), fulfillment(됐다 싶은 순간과 직전과의 차이), reengagement(이후 비슷한 일과 그때 어떻게 했나 — 다르게 했다면 같은 대상 다른 행동으로서 비교까지), same_action_diff_object(같은 행동·다른 대상).";
 
 const WINDOW_GUIDE: Record<WindowKind, string> = {
   exp1: `## 지금 진행 중인 질문 로직: 경험 1

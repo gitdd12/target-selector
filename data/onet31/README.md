@@ -12,8 +12,8 @@
 
 | 파일 | 내용 | 원본 |
 |---|---|---|
-| `occupations.json` | 직업 1,016개. `{직업코드: {title, desc, jobZone}}`. jobZone이 없는 직업이 있다(923개만 있음) | Occupation Data, Job Zones |
-| `job_zone_reference.json` | Job Zone 단계 설명. 31.0판은 1과 2가 합쳐져 4단계 | Job Zone Reference |
+| `occupations.json` | 직업 1,016개. `{직업코드: {title, desc, jobZone}}`. jobZone이 없는 직업이 있다(923개만 있음). jobZone은 직업 추천에 쓰지 않기로 했다(2026-09-25) | Occupation Data, Job Zones |
+| `job_zone_reference.json` | Job Zone 단계 설명. 31.0판은 1과 2가 합쳐져 4단계. 참고용(추천에 쓰지 않음) | Job Zone Reference |
 | `tasks.json` | 업무 문장 18,838개. 아래 필드 참고 | Task Statements, Task Ratings, Tasks to DWAs |
 | `excluded_occupations.json` | 직업 추천에서 빼는 직업 8개(종교 3, 장례 5). 직업 코드로 정확히 제외 | 결정 2026-09-25 |
 | `dwas.json` | 업무 활동 계층 2,087행(GWA 41 → IWA 332 → DWA 2,087) | GWAs to IWAs to DWAs |

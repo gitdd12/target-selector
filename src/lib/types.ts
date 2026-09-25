@@ -50,7 +50,7 @@ export const COVERAGE_KEYS = [
 ] as const;
 export type CoverageKey = (typeof COVERAGE_KEYS)[number];
 export const COVERAGE_LABEL: Record<CoverageKey, string> = {
-  scene: "장면",
+  scene: "장면과 시작 상태",
   actions: "실제 한 행동",
   required_parts: "꼭 해야 했던 부분",
   chosen_parts: "본인이 정해서 한 부분",
@@ -104,6 +104,7 @@ const WeightSignal = z.object({ present: z.boolean(), evidence: z.string().descr
 export const ExperienceFieldsSchema = z.object({
   scene_title: z.string().describe("이 경험을 가리키는 짧은 제목(사용자 표현 위주, 해석 금지)"),
   context_and_objects: z.string(),
+  starting_state: z.string().describe("손대기 전 대상의 모습(사용자 표현). 무엇을 가지고 시작했나(이미 있던 것 / 흩어진 재료 / 머릿속 생각 / 모르던 것 / 사람의 상태 등). 끝났을 때의 모습도 알면 함께 적는다. 없으면 미상"),
   actions: z.string(),
   required_parts: z.string(),
   chosen_parts: z.string(),
