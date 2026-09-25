@@ -1,0 +1,3 @@
+- [비개발자 · 한국어](user-non-developer-korean.md) — 전문 용어 없이 설명, 기술 결정은 위임
+- [코어 찾기 프로젝트](core-finder-project.md) — 사용자 결정사항과 미결 항목, 앱 위치
+- [질문이면 작업 말고 의견만](feedback-ask-vs-do.md) — "~할까?/흠" 말투는 의견 먼저, 명령형일 때만 작업
