@@ -1,0 +1,4767 @@
+{
+"Accompany and supervise students during meals.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Accompany children to and from school, on outings, and to medical appointments.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:아이"
+},
+"Accompany clients to doctors' offices or on other trips outside the home, providing transportation, assistance, and companionship.": {
+"B": 0.43,
+"A": 0.27
+},
+"Accompany injured athletes to hospitals.": {
+"B": 0.5,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Accompany patients on outings, providing transportation when necessary.": {
+"B": 0.5,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Accompany patients to and from wards for medical or dental treatments, shopping trips, or religious or recreational events.": {
+"B": 0.5,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Act as client advocates to coordinate required services or to resolve emergency problems in crisis situations.": {
+"B": 0.3,
+"A": 0.0
+},
+"Act as liaison with physicist and supportive care personnel.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Act as liaisons between clients and medical staff.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Activate emergency action plans and administer first aid, as necessary.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Adapt existing or develop new music therapy assessment instruments or procedures to meet an individual client's needs.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Address community groups, faculty, and staff members to explain available counseling services.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Address employee relations issues, such as harassment allegations, work complaints, or other employee concerns.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:동료·직원"
+},
+"Address legal issues, such as child abuse and discipline, assisting with hearings and providing testimony to inform custody arrangements.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Adjust controls to regulate specified temperature and humidity of animal quarters, nurseries, or exhibit areas.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Administer anesthesia to animals, under the direction of a veterinarian, and monitor animals' responses to anesthetics so that dosages can be adjusted.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Administer anesthetics during surgery and monitor the effects on animals.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "생물"
+},
+"Administer bedside or personal care, such as ambulation or personal hygiene assistance.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Administer drugs, orally or by injection, or perform intravenous procedures.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Administer emergency first aid, such as performing emergency resuscitation or other life saving procedures.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Administer emergency first aid, wrap injuries, treat minor chronic disabilities, or refer injured persons to physicians.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Administer first aid according to prescribed procedures and notify emergency medical personnel when necessary.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Administer first aid in emergency situations.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Administer first aid to injured group participants.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Administer first aid to passengers in distress.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Administer first aid treatment or life support care to sick or injured persons in prehospital settings.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Administer first aid, such as bandaging, splinting, or administering oxygen.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Administer oral medications or hypodermic injections, following physician's prescriptions and hospital procedures.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Administer prescribed medications to animals.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "생물"
+},
+"Administer prescribed oral medications, under the written direction of physician or as directed by home care nurse or aide, and ensure patients take their medicine.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Administer, coordinate, or recommend disciplinary and corrective actions.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Advise against injured athletes returning to games or competition if resuming activity could lead to further injury.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Advise and teach students.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Advise animal owners regarding sanitary measures, feeding, general care, medical conditions, or treatment options.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "생물"
+},
+"Advise animal owners regarding the purchase of specific animals.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Advise athletes on the proper use of equipment.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Advise attorneys, juries, litigants, and court personnel regarding conduct, issues, and proceedings.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Advise clients concerning business transactions, claim liability, advisability of prosecuting or defending lawsuits, or legal rights and obligations.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Advise clients on housing matters, such as housing rental, homeownership, mortgage delinquency, or foreclosure prevention.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Advise clients on how they could be helped by counseling.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Advise clients on market conditions, prices, mortgages, legal requirements, and related matters.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Advise clients or community groups on issues related to social or intellectual development, such as education, childcare, or problem solving.": {
+"B": 0.2,
+"A": 0.2,
+"obj": "사람(정서)"
+},
+"Advise clients or respond to inquiries about financial matters in person or via phone, email, Web site, or Internet chat.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:고객"
+},
+"Advise educators or other medical staff on hearing or balance topics.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Advise employees in handling problems or resolving complaints from customers, tenants, detainees, or other persons.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:동료·직원"
+},
+"Advise or inform guardians, relatives, or significant others of patients' conditions or treatment.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Advise patients about recommended courses of treatment.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Advise patients to comply with treatment plans.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Advise pet owners on how to care for their pets' health.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Advise staff of individuals' qualifications.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Advise students on academic and vocational curricula and career issues.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Advise students on academic and vocational curricula and on career issues.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Advise students on academic and vocational curricula, and on career issues.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Advise students on course selection, career decisions, and other academic and vocational concerns.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Advise students on issues such as course selection, progress toward graduation, and career decisions.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Advocate for clients or patients to resolve crises.": {
+"B": 0.3,
+"A": 0.0
+},
+"Advocate for patients' and families' needs, or provide emotional support for patients and their families.": {
+"B": 0.65,
+"A": 0.5
+},
+"Aid patients in becoming accustomed to hospital routines.": {
+"B": 0.5,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Aid patients in dressing and grooming themselves.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Aid patients in performing tasks, such as bathing or keeping beds, clothing, or living areas clean.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Alter treatment programs to obtain better results if treatment is not having the intended effect.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Analyze characteristics of animals to identify and classify them.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Analyze data to determine the effectiveness of specific treatments or therapy approaches.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Analyze data to determine the effectiveness of treatments or therapy approaches.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Analyze genetic information to identify patients or families at risk for specific disorders or syndromes.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Analyze information from interviews, educational and medical records, consultation with other professionals, and diagnostic evaluations to assess clients' abilities, needs, and eligibility for services.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Analyze or synthesize client data to draw conclusions or make recommendations for art therapy.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Analyze or synthesize client data to draw conclusions or make recommendations for therapy.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Analyze worker or production problems and recommend solutions, such as improving production methods or implementing motivational plans.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:동료·직원"
+},
+"Anesthetize and inoculate animals, according to instructions.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Answer customer questions regarding problems with their accounts.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Answer customers' questions about merchandise and advise customers on merchandise selection.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Answer customers' questions, and provide information on procedures or policies.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Answer patients' calls and determine how to assist them.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Answer questions and advise customers regarding loans and transactions.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Answer questions and provide future tax planning to clients.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Answer questions that patients have about their health and well-being.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Answer telephones and assist customers with their questions.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Answer telephones and schedule appointments.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Answer telephones, and route calls or deliver messages.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Answer telephones, responding to questions or requests.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Apply current technology to music therapy practices.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Apply selected research findings to practice.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Arrange for medical, psychiatric, and other tests that may disclose causes of difficulties and indicate remedial measures.": {
+"B": 0.2,
+"A": 0.2,
+"obj": "사람(정서)"
+},
+"Arrange for on-site job coaching or assistive devices, such as specially equipped wheelchairs, to help clients adapt to work or school environments.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Arrange for pallbearers or inform pallbearers or honorary groups of their duties.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Arrange for physical, mental, academic, vocational, and other evaluations to obtain information for assessing clients' needs and developing rehabilitation plans.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Arrange meetings concerning issues involving their clients.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Ask questions that will help clients identify their feelings and behaviors.": {
+"B": 0.5,
+"A": 0.5
+},
+"Assemble, clean, or maintain equipment or materials for patient use.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Assess an individual child's needs, limitations, and potential, using observation, review of school records, and consultation with parents and school personnel.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:아이"
+},
+"Assess and report the progress of recovering athletes to coaches or physicians.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Assess client functioning levels, strengths, and areas of need in terms of perceptual, sensory, affective, communicative, musical, physical, cognitive, social, spiritual, or other abilities.": {
+"B": 0.2,
+"A": 0.2,
+"obj": "사람(정서)"
+},
+"Assess client needs or disorders, using drawing, painting, sculpting, or other artistic processes.": {
+"B": 0.2,
+"A": 0.2,
+"obj": "사람(정서)"
+},
+"Assess employee performance and suggest ways to improve work.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Assess employee performance.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Assess individuals' degree of drug dependency by collecting and analyzing urine samples.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Assess nature and extent of illness or injury to establish and prioritize medical procedures.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Assess needs for assistance, such as rehabilitation, financial aid, or additional vocational training, and refer clients to the appropriate services.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Assess patients for risk of suicide attempts.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Assess patients' psychological or emotional needs, such as those relating to stress, fear of test results, financial issues, and marital conflicts to make referral recommendations or assist patients in managing test outcomes.": {
+"B": 0.7,
+"A": 0.7,
+"obj": "사람(정서)"
+},
+"Assess patients' psychosocial status and needs, including areas such as sleep patterns, anxiety, grief, anger, and support systems.": {
+"B": 0.5,
+"A": 0.5,
+"obj": "사람(정서)"
+},
+"Assess performance following athletic competition, identifying strengths and weaknesses and making adjustments to improve future performance.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Assess students' physical progress or needs.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Assess the needs of patients' family members or caregivers.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Assess the risks and benefits of treatment termination for clients.": {
+"B": 0.2,
+"A": 0.2,
+"obj": "사람(정서)"
+},
+"Assign appropriate chores and praise targeted behaviors to encourage development of self-control, self-confidence, and responsibility.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:아이"
+},
+"Assign rooms to students.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Assign tasks such as feeding and treatment of animals, and cleaning and maintenance of animal quarters.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Assimilate arriving children to the school environment by greeting them, helping them remove outerwear, and selecting activities of interest to them.": {
+"B": 0.5,
+"A": 0.0,
+"obj": "사람:아이"
+},
+"Assist children with disabilities or children with psychological, emotional, or behavioral issues with boarding and exiting the school bus.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:아이"
+},
+"Assist clients in adhering to treatment plans, such as setting up appointments, arranging for transportation to appointments, or providing support.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Assist clients in obtaining insurance reimbursements.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Assist customers by providing information and resolving their complaints.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:고객"
+},
+"Assist educational specialists or clinical psychologists in administering situational or diagnostic tests to measure client's abilities or progress.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Assist engineering and other personnel to solve operating problems.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Assist faculty members or staff with student conferences.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Assist guests with special needs by providing equipment such as wheelchairs.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:고객"
+},
+"Assist in locating housing for displaced individuals.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Assist in preparing food and serving meals and refreshments to children.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Assist in training technicians, medical students, residents, or other staff members.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Assist individuals in filling out applications or questionnaires.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:고객"
+},
+"Assist passengers, such as elderly or individuals with disabilities, on and off bus, ensure they are seated properly, help carry baggage, and answer questions about bus schedules or routes.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:노인"
+},
+"Assist patients in organizing their health care system activities.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Assist students who need extra help with their coursework outside of class.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Assist students who need extra help, such as by tutoring and preparing and implementing remedial programs.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Assist travelers and guests with disabilities.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:고객"
+},
+"Assist veterinarians in examining animals to determine the nature of illnesses or injuries.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Assist workers in tasks, such as loading vehicles.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Attend care plan meetings to review patient progress and update care plans.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Attend community meetings or health fairs to understand community issues or build relationships with community members.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람·관계"
+},
+"Attend continuing education classes.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Attend meetings, educational conferences, and training workshops, and serve on committees.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Attend to children's basic needs by feeding them, dressing them, and changing their diapers.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:아이"
+},
+"Attend to children's basic needs by feeding them, dressing them, or changing their diapers.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:아이"
+},
+"Attend to needs of athletic teams in clubhouses.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:동료·직원"
+},
+"Attend to special needs of tour participants.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:고객"
+},
+"Attend to the needs of the bereaved, such as by offering comfort, counseling, or after-care programs.": {
+"B": 0.5,
+"A": 0.3
+},
+"Attend training classes to maintain certification licensure, keep abreast of new developments in the field, or maintain existing knowledge.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Attend training sessions to increase knowledge and skills.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Attend workshops, seminars, or professional meetings to remain informed of new developments in school psychology.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Bathe and groom animals.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "생물"
+},
+"Bathe animals, clip nails or claws, and brush or cut animals' hair.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Bathe patients.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Call patients to inquire about their post-operative status or recovery.": {
+"B": 0.7,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Call upon witnesses to testify at hearings.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Capture and remove stray, uncontrolled, or abused animals from undesirable conditions, using nets, nooses, or tranquilizer darts as necessary.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Care for and monitor the condition of animals recovering from surgery.": {
+"B": 0.5,
+"A": 0.0,
+"obj": "생물"
+},
+"Care for children in institutional setting, such as group homes, nursery schools, private businesses, or schools for people with disabilities.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:아이"
+},
+"Care for children with disabilities or who have sick parents or parents with disabilities.": {
+"B": 0.5,
+"A": 0.0,
+"obj": "사람:아이"
+},
+"Care for individuals or families during periods of incapacitation, family disruption, or convalescence, providing companionship, personal care, or help in adjusting to new lifestyles.": {
+"B": 0.5,
+"A": 0.33
+},
+"Care for patients by changing bed linens, washing and ironing laundry, cleaning, or assisting with their personal care.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Change dressings.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Chaperone group-sponsored trips and social functions.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:아이"
+},
+"Check patients' pulse, temperature, and respiration.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Clean and disinfect rooms and furnishings to maintain a safe and orderly environment.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Clean and disinfect surgical equipment.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Clip or shear hair on animals.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Coach client representatives in effective communication with the public or with employees.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Collaborate with clients' families to implement rehabilitation plans, such as behavioral, residential, social, or employment goals.": {
+"B": 0.2,
+"A": 0.2,
+"obj": "사람(정서)"
+},
+"Collaborate with community agencies to establish facilities and programs for persons with disabilities.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Collaborate with counselors to develop counseling programs that address the needs of individual students.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Collaborate with counselors, physicians, or nurses to plan or coordinate treatment, drawing on social work experience and patient needs.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Collaborate with mental health professionals and other staff members to perform clinical assessments or develop treatment plans.": {
+"B": 0.2,
+"A": 0.2,
+"obj": "사람(정서)"
+},
+"Collaborate with or assist doctors, psychologists, or rehabilitation therapists in working with patients with cognitive, intellectual, or developmental disabilities to treat, rehabilitate, and return patients to the community.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Collaborate with other educational professionals to develop teaching strategies and school programs.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Collaborate with other professionals to evaluate patients' medical or physical condition and to assess client needs.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Collaborate with other teachers that provide instruction to special education students to ensure that the students receive appropriate support.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Collaborate with other workers to locate and correct malfunctions.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Collaborate with others to design or implement interdisciplinary treatment programs.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Collaborate with students, parents, teachers, school administrators, or counselors to determine student needs, develop tutoring plans, or assess student progress.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Collaborate with teachers and administrators in the development, evaluation, and revision of school programs and in the preparation of master schedules for curriculum offerings.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Collaborate with workers and managers to solve work-related problems.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:동료·직원"
+},
+"Collect and analyze data to evaluate the effectiveness of academic programs and other services, such as behavioral management systems.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Collect and record animal information, such as weight, size, physical condition, treatments received, medications given, and food intake.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Collect for, or share with, research projects patient data on specific genetic disorders or syndromes.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Collect information about clients through interviews, observation, or tests.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Collect information about clients, using techniques such as testing, interviewing, discussion, or observation.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Collect information about individuals or clients, using interviews, case histories, observational techniques, and other assessment methods.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Collect supplementary information needed to assist client, such as employment records, medical records, or school reports.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Comfort and reassure patients.": {
+"B": 0.7,
+"A": 0.3
+},
+"Comfort patients during exams, or request sedatives or other medication from physicians for patients with anxiety or claustrophobia.": {
+"B": 0.25,
+"A": 0.15
+},
+"Communicate and collaborate with other healthcare professionals involved with the care of a patient.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Communicate behavioral observations and student progress reports to students, parents, teachers, or administrators.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Communicate client assessment findings and recommendations in oral, written, audio, video, or other forms.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Communicate likely outcomes of medical diseases or traumatic conditions to patients or their representatives.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Communicate nonverbally with children to provide them with comfort, encouragement, or positive reinforcement.": {
+"B": 0.5,
+"A": 0.3
+},
+"Communicate with children's parents or guardians about daily activities, behaviors, and related issues.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:아이"
+},
+"Communicate with clients to build rapport, acknowledge their progress, or reflect upon their reactions to musical experiences.": {
+"B": 0.5,
+"A": 0.5
+},
+"Communicate with counsel regarding case management or procedural requirements.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Communicate with dispatchers or treatment center personnel to provide information about situation, to arrange reception of survivors, or to receive instructions for further treatment.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Communicate with or instruct caregivers or family members on patient therapeutic activities or treatment plans.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Communicate with other staff to resolve problems with individual students.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Communicate with patients to ascertain feelings or need for assistance or social and emotional support.": {
+"B": 1.0,
+"A": 1.0
+},
+"Compile and interpret students' test results, along with information from teachers and parents, to diagnose conditions and to help assess eligibility for special services.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Compile and study occupational, educational, and economic information to assist counselees in determining and carrying out vocational and educational objectives.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Compile information such as residents' daily activities and the quantities of supplies used to prepare required reports.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Complete administrative tasks, such as entering orders into computer, answering telephone calls, or maintaining medical or facility information.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Complete and maintain accurate records or reports regarding the patients' histories and progress, services provided, or other required information.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Complete physical checks and monitor patients to detect unusual or harmful behavior and report observations to professional staff.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Compose, arrange, or adapt music for music therapy treatments.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Conduct an initial assessment of an athlete's injury or illness to provide emergency or continued care and to determine whether they should be referred to physicians for definitive diagnosis and treatment.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Conduct art therapy sessions, providing guided self-expression experiences to help clients recover from, or cope with, cognitive, emotional, or physical impairments.": {
+"B": 0.5,
+"A": 0.5,
+"obj": "사람(정서)"
+},
+"Conduct assessments of patients' risk for harm to self or others.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Conduct chemical dependency program orientation sessions.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Conduct educational activities for school children.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Conduct evaluations of employees' performance.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Conduct exercise electrocardiogram tests to monitor cardiovascular activity under stress.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Conduct follow-up interviews with counselees to determine if their needs have been met.": {
+"B": 0.5,
+"A": 0.5,
+"obj": "사람(정서)"
+},
+"Conduct home visits for pregnant women, newborn infants, or other high-risk individuals to monitor their progress or assess their needs.": {
+"B": 0.5,
+"A": 0.3
+},
+"Conduct individual in-room visits with residents.": {
+"B": 0.5,
+"A": 0.5
+},
+"Conduct information sharing sessions, such as in-service workshops for other professionals, potential client groups, or the general community.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Conduct neuropsychological evaluations such as assessments of intelligence, academic ability, attention, concentration, sensorimotor function, language, learning, and memory.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Conduct or facilitate training sessions or seminars for wellness and fitness staff.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Conduct research on neuropsychological disorders.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Conduct research to develop or improve diagnostic or therapeutic counseling techniques.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Conduct research to generate new knowledge that can be used to address learning and behavior issues.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Conduct social research to advance knowledge in the social work field.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Conduct social research.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Conduct therapy sessions to improve patients' mental and physical well-being.": {
+"B": 0.5,
+"A": 0.5,
+"obj": "사람(정서)"
+},
+"Conduct training programs to develop or maintain desired animal behaviors for competition, entertainment, obedience, security, riding, or related purposes.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Conduct worker studies to determine whether specific instances of disease or illness are job-related.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Conduct, or assist in the conduct of, music therapy research.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Confer with clients about their medical histories and problems with stress or pain to determine how massage will be most helpful.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Confer with clients to develop plans for posttreatment activities.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Confer with clients to discuss their options and goals so that rehabilitation programs and plans for accessing needed services can be developed.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Confer with clients to obtain and provide information when claims are made on a policy.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Confer with co-workers to obtain information about orders, processes, or problems.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Confer with colleagues to formulate positions and strategies pertaining to pending issues.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Confer with coworkers to get information about order details, processing plans, or problems that occur.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Confer with coworkers to obtain information about orders, processes, or problems.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Confer with customers or supervising personnel to address questions, problems, or requests for service or equipment.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:고객"
+},
+"Confer with engineering staff and other personnel to resolve problems.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Confer with family members or others close to clients to keep them informed of treatment planning and progress.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Confer with management or subordinates to resolve worker problems, complaints, or grievances.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:동료·직원"
+},
+"Confer with medical personnel to better understand the backgrounds and needs of individual residents.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Confer with members of treatment team to plan and evaluate therapy programs.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Confer with other counselors, doctors, and professionals to analyze individual cases and to coordinate counseling services.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Confer with other professionals on client's treatment team to develop, coordinate, or integrate treatment plans.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Confer with other sporting officials, coaches, players, and facility managers to provide information, coordinate activities, and discuss problems.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:동료·직원"
+},
+"Confer with parents or guardians, other teachers, counselors, and administrators to resolve students' behavioral and academic problems.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Confer with parents or guardians, teachers, administrators, and other professionals to discuss children's progress, resolve behavioral, academic, and other problems, and to determine priorities for students and their resource needs.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Confer with parents or guardians, teachers, counselors, and administrators to resolve students' behavioral and academic problems.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Confer with parents, guardians, teachers, counselors, or administrators to resolve students' behavioral or academic problems.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Confer with physicians, psychologists, occupational therapists, and other professionals to develop and implement client rehabilitation programs.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Confer with professionals on client's treatment team to develop, coordinate, or integrate treatment plans.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Confer with project personnel to identify and resolve problems.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Consult reference material, such as textbooks, manuals, or journals, to identify symptoms, make diagnoses, or develop approaches to treatment.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Consult with clients after sales or contract signings to resolve problems and provide ongoing support.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:고객"
+},
+"Consult with clients after sales or contract signings to resolve problems and to provide ongoing support.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:고객"
+},
+"Consult with customers to resolve complaints and verify financial and credit transactions.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:고객"
+},
+"Consult with or provide consultation to other doctors, therapists, or clinicians regarding patient care.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Consult with other professionals about patients' neurological conditions.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Consult with other professionals, agencies, or universities to discuss therapies, treatments, counseling resources or techniques, and to share occupational information.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Consult with parents, teachers, and other school personnel to determine causes of problems, such as truancy and misbehavior, and to implement solutions.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Contact animal owners to inform them that their pets are at animal holding facilities.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "생물"
+},
+"Contact maintenance crews when necessary.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Contact outside health care providers and communicate with subjects to obtain follow-up information.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Contact patients' relatives to arrange family conferences.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Contact workers in work stations or other departments to request movement of materials, products, or machinery, or to notify them of incoming shipments and their estimated delivery times.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Coordinate activities with courts, probation officers, community services, or other post-treatment agencies.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Coordinate art showcases to display artwork produced by clients.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Coordinate counseling efforts with mental health professionals or other health professionals, such as doctors, nurses, or social workers.": {
+"B": 0.2,
+"A": 0.2,
+"obj": "사람(정서)"
+},
+"Coordinate efforts with other workers involved in installing or maintaining equipment or components.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Coordinate field trips for client groups to museums or other public displays of art.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Coordinate or direct employee workshops, courses, or training about mental health issues.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Coordinate the care of patients with other health care professionals or support staff.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Coordinate with treatment center personnel to obtain patients' vital statistics and medical history, to determine the circumstances of the emergency, and to administer emergency treatment.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Coordinate work with other emergency medical team members or police or fire department personnel.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Coordinate work with physicians or other healthcare team members, including providing assistance during invasive procedures.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Counsel and encourage patients to develop leisure activities.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Counsel and instruct patients and their families in techniques to improve hearing and communication related to hearing loss.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Counsel and provide guidance to students regarding personal, academic, vocational, or behavioral issues.": {
+"B": 0.5,
+"A": 0.5,
+"obj": "사람(정서)"
+},
+"Counsel children and families to help solve conflicts and problems in learning and adjustment.": {
+"B": 0.5,
+"A": 0.0,
+"obj": "사람:아이"
+},
+"Counsel clients and patients in individual and group sessions to help them overcome dependencies, recover from illness, and adjust to life.": {
+"B": 0.7,
+"A": 0.7,
+"obj": "사람(정서)"
+},
+"Counsel clients in individual or group sessions to assist them in dealing with substance abuse, mental or physical illness, poverty, unemployment, or physical abuse.": {
+"B": 0.5,
+"A": 0.5
+},
+"Counsel clients on concerns, such as unsatisfactory relationships, divorce and separation, child rearing, home management, or financial difficulties.": {
+"B": 0.7,
+"A": 0.7
+},
+"Counsel clients on personal and family financial problems, such as excessive spending or borrowing of funds.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "돈·재무"
+},
+"Counsel clients or patients, individually or in group sessions, to assist in overcoming dependencies, adjusting to life, or making changes.": {
+"B": 0.7,
+"A": 0.7,
+"obj": "사람(정서)"
+},
+"Counsel employees about work-related issues and assist employees to correct job-skill deficiencies.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:동료·직원"
+},
+"Counsel employees in work-related activities, personal growth, or career development.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:동료·직원"
+},
+"Counsel family members to assist them in understanding, dealing with, and supporting clients or patients.": {
+"B": 0.5,
+"A": 0.5,
+"obj": "사람(정서)"
+},
+"Counsel family members to assist them in understanding, dealing with, or supporting clients or patients.": {
+"B": 0.5,
+"A": 0.5,
+"obj": "사람(정서)"
+},
+"Counsel individuals and groups on basic rules of good nutrition, healthy eating habits, and nutrition monitoring to improve their quality of life.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Counsel individuals or groups concerning their spiritual, emotional, or personal needs.": {
+"B": 0.5,
+"A": 0.5
+},
+"Counsel individuals or groups to help them understand and overcome personal, social, or behavioral problems affecting their educational or vocational situations.": {
+"B": 0.5,
+"A": 0.5
+},
+"Counsel individuals regarding interpersonal, health, financial, or religious problems.": {
+"B": 0.5,
+"A": 0.5
+},
+"Counsel individuals, groups, families, or communities regarding issues including mental health, poverty, unemployment, substance abuse, physical abuse, rehabilitation, social adjustment, child care, or medical care.": {
+"B": 0.5,
+"A": 0.5
+},
+"Counsel individuals, groups, or families to help them understand problems, deal with crisis situations, define goals, and develop realistic action plans.": {
+"B": 0.7,
+"A": 0.7,
+"obj": "사람(정서)"
+},
+"Counsel inmates and respond to legitimate questions, concerns, and requests.": {
+"B": 0.3,
+"A": 0.3
+},
+"Counsel or aid family members to assist them in understanding, dealing with, or supporting the client or patient.": {
+"B": 0.5,
+"A": 0.5,
+"obj": "사람(정서)"
+},
+"Counsel outpatients or other patients during office visits.": {
+"B": 0.5,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Counsel parents with child rearing problems, interviewing the child and family to determine whether further action is required.": {
+"B": 0.5,
+"A": 0.0,
+"obj": "사람:아이"
+},
+"Counsel patients about nutrition, exercise, sleeping habits, stress management, or other matters.": {
+"B": 0.5,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Counsel patients and families on communication strategies and the effects of hearing loss.": {
+"B": 0.5,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Counsel student athletes on academic, athletic, and personal issues.": {
+"B": 0.5,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Counsel students in the handling of issues such as family, financial, and educational problems.": {
+"B": 0.7,
+"A": 0.7
+},
+"Counsel students regarding educational issues, such as course and program selection, class scheduling and registration, school adjustment, truancy, study habits, and career planning.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Counsel students whose behavior, school progress, or mental or physical impairment indicate a need for assistance, diagnosing students' problems and arranging for needed services.": {
+"B": 0.7,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Counsel students with adjustment or academic problems.": {
+"B": 0.5,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Counsel workers about job and career-related issues.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:동료·직원"
+},
+"Create developmentally appropriate lesson plans.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Cue or signal animals during performances.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Customize art therapy programs for specific client populations, such as those in schools, nursing homes, wellness centers, prisons, shelters, or hospitals.": {
+"B": 0.2,
+"A": 0.2,
+"obj": "사람(정서)"
+},
+"Customize treatment programs for specific areas of music therapy, such as intellectual or developmental disabilities, educational settings, geriatrics, medical settings, mental health, physical disabilities, or wellness.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Demonstrate activities to children.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Demonstrate therapy techniques, such as manual or creative arts or games.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Design and conduct genetics training programs for physicians, graduate students, other health professions or the general community.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Design art therapy sessions or programs to meet client's goals or objectives.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Design classes and programs to meet the needs of special students.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Design music therapy experiences, using various musical elements to meet client's goals or objectives.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Design or implement rehabilitation plans for patients with cognitive dysfunction.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Design or provide music therapy experiences to address client needs, such as using music for self-care, adjusting to life changes, improving cognitive functioning, raising self-esteem, communicating, or controlling impulses.": {
+"B": 0.5,
+"A": 0.5,
+"obj": "사람(정서)"
+},
+"Design, fabricate, or repair assistive devices or make adaptive changes to equipment or environments.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Determine clients' eligibility for financial assistance.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Determine or coordinate treatment plans by requesting laboratory services, reviewing genetics or counseling literature, and considering histories or diagnostic data.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Determine the need for facility maintenance and repair, and notify appropriate personnel.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Determine whether clients should be counseled or referred to other specialists in such fields as medicine, psychiatry, or legal aid.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Develop an understanding of customers' needs and take actions to ensure that such needs are met.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:고객"
+},
+"Develop and coordinate educational programs for residents.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Develop and implement individual treatment plans, specifying type, frequency, intensity, and duration of therapy.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Develop and implement individualized treatment plans addressing family relationship problems, destructive patterns of behavior, and other personal issues.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Develop and implement treatment plans based on clinical experience and knowledge.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Develop and maintain client relationships.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:고객"
+},
+"Develop and maintain liaisons and effective working relations with groups and individuals, agencies, and the public to encourage cooperative management strategies or to develop information and interpret findings.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Develop and maintain relationships with community referral sources, such as schools or community groups.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Develop and participate in health promotion programs, group activities, or discussions to promote client health, facilitate social adjustment, alleviate stress, and prevent physical or mental disability.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Develop and review service plans in consultation with clients and perform follow-ups assessing the quantity and quality of services provided.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Develop client treatment plans based on research, clinical experience, and client histories.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Develop diagnostic procedures to determine clients' needs.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Develop discharge plans for patients.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Develop individualized educational plans in collaboration with teachers and other staff members.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Develop individualized treatment plans that incorporate studio art therapy, counseling, or psychotherapy techniques.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Develop or advise on social policy and assist in community development.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Develop or advise on social policy or assist in community development.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Develop or assist others in development of care and treatment plans.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Develop or teach strategies to promote client wellness and independence.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Develop program plans for individuals or assist in plan development.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Develop rehabilitation plans that fit clients' aptitudes, education levels, physical abilities, and career goals.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Develop therapeutic and treatment plans based on clients' interests, abilities, or needs.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Develop treatment plan to meet needs of patient, based on needs assessment, patient interests, and objectives of therapy.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Develop, direct, and participate in training programs for staff and students.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Develop, implement, or evaluate public education, prevention, or health promotion programs, working in collaboration with organizations, institutions, or communities.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Diagnose and treat conditions involving injury to the central nervous system, such as cerebrovascular accidents, neoplasms, infectious or inflammatory diseases, degenerative diseases, head traumas, demyelinating diseases, and various forms of dementing illnesses.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Diagnose and treat conditions such as chemical dependency, alcohol dependency, Acquired Immune Deficiency Syndrome (AIDS) dementia, and environmental toxin exposure.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Diagnose and treat pediatric populations for conditions such as learning disabilities with developmental or organic bases.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Diagnose mental and emotional disorders in clients.": {
+"B": 0.2,
+"A": 0.2,
+"obj": "사람(정서)"
+},
+"Direct and participate in on- and off-campus recreational activities for residents of institutions, boarding schools, fraternities or sororities, children's homes, or similar establishments.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Direct or provide home health services.": {
+"B": 0.3,
+"A": 0.0
+},
+"Direct or supervise nursing care staff in the provision of patient therapy.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Direct patients in simple prescribed exercises or in the use of braces or artificial limbs.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Direct, coordinate, and evaluate activities of staff and interns engaged in patient assessment and treatment.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Direct, supervise, assess, and communicate with supportive personnel.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:동료·직원"
+},
+"Discharge patient from physical therapy when goals or projected outcomes have been attained and provide for appropriate follow-up care or referrals.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Discipline children and recommend or initiate other measures to control behavior, such as caring for own clothing and picking up toys and books.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:아이"
+},
+"Discuss financial options with clients and keep them informed about transactions.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:고객"
+},
+"Discuss illnesses and treatments with patients and family members.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Discuss job performance problems with employees to identify causes and issues and to work on resolving problems.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:동료·직원"
+},
+"Discuss testing options and the associated risks, benefits and limitations with patients and families to assist them in making informed decisions.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Discuss the design with the client.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Discuss with clients their pets' grooming needs.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Discuss with individual patients their plans for life after leaving therapy.": {
+"B": 0.5,
+"A": 0.5,
+"obj": "사람(정서)"
+},
+"Do facility laundry and clean, organize, maintain, and disinfect animal quarters, such as pens and stables, and equipment, such as saddles and bridles.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Document evaluations, treatment plans, case summaries, or progress or other reports related to individual clients or client groups.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Document patient information including session notes, progress notes, recommendations, and treatment plans.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Dress children and change diapers.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Educate and supervise practicum students, psychology interns, or hospital staff.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Educate clients about end-of-life symptoms and options to assist them in making informed decisions.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Educate clients or community members about mental or physical illness, abuse, medication, or available community resources.": {
+"B": 0.2,
+"A": 0.2,
+"obj": "사람(정서)"
+},
+"Educate or advise clients on animal health care, nutrition, or behavior problems.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "생물"
+},
+"Educate patients and family members about mental health and medical conditions, preventive health measures, medications, or treatment plans.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Educate patients and family members about various topics, such as communication techniques or strategies to cope with or to avoid personal misunderstandings.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Educate the public about animal welfare, and animal control laws and regulations.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Educate, prepare, and reassure patients and their families by answering questions, providing physical assistance, and reinforcing physicians' advice regarding treatment reactions or post-treatment care.": {
+"B": 0.2,
+"A": 0.07
+},
+"Encourage clients to express their feelings and discuss what is happening in their lives, helping them to develop insight into themselves or their relationships.": {
+"B": 0.65,
+"A": 0.65
+},
+"Encourage clients with special needs and circumstances to acquire new skills and get involved in health-promoting leisure activities, such as sports, games, arts and crafts, and gardening.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Encourage individuals and family members to develop and use skills and strategies for confronting their problems in a constructive manner.": {
+"B": 0.3,
+"A": 0.3
+},
+"Encourage patients and attend to their physical needs to facilitate the attainment of therapeutic goals.": {
+"B": 0.4,
+"A": 0.15
+},
+"Encourage patients to develop work skills and to participate in social, recreational, or other therapeutic activities that enhance interpersonal skills or develop social relationships.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Enforce rules and regulations to ensure the smooth and orderly operation of dormitory programs.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Engage clients in music experiences to identify client responses to different styles of music, types of musical experiences, such as improvising or listening, or elements of music, such as tempo or harmony.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Engage in research activities related to the field of medical genetics or genetic counseling.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Entertain, converse with, or read aloud to patients to keep them mentally healthy and alert.": {
+"B": 0.7,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Escort individuals or groups on cruises, sightseeing tours, or through places of interest, such as industrial establishments, public buildings, or art galleries.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:고객"
+},
+"Escort patients to medical appointments.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Establish and enforce administration policies and rules governing student behavior.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Establish and maintain relationships with individual or business customers or provide assistance with problems these customers may encounter.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:고객"
+},
+"Establish and supervise peer-counseling and peer-tutoring programs.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Establish client goals or objectives for music therapy treatment, considering client needs, capabilities, interests, overall therapeutic program, coordination of treatment, or length of treatment.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Establish contacts with employers to create internship and employment opportunities for students.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Establish goals or objectives for art therapy sessions in consultation with clients or site administrators.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Establish neurobehavioral baseline measures for monitoring progressive cerebral disease or recovery.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Euthanize animals.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Euthanize rabid, unclaimed, or severely injured animals.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Evaluate animals for trainability and ability to perform.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Evaluate animals to determine their temperaments, abilities, or aptitude for training.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Evaluate clients' physical or mental condition, based on review of client information.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Evaluate employee performance.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Evaluate nursing intervention outcomes, conferring with other healthcare team members as necessary.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Evaluate or make recommendations for standards of care or clinical operations, ensuring compliance with applicable regulations, ethics, legislation, or policies.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Evaluate personal characteristics and home conditions of foster home or adoption applicants.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Evaluate students' or individuals' abilities, interests, and personality characteristics, using tests, records, interviews, or professional sources.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Evaluate the daily living skills or capacities of clients with physical, developmental, or mental health disabilities.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Evaluate the effectiveness of counseling or treatments and the accuracy and completeness of diagnoses, modifying plans or diagnoses as necessary.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Evaluate the effectiveness of counseling programs on clients' progress in resolving identified problems and moving towards defined objectives.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Examine and observe animals to detect signs of illness, disease, or injury.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "생물"
+},
+"Examine animals and specimens to detect the presence of disease or other problems.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Examine animals for injuries or malnutrition, and arrange for any necessary medical treatment.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "생물"
+},
+"Examine animals to detect and determine the nature of diseases or injuries.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Examine animals to detect behavioral changes or clinical symptoms that could indicate illness or injury.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "생물"
+},
+"Examine animals to detect illness, injury, or disease, and to check physical characteristics, such as rate of weight gain.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "생물"
+},
+"Examine animals to detect symptoms of illness or injury.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "생물"
+},
+"Examine injured persons and administer first aid or cardiopulmonary resuscitation, if necessary, using training and medical supplies and equipment.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Examine, evaluate and treat athletes who have been injured or who have medical problems such as exercise-induced asthma.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Exercise animals or provide them with companionship.": {
+"B": 0.25,
+"A": 0.0
+},
+"Exercise animals to keep them in healthy condition.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "생물"
+},
+"Exercise animals to maintain their physical and mental health.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "생물"
+},
+"Explain diagnostic procedures such as chorionic villus sampling (CVS), ultrasound, fetal blood sampling, and amniocentesis.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Explain testing procedures to patients, answering questions or reassuring patients, as needed.": {
+"B": 0.25,
+"A": 0.15
+},
+"Feed and water animals according to schedules and feeding instructions.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "생물"
+},
+"Feed and water animals, and clean and disinfect pens, cages, yards, and hutches.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Feed livestock or laboratory animals.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "생물"
+},
+"Feed or exercise animals or provide other general care, such as cleaning or maintaining holding or performance areas.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "생물"
+},
+"Feed patients or assist patients to eat or drink.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Fill out and maintain client-related paperwork, including federal- and state-mandated forms, client diagnostic records, and progress notes.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Find homes for stray or unwanted animals.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "생물"
+},
+"Follow progress of discharged patients to determine effectiveness of treatments.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Follow up on results of counseling programs and clients' adjustments to determine effectiveness of programs.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Gather client information from sources such as case documentation, client observation, or interviews of client or family members.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Gather diagnostic data from sources such as case documentation, observations of clients, or interviews with clients or family members.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Gather information about community mental health needs or resources that could be used in conjunction with therapy.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Gather information from doctors, schools, social workers, juvenile counselors, law enforcement personnel, and others to make recommendations to courts for resolution of child custody or visitation disputes.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Greet customers and ascertain what each customer wants or needs.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:고객"
+},
+"Greet customers and ask about the quality of service they are receiving.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:고객"
+},
+"Greet customers and make them feel welcome.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:고객"
+},
+"Greet guests and seat them at tables or in waiting areas.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:고객"
+},
+"Greet visitors and determine whether they should be given access to specific individuals.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Greet visitors or callers and handle their inquiries or direct them to the appropriate persons according to their needs.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:고객"
+},
+"Guide and assist crews laying track and resetting supports and blocking.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Guide and counsel students with adjustment or academic problems or special academic interests.": {
+"B": 0.5,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Guide and counsel students with adjustment or academic problems or with special academic interests.": {
+"B": 0.5,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Guide and counsel students with adjustment or academic problems, or special academic interests.": {
+"B": 0.5,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Guide and counsel students with adjustments, academic problems, or special academic interests.": {
+"B": 0.5,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Guide clients in the development of skills or strategies for dealing with their problems.": {
+"B": 0.5,
+"A": 0.5,
+"obj": "사람(정서)"
+},
+"Guide or counsel students with adjustment problems, academic problems, or special academic interests.": {
+"B": 0.5,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Handle customer complaints and take appropriate action to resolve them.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:고객"
+},
+"Hear and resolve complaints from customers or the public.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:고객"
+},
+"Help children with homework and school work.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:아이"
+},
+"Help develop or monitor family schedule.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Help patients with bathing, dressing, maintaining personal hygiene, moving in bed, or standing and walking.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Help prepare and serve nutritionally balanced meals and snacks for children.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Hire or supervise loss prevention staff.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Hire, supervise, and train support workers.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:동료·직원"
+},
+"Hire, train, evaluate, or discharge staff or resolve personnel grievances.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:동료·직원"
+},
+"Hold or restrain animals during veterinary procedures.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Hold regular meetings with each assigned unit.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Identify and respond to emergency physical or mental health situations.": {
+"B": 0.5,
+"A": 0.5,
+"obj": "사람(정서)"
+},
+"Identify cases of domestic abuse or other family problems and encourage students or parents to seek additional assistance from mental health professionals.": {
+"B": 0.4,
+"A": 0.4
+},
+"Identify children showing signs of emotional, developmental, or health-related problems and discuss them with supervisors, parents or guardians, and child development specialists.": {
+"B": 0.7,
+"A": 0.0,
+"obj": "사람:아이"
+},
+"Identify environmental impediments to client or patient progress through interviews and review of patient records.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Identify funding sources and write grant proposals for eligible programs or services.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Identify psychological, emotional, or behavioral issues and diagnose disorders, using information obtained from interviews, tests, records, or reference materials.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Identify signs of emotional or developmental problems in children and bring them to parents' or guardians' attention.": {
+"B": 0.7,
+"A": 0.0,
+"obj": "사람:아이"
+},
+"Implement, or assist occupational therapists with implementing, treatment plans designed to help clients function independently.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Improvise instrumentally, vocally, or physically to meet client's therapeutic needs.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Increase social work knowledge by reviewing current literature, conducting social research, or attending seminars, training workshops, or classes.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Inform designated employees or departments of items loaded or problems encountered.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Inform management about problems, such as employee disputes.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Inform supervisors when equipment is not working properly and when food and supplies are getting low, and order needed items.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Inform workers about interests or special needs of specific groups.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Initiate and direct efforts to foster tolerance, understanding, and appreciation of diversity in school communities.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Initiate emergency interventions to stabilize patients.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Install, maintain, and repair animal care facility equipment, such as infrared lights, feeding devices, and cages.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Instruct and assist children in the development of health and personal habits, such as eating, resting, and toilet behavior.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:아이"
+},
+"Instruct children about the dangers of fire.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Instruct children in health and personal habits, such as eating, resting, and toilet habits.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Instruct children in safe behavior, such as seeking adult assistance when crossing the street and avoiding contact with unsafe objects.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:아이"
+},
+"Instruct emergency medical response team about emergency interventions to ensure correct application of procedures.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Instruct individuals in career development techniques, such as job search and application strategies, resume writing, and interview skills.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Instruct individuals or groups in the use of art media, such as paint, clay, or yarn.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Instruct or advise clients on issues, such as household cleanliness, utilities, hygiene, nutrition, or infant care.": {
+"B": 0.2,
+"A": 0.2,
+"obj": "사람(정서)"
+},
+"Instruct others in program methods, procedures, or functions.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Instruct patient in activities and techniques, such as sports, dance, music, art, or relaxation techniques, designed to meet their specific physical or psychological needs.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Instruct, motivate, safeguard, and assist patients as they practice exercises or functional activities.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Instruct, or assist in instructing, patients and families in home programs, basic living skills, or the care and use of adaptive equipment.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Integrate behavioral, developmental, improvisational, medical, or neurological approaches into music therapy treatments.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Interact with clients to assist them in gaining insight, defining goals, and planning action to achieve effective personal, social, educational, or vocational development and adjustment.": {
+"B": 0.5,
+"A": 0.5,
+"obj": "사람(정서)"
+},
+"Interpret exercise program participant data to evaluate progress or identify needed program changes.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Interpret laboratory results and communicate findings to patients or physicians.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Interpret test results and prepare psychological reports for teachers, administrators, and parents.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Interpret the artistic creations of clients to assess their functioning, needs, or progress.": {
+"B": 0.2,
+"A": 0.2,
+"obj": "사람(정서)"
+},
+"Intervene as an advocate for clients or patients to resolve emergency problems in crisis situations.": {
+"B": 0.3,
+"A": 0.0
+},
+"Interview clients and take their calls to provide customer service and obtain information on claims.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Interview clients individually, in families, or in groups, assessing their situations, capabilities, and problems to determine what services are required to meet their needs.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Interview clients to obtain information about employment history, educational background, and career goals, and to identify barriers to employment.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Interview clients, review records, and confer with other professionals to evaluate individuals' mental and physical condition and to determine their suitability for participation in a specific program.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Interview clients, review records, conduct assessments, or confer with other professionals to evaluate the mental or physical condition of clients or patients.": {
+"B": 0.2,
+"A": 0.2,
+"obj": "사람(정서)"
+},
+"Interview new patients to complete admission forms, to assess their mental health status, or to obtain their mental health and treatment history.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Interview patients or review medical records to obtain comprehensive patient or family medical histories, and document findings.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Interview patients to obtain comprehensive medical histories.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Interview patients upon admission and record information.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Inventory, pack, and remove items left behind by former residents.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Investigate and resolve personnel problems within organization and charges of misconduct against staff.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:동료·직원"
+},
+"Investigate child abuse or neglect cases and take authorized protective action when necessary.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:아이"
+},
+"Investigate reports of animal attacks or animal cruelty, interviewing witnesses, collecting evidence, and writing reports.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Issue medications from dispensary and maintain records in accordance with specified procedures.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Issue warnings or citations in connection with animal-related offenses, or contact police to report violations and request arrests.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Keep abreast of the issues affecting constituents by making personal visits and phone calls, reading local newspapers, and viewing or listening to local broadcasts.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람·관계"
+},
+"Keep records documenting animal health, diet, or behavior.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Keep records of play, meal schedules, and bill payment.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Keep records on individual children, including daily observations and information about activities, meals served, and medications administered.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Lead group counseling sessions that provide support in such areas as grief, stress, or chemical dependency.": {
+"B": 0.5,
+"A": 0.5
+},
+"Lead prescribed individual or group therapy sessions as part of specific therapeutic procedures.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Lead stretching exercises for team members prior to games or practices.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Learn about new developments in counseling by reading professional literature, attending courses and seminars, or establishing and maintaining contact with other social service agencies.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Listen and provide emotional support and encouragement to psychiatric patients.": {
+"B": 1.0,
+"A": 1.0
+},
+"Listen to and resolve customer complaints regarding services, products, or personnel.": {
+"B": 0.5,
+"A": 0.0,
+"obj": "사람:고객"
+},
+"Listen to and resolve customers' complaints regarding products or services.": {
+"B": 0.5,
+"A": 0.0,
+"obj": "사람:고객"
+},
+"Locate barriers to client employment, such as inaccessible work sites, inflexible schedules, or transportation problems, and work with clients to develop strategies for overcoming these barriers.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Maintain a safe play environment.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:아이"
+},
+"Maintain accurate and complete student records as required by laws, district policies, and administrative regulations.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Maintain and promote a positive attitude toward clients and their treatment programs.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Maintain case files that include activities, progress notes, evaluations, and recommendations.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Maintain case history records and prepare reports.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Maintain close contact with clients during job training and placements to resolve problems and evaluate placement adequacy.": {
+"B": 0.5,
+"A": 0.5,
+"obj": "사람(정서)"
+},
+"Maintain confidentiality of records relating to clients' treatment.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Maintain current knowledge of relevant research.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Maintain patients' restrictions to assigned areas.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Maintain records of patient care, condition, progress, or problems to report and discuss observations with supervisor or case manager.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Maintain student records, including special education reports, confidential records, records of services provided, and behavioral data.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Make emergency visits to resolve equipment problems.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Make regular rounds to ensure that residents and areas are safe and secure.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Manage budgets and direct case service allocations, authorizing expenditures and payments.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Manage projects or contribute to committee or team work.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Massage body parts to relieve soreness, strains, or bruises.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Massage patients or apply preparations or treatments, such as liniment, alcohol rubs, or heat-lamp stimulation.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Mediate interpersonal problems between residents.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Meet regularly with parents to discuss children's activities and development.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:아이"
+},
+"Meet with families, probation officers, police, or other interested parties to exchange necessary information during the treatment process.": {
+"B": 0.2,
+"A": 0.2,
+"obj": "사람(정서)"
+},
+"Meet with other instructors to discuss individual students and their progress.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Meet with other professionals to discuss individual students' needs and progress.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Meet with parents or guardians to discuss their children's progress, advise them on using community resources, or teach skills for dealing with students' impairments.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:아이"
+},
+"Mentor and support administrative staff members, such as superintendents and principals.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:동료·직원"
+},
+"Mentor or train staff to lead group exercise.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:동료·직원"
+},
+"Mix food, liquid formulas, medications, or food supplements according to instructions, prescriptions, and knowledge of animal species.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Model appropriate social behaviors and encourage concern for others to cultivate development of interpersonal relationships and communication skills.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:아이"
+},
+"Modify treatment activities or approaches as needed to comply with changes in clients' status.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Modify treatment plans according to changes in client status.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Modify treatment plans to comply with changes in client status.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Modify treatment plans to comply with changes in clients' status.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Monitor and record clients' progress to ensure that goals and objectives are met.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Monitor animals recovering from surgery and notify veterinarians of any unusual changes or symptoms.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "생물"
+},
+"Monitor athletes' use of equipment to ensure safe and proper use.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Monitor clients' progress to determine whether changes in rehabilitation plans are needed.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Monitor clients' use of medications.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Monitor employees' work levels and review work performance.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Monitor participants' progress and adapt programs as needed.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Monitor patients' comfort and safety during tests, alerting physicians to abnormalities or changes in patient responses.": {
+"B": 0.5,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Monitor patients' performance in therapy activities, providing encouragement.": {
+"B": 0.5,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Monitor patients' physical and emotional well-being and report unusual behavior or physical ailments to medical staff.": {
+"B": 0.5,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Monitor patients' progress and provide ongoing observation of hearing or balance status.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Monitor students' progress and provide students and teachers with assistance in resolving any problems.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Monitor the performance of project team members to provide performance feedback.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:동료·직원"
+},
+"Monitor the performance of project team members, providing and documenting performance feedback.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:동료·직원"
+},
+"Monitor, evaluate, and record client progress according to measurable goals described in treatment and care plan.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Monitor, evaluate, and record client progress with respect to treatment goals.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Notify command of situation and request assistance.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Notify kitchen personnel of shortages or special orders.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Notify maintenance, stationary engineering, or other auxiliary personnel to correct equipment malfunctions or to adjust power, steam, water, or air supplies.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Notify or signal other workers to operate equipment or when processing is complete.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Notify supervisors of mechanical malfunctions.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Notify supervisors of needed repairs.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Notify supervisors or mechanics of equipment malfunctions.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Notify supervisors or other appropriate personnel when security breaches occur.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Notify supervisors or other personnel of production problems.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Notify supervisors or repair staff of mechanical malfunctions.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Notify supervisors when major equipment repairs are needed.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Notify supervisors when major lighting equipment repairs are needed.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Notify workers of any special treatment required for shipments.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Observe and care for patients throughout examinations to ensure their safety and comfort.": {
+"B": 0.5,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Observe and caution children petting and feeding animals in designated areas to ensure the safety of humans and animals.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:아이"
+},
+"Observe and document client reactions, progress, or other outcomes related to art therapy.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Observe and document client reactions, progress, or other outcomes related to music therapy.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Observe and evaluate athletes' mental well-being.": {
+"B": 0.5,
+"A": 0.5,
+"obj": "사람(정서)"
+},
+"Observe and evaluate students' performance, behavior, social development, and physical health.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Observe and evaluate students' work to determine progress and make suggestions for improvement.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Observe and evaluate students' work to determine progress, provide feedback, and make suggestions for improvement.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Observe and influence patients' behavior, communicating and interacting with them and teaching, counseling, or befriending them.": {
+"B": 0.4,
+"A": 0.33
+},
+"Observe and monitor children's play activities.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:아이"
+},
+"Observe and reassure patients during treatment and report unusual reactions to physician or turn equipment off if unexpected adverse reactions occur.": {
+"B": 0.4,
+"A": 0.15
+},
+"Observe and record patients' progress, attitudes, and behavior and maintain this information in client records.": {
+"B": 0.2,
+"A": 0.2,
+"obj": "사람(정서)"
+},
+"Observe animals for signs of illness, injury, or unusual behavior, notifying veterinarians or managers as warranted.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "생물"
+},
+"Observe animals in heat to detect approach of estrus and exercise animals to induce or hasten estrus, if necessary.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Observe animals' physical conditions to detect illness or unhealthy conditions requiring medical care.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "생물"
+},
+"Observe children's behavior for irregularities, take temperature, transport children to doctor, or administer medications, as directed, to maintain children's health.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:아이"
+},
+"Observe equipment gauges and indicators and hand signals of other workers to verify load positions or depths.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Observe individuals at play, in group interactions, or in other contexts to detect indications of cognitive, intellectual, or developmental disabilities.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:아이"
+},
+"Observe nurses and visit patients to ensure proper nursing care.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Observe participants and inform them of corrective measures necessary for skill improvement.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Observe signals from other crew members so that work activities can be coordinated.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Observe students during classroom and play activities to evaluate students' performance, behavior, social development, and physical health.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Observe students to detect and report unusual behavior.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Observe students to determine qualifications, limitations, abilities, interests, and other individual characteristics.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Observe students' performance, and record relevant data to assess progress.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Observe the behavior and condition of animals and monitor their clinical symptoms.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "생물"
+},
+"Observe, analyze, and record patients' participation, reactions, and progress during treatment sessions, modifying treatment programs as needed.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Observe, interview, and assess patients to identify care needs.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Observe, record, and report to physician the patient's condition or injury, the treatment provided, and reactions to drugs or treatment.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Obtain and study medical, psychological, social, and family histories by interviewing individuals, couples, or families and by reviewing records.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Obtain information from medical records, medical staff, family members and the patients, themselves, to assess patients' capabilities, needs and interests.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Offer assistance to mourners as they enter or exit limousines.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Offer counsel and comfort to bereaved families or friends.": {
+"B": 0.5,
+"A": 0.3
+},
+"Offer counsel and comfort to families and friends of the deceased.": {
+"B": 0.5,
+"A": 0.3
+},
+"Offer special assistance to persons such as those who are unable to dial or who are in emergency situations.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:고객"
+},
+"Operate equipment, such as electrocardiograms (EKGs), external defibrillators, or bag valve mask resuscitators, in advanced life support environments.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Order any needed educational or treatment supplies.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Order food for animals, and arrange for its delivery.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Order supplies for facilities.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Order, unload, and store feed and supplies.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Organize and conduct age-appropriate recreational activities, such as games, arts and crafts, sports, walks, and play dates.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Organize and participate in recreational activities and outings, such as games and field trips.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:아이"
+},
+"Organize and store toys and materials to ensure order in activity areas.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Organize or conduct animal shows.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Organize support groups or counsel family members to assist them in understanding, dealing with, and supporting the client or patient.": {
+"B": 0.5,
+"A": 0.5,
+"obj": "사람(정서)"
+},
+"Organize, supervise, or encourage patient participation in social, educational, or recreational activities.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Oversee Medicaid- and Medicare-related paperwork and recordkeeping in hospitals.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Oversee departmental budget.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Oversee support staff.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Participate in case conferences or staff meetings.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Participate in case reviews, consulting with the team caring for the client, to evaluate the client's needs and plan for continuing services.": {
+"B": 0.2,
+"A": 0.2,
+"obj": "사람(정서)"
+},
+"Participate in continuing education.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Participate in educational programs, in-service training, or workshops to remain current in methods and techniques.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Participate in job development and placement programs, contacting prospective employers, placing clients in jobs, and evaluating the success of placements.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Participate in patients' care meetings and conferences.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Participate in recreational activities with patients, including card games, sports, or television viewing.": {
+"B": 0.5,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Participate in the work of subordinates to facilitate productivity or to overcome difficult aspects of work.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:동료·직원"
+},
+"Perform a variety of duties as requested by client, such as obtaining household supplies or running errands.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Perform activities that support a team or a specific sport, such as participating in community outreach activities, meeting with media representatives, and appearing at fundraising events.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Perform animal grooming duties, such as washing, brushing, clipping, and trimming coats, cutting nails, and cleaning ears.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Perform clerical duties, such as scheduling appointments, collecting data, or documenting health insurance billings.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Perform crisis interventions to help ensure the safety of the patients and others.": {
+"B": 0.5,
+"A": 0.5,
+"obj": "사람(정서)"
+},
+"Perform crisis interventions with clients.": {
+"B": 0.5,
+"A": 0.3
+},
+"Perform difficult staffing duties, including dealing with understaffing, refereeing disputes, firing employees, and administering disciplinary procedures.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:동료·직원"
+},
+"Perform duties related to livestock reproduction, such as breeding animals within appropriate timeframes, performing artificial inseminations, and helping with animal births.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Perform emergency cardiac care, such as cardioversion and manual defibrillation.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Perform emergency invasive intervention before delivering patient to an acute care facility.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Perform emergency pharmacological interventions.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Perform first aid or cardiopulmonary resuscitation (CPR) when required.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Perform general administrative tasks, such as taking attendance, editing internal paperwork, and making phone calls.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Perform general personnel functions, such as supervision, training, and scheduling.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Perform healthcare-related tasks, such as monitoring vital signs and medication, under the direction of registered nurses or physiotherapists.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Perform housekeeping and cleaning duties related to children's care.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Perform housekeeping duties, such as cooking, cleaning, washing clothes or dishes, or running errands.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Perform housekeeping duties, such as laundry, cleaning, dish washing, and changing of linens.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Perform nursing duties, such as administering medications, measuring vital signs, collecting specimens, or drawing blood samples.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Perform personnel activities, such as supervising and training employees.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Perform team support duties, such as running errands, maintaining equipment, or stocking supplies.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Photograph or videotape client artwork for inclusion in client records or for promotional purposes.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Pick up and handle human or pet remains in a respectful manner.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Place children in foster or adoptive homes, institutions, or medical treatment centers.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Plan and conduct orientation programs and group conferences to promote the adjustment of individuals to new life experiences, such as starting college.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Plan and conduct programs to combat social problems, prevent substance abuse, or improve community health and counseling services.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Plan and develop accredited psychological service programs in psychiatric centers or hospitals, in collaboration with psychiatrists and other professional staff.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Plan and promote career and employment-related programs and events, such as career planning presentations, work experience programs, job fairs, and career workshops.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Plan discharge from care facility to home or other care facility.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Plan or conduct programs to prevent substance abuse or improve community health or counseling services.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Plan or conduct programs to prevent substance abuse, combat social problems, or improve health or counseling services in community.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Plan or execute animal nutrition or reproduction programs.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Plan or implement follow-up or aftercare programs for clients to be discharged from treatment programs.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Plan or structure music therapy sessions to achieve appropriate transitions, pacing, sequencing, energy level, or intensity in accordance with treatment plans.": {
+"B": 0.2,
+"A": 0.2,
+"obj": "사람(정서)"
+},
+"Plan, direct, and participate in recruitment and enrollment activities.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Plan, organize, direct, and participate in treatment programs and activities to facilitate patients' rehabilitation, help them integrate into the community, and prevent further medical problems.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Plan, organize, or lead structured programs of counseling, work, study, recreation, or social activities for clients.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Plan, purchase, prepare, or serve meals to patients or other family members, according to prescribed diets.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Plan, shop for, or prepare nutritious meals or assist families in planning, shopping for, or preparing nutritious meals.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Plan, supervise, and conduct psychological research and write papers describing research results.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Prepare and deliver lectures to undergraduate or graduate students on topics such as family behavior, child and adolescent mental health, or social intervention evaluation.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Prepare and maintain all required treatment records and reports.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Prepare and maintain records and case files, including documentation, such as clients' personal and eligibility information, services provided, narratives of client contacts, or relevant correspondence.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Prepare and maintain records of client progress and services performed, reporting changes in client condition to manager or supervisor.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Prepare and submit reports and charts to treatment team to reflect patients' reactions and evidence of progress or regression.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Prepare or provide genetics-related educational materials to patients or medical personnel.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Prepare patients for and assist with examinations or treatments.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Prepare reports on students and activities as required by administration.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Prepare students for later educational experiences by encouraging them to explore learning opportunities and to persevere with challenging tasks.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Prepare written evaluations of individuals' psychological competence for court hearings.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Present and explain proposals, reports, or findings to clients.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Prevent or defuse altercations between students.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Process contract cancellations for students who are unable to follow residence hall policies and procedures.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Promote an understanding of child development and its relationship to learning and behavior.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Protect herds from predators, using trained dogs.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Provide assistance in administering employee benefit programs and worker's compensation plans.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Provide assistance in dressing or changing seriously ill or injured patients or patients with disabilities.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Provide assistance or direction to other stockroom, warehouse, or storage yard workers.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Provide assistance to staff members by inspecting rooms, setting tables, or doing laundry.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Provide assistance to students with special needs.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Provide assistance with animal euthanasia and the disposal of remains.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Provide assistance with euthanasia of animals or disposal of corpses.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Provide assistance with patrons' special needs, such as helping those with wheelchairs.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:고객"
+},
+"Provide basic health services, such as first aid.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Provide basic patient care or treatments, such as taking temperatures or blood pressures, dressing wounds, treating bedsores, giving enemas or douches, rubbing with alcohol, massaging, or performing catheterizations.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Provide boarding assistance to elderly, sick, or injured people.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Provide care for children with physical, developmental, or mental health disabilities.": {
+"B": 0.5,
+"A": 0.0,
+"obj": "사람:아이"
+},
+"Provide care for park program animals.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "생물"
+},
+"Provide care to a wide range of animals or specialize in a particular species, such as horses or exotic birds.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "생물"
+},
+"Provide clerical support to other departments.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Provide clients or family members with information about addiction issues and about available services or programs, making appropriate referrals when necessary.": {
+"B": 0.2,
+"A": 0.2,
+"obj": "사람(정서)"
+},
+"Provide clients with communication assistance, typing their correspondence or obtaining information for them.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Provide clinical services to clients, such as assessing psychological problems and conducting psychotherapy.": {
+"B": 0.3,
+"A": 0.3
+},
+"Provide coaching and mentoring to other caregivers to help facilitate their professional growth and development.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:동료·직원"
+},
+"Provide comfort and relaxation measures for mothers in labor through interventions such as massage, breathing techniques, hydrotherapy, or music.": {
+"B": 0.5,
+"A": 0.0
+},
+"Provide consultation to parents, teachers, administrators, and others on topics such as learning styles and behavior modification techniques.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Provide consultation, support, or education to groups such as parents and teachers.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Provide consulting services to other doctors caring for patients with special or difficult problems.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Provide consulting services, including educational programs, outreach programs, or prevention talks to schools, social service agencies, businesses, or the general public.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Provide counseling to patient and family members by providing information, education, or reassurance.": {
+"B": 0.25,
+"A": 0.25
+},
+"Provide crisis intervention to students when difficult situations occur at schools.": {
+"B": 0.5,
+"A": 0.3
+},
+"Provide customer service by greeting and assisting customers and responding to customer inquiries and complaints.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:고객"
+},
+"Provide direct service and support to individuals or clients, such as handling a referral for child advocacy issues, conducting a needs evaluation, or resolving complaints.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Provide directions to guests.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Provide education or counseling to individuals and families.": {
+"B": 0.5,
+"A": 0.5,
+"obj": "사람(정서)"
+},
+"Provide educational programs on topics such as classroom management, teaching strategies, or parenting skills.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Provide emergency care, such as artificial respiration, external cardiac massage, or assistance with cardiopulmonary resuscitation.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Provide emergency first aid and summon medical assistance when necessary.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Provide emergency first aid to sick or injured animals.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "생물"
+},
+"Provide emergency or other appropriate medical care to participants with symptoms or signs of physical distress.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Provide employees with guidance in handling difficult or complex problems or in resolving escalated complaints or disputes.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:동료·직원"
+},
+"Provide family counseling and treatment services to inmates participating in substance abuse programs.": {
+"B": 0.3,
+"A": 0.3
+},
+"Provide for stewardship of plant or animal resources or habitats, studying land use, monitoring animal populations, or providing shelter, resources, or medical treatment for animals.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "생물"
+},
+"Provide genetic counseling in specified areas of clinical genetics, such as obstetrics, pediatrics, oncology and neurology.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Provide headphones or earplugs to patients to improve comfort and reduce unpleasant noise.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Provide health care, first aid, immunizations, or assistance in convalescence or rehabilitation in locations such as schools, hospitals, or industry.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Provide individual support or counseling in general wellness or nutrition.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Provide information for teachers and staff members involved in helping students or graduates identify and pursue employment opportunities.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Provide information or counseling regarding issues such as animal health care, behavior problems, or nutrition.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "생물"
+},
+"Provide information or refer individuals to public or private agencies or community services for assistance.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Provide information, technical assistance, or training to supervisors, managers, or employees on topics such as employee supervision, hiring, grievance procedures, or staff development.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:동료·직원"
+},
+"Provide inpatient or outpatient medical management of neuromuscular disorders, musculoskeletal trauma, acute and chronic pain, deformity or amputation, cardiac or pulmonary disease, or other disabling conditions.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Provide instructions to clients on how to obtain help with legal, financial, and other personal issues.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Provide instructions to patients or family members concerning diagnoses or treatment plans.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Provide medical treatment or personal care to patients in private home settings, such as cooking, keeping rooms orderly, seeing that patients are comfortable and in good spirits, or instructing family members in simple nursing tasks.": {
+"B": 0.5,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Provide medical treatment, such as administering medications and vaccinations, or arrange for veterinarians to provide more extensive treatment.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Provide nursing, psychiatric, or personal care to patients with cognitive, intellectual, or developmental disabilities.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Provide occupational, educational, or other information to individuals so that they can make educational or vocational plans.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Provide patients and families with emotional support and instruction in areas such as caring for infants, preparing healthy meals, living independently, or adapting to disability or illness.": {
+"B": 0.5,
+"A": 0.5
+},
+"Provide patients or caregivers with assistance in locating health care resources.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Provide patients with assistance in bathing, dressing, or grooming, demonstrating these skills as necessary.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Provide patients with assistance in locating or holding jobs.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Provide patients with cognitive, intellectual, or developmental disabilities with routine physical, emotional, psychological, or rehabilitation care under the direction of nursing or medical staff.": {
+"B": 0.5,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Provide patients with help moving in and out of beds, baths, wheelchairs, or automobiles and with dressing and grooming.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Provide patients with information about the inheritance of conditions such as cardiovascular disease, Alzheimer's disease, diabetes, and various forms of cancer.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Provide patients with proposed treatment plans and cost estimates.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Provide physical support to assist patients to perform daily living activities, such as getting out of bed, bathing, dressing, using the toilet, standing, walking, or exercising.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Provide physical support to patients to assist them to perform daily living activities, such as getting out of bed, bathing, dressing, using the toilet, standing, walking, or exercising.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Provide physicians with assistance during surgery or complicated medical procedures.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Provide post-mortem care.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Provide psychological or administrative services and advice to private firms or community agencies regarding mental health programs or individual cases.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Provide public education and consultation to other professionals or groups regarding counseling services, issues, and methods.": {
+"B": 0.2,
+"A": 0.2,
+"obj": "사람(정서)"
+},
+"Provide recommendations and solutions in crisis situations such as workplace violence, protests, and demonstrations.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "조직·프로젝트"
+},
+"Provide requested information on students' progress and the development of case plans.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Provide special services such as alcohol and drug prevention programs and classes that teach students to handle conflicts without resorting to violence.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Provide staff with assistance in performing difficult or complicated duties.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:동료·직원"
+},
+"Provide students with disabilities with assistive devices, supportive technology, and assistance accessing facilities, such as restrooms.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Provide students with information on topics such as college degree programs and admission requirements, financial aid opportunities, trade and technical schools, and apprenticeship programs.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Provide technical direction or support to installation teams during installation, start-up, testing, system commissioning, or performance monitoring.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Provide technical support to clients through activities, such as rearranging workplace fixtures to reduce physical hazards or discomfort or modifying task sequences to reduce cycle time.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:동료·직원"
+},
+"Provide technical support to junior staff or clients.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:동료·직원"
+},
+"Provide technical support to other employees regarding mechanical design, fabrication, testing, or documentation.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Provide telephone support related to networking or connectivity issues.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Provide transportation or escort for expeditions, such as shopping trips or visits to doctors or dentists.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Provide treatment to sick or injured animals, or contact veterinarians to secure treatment.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "생물"
+},
+"Provide veterinarians with the correct equipment or instruments, as needed.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Provide workers with assistance in performing duties as necessary to meet deadlines.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:동료·직원"
+},
+"Provide, find, or arrange for support services, such as child care, homemaker service, prenatal care, substance abuse treatment, job training, counseling, or parenting classes to prevent more serious problems from developing.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Read current literature, attend meetings or conferences, or talk with colleagues to stay abreast of new technology or competitive products.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Read current literature, talk with colleagues, and participate in professional organizations or conferences to keep abreast of developments in audiology.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Read current literature, talk with colleagues, and participate in professional organizations or conferences to keep abreast of developments in neuropsychology.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Read current literature, talk with colleagues, continue education, or participate in professional organizations or conferences to keep abreast of developments in technology, equipment, or systems.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Read current literature, talk with colleagues, continue education, or participate in professional organizations or conferences to keep abreast of developments in the field.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Read current literature, talk with colleagues, or participate in professional organizations or conferences to keep abreast of developments in genetics.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Read current literature, talk with colleagues, or participate in professional organizations or conferences to keep abreast of developments in nursing.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Read to children and teach them simple painting, drawing, handicrafts, and songs.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:아이"
+},
+"Reassure passengers when situations, such as turbulence, are encountered.": {
+"B": 0.3,
+"A": 0.0
+},
+"Receive and respond to customer complaints.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:고객"
+},
+"Receive and screen telephone calls and visitors.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Receive or usher people to their seats for services.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Recommend and implement measures to improve worker motivation, work methods, or customer services.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:동료·직원"
+},
+"Recommend assistive devices according to patients' needs or nature of impairments.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Recommend or purchase needed art supplies or equipment.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Recommend temporary foster care and advise foster or adoptive parents.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:아이"
+},
+"Record and maintain patient information, such as vital signs, eating habits, behavior, progress notes, treatments, or discharge plans.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Refer athletes for specialized consultation, physical therapy, or diagnostic testing.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Refer clients to community resources for services, such as job placement, debt counseling, legal aid, housing, medical treatment, or financial assistance, and provide concrete information, such as where to go and how to apply.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Refer clients to other specialists, institutions, or support services as necessary.": {
+"B": 0.2,
+"A": 0.2,
+"obj": "사람(정서)"
+},
+"Refer clients to other types of therapists when necessary.": {
+"B": 0.2,
+"A": 0.2,
+"obj": "사람(정서)"
+},
+"Refer community members to needed health services.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Refer patient, client, or family to community resources for housing or treatment to assist in recovery from mental or physical illness, following through to ensure service efficacy.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Refer patient, client, or family to community resources to assist in recovery from mental or physical illness and to provide access to services such as financial assistance, legal aid, housing, job placement or education.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Refer patients to appropriate health care services or resources.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Refer patients to specialists or community resources.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Refer patients, clients, or family members to community resources or to specialists as necessary.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Refer people to community support services, psychologists, or doctors.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Refer qualified counselees to employers or employment services for job placement.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:동료·직원"
+},
+"Refer students and their families to appropriate community agencies for medical, vocational, or social services.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Refer students to degree programs based on interests, aptitudes, or educational assessments.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Refer students to outside counseling services.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Regulate children's rest periods and nap schedules.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:아이"
+},
+"Regulate children's rest periods.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:아이"
+},
+"Remove hazards and develop appropriate boundaries and rules to create a safe environment for children.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Render aid to accident survivors and other persons requiring first aid for physical injuries.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Report any pertinent information to the proper authorities in cases of child endangerment, neglect, or abuse.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:아이"
+},
+"Report equipment problems and ensure that required repairs are made.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Report to supervisors, verbally or in writing, on patients' progress, attitudes, and behavior.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Rescue and evacuate injured persons.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Rescue distressed persons, using rescue techniques and equipment.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Research and study players and teams to anticipate issues that might arise in future engagements.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Resolve personnel problems, complaints, or formal grievances when possible, or refer them to higher-level supervisors for resolution.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:동료·직원"
+},
+"Resolve worker problems or collaborate with employees to assist in problem resolution.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:동료·직원"
+},
+"Respond to and resolve patrons' complaints.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:고객"
+},
+"Respond to customer inquiries or complaints.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:고객"
+},
+"Respond to medical emergencies by administering basic first aid or by obtaining assistance from paramedics.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Respond to questions from patrons, and provide information about animals, such as behavior, habitat, breeding habits, or facility activities.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Respond to requests for assistance during emergencies or crises.": {
+"B": 0.3,
+"A": 0.0
+},
+"Respond to students' questions, requests, or complaints.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Restrain animals during exams or procedures.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Restrain or aid patients as necessary to prevent injury.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Restrain or shackle violent patients.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Restrain patients to prevent violence or injury or to assist physicians or nurses to administer treatments.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Restrain violent, potentially violent, or suicidal patients by verbal or physical means as required.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Retrain horses to break bad habits, such as kicking, bolting, or resisting bridling or grooming.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "생물"
+},
+"Review and evaluate clients' progress in relation to measurable goals described in treatment and care plans.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Review clients' accounts and plans regularly to determine whether life changes, economic changes, environmental concerns, or financial performance indicate a need for plan reassessment.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "돈·재무"
+},
+"Review research or literature in art therapy, psychology, or related disciplines.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Review transcripts to ensure that students meet graduation or college entrance requirements, and write letters of recommendation.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Sanitize toys and play equipment.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Schedule and make regular visits to farmers.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Schedule appointments and procedures for animals.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Schedule staff or supervise scheduling.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Segregate animals according to weight, age, color, and physical condition.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Select or adapt musical instruments, musical equipment, or non-musical materials, such as adaptive devices or visual aids, to meet treatment objectives.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Select or prepare artistic media or related equipment or devices to accomplish therapy session objectives.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Select therapy activities to fit patients' needs and capabilities.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Select, administer, and score psychological tests.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Select, administer, score, and interpret psychological tests to obtain information on individuals' intelligence, achievements, interests, or personalities.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Sell pet food and supplies.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Serve as a resource to help families and schools deal with crises, such as separation and loss.": {
+"B": 0.7,
+"A": 0.7,
+"obj": "사람(정서)"
+},
+"Serve as liaisons between students, homes, schools, family services, child guidance clinics, courts, protective services, doctors, and other contacts to help children who face problems, such as disabilities, abuse, or poverty.": {
+"B": 0.5,
+"A": 0.0,
+"obj": "사람:아이"
+},
+"Serve as pallbearers, attend visiting rooms, and provide other assistance to the bereaved.": {
+"B": 0.5,
+"A": 0.5,
+"obj": "사람(정서)"
+},
+"Serve meals or feed patients needing assistance or persuasion.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Serve on policy-making committees, assist in community development, and assist client groups by lobbying for solutions to problems.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Settle disputes between inmates.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:동료·직원"
+},
+"Settle seating disputes or help solve other customer concerns.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:고객"
+},
+"Shackle hind legs of animals to raise them for slaughtering or skinning.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Shift animals between grazing areas to ensure that they have sufficient access to food.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Shop for groceries, clothing, and other items needed for children's care.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Signal and assist other workers loading or unloading materials.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Signal or instruct other workers to weigh, move, or check products.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Signal or verbally direct workers engaged in hoisting and moving loads to ensure safety of workers and materials.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Sing or play musical instruments, such as keyboard, guitar, or percussion instruments.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Skin sections of animals or whole animals.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Sort and distribute mail.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Speak foreign languages to communicate with foreign visitors.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Speak to students to encourage and support the development of future political leaders.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Sponsor extracurricular activities, such as clubs, student organizations, and academic contests.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Stabilize patients in critical condition.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Sterilize bottles and prepare formulas.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Stun animals prior to slaughtering.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Summon medical help for injured individuals and alert medical personnel to take statements from them.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Supervise and assist with homework.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Supervise and direct other workers providing services to clients or patients.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Supervise and instruct assistants.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Supervise and monitor unit nursing staff.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:동료·직원"
+},
+"Supervise and train interns, clinicians in training, and other counselors.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Supervise and work with volunteers.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Supervise crew members, and provide assistance in training them.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Supervise employees or volunteers working on sustainability projects.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Supervise loan personnel.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Supervise nurses' aides or assistants.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Supervise or advise subordinate personnel.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:동료·직원"
+},
+"Supervise or collaborate with therapy team.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Supervise or coordinate patient care or support staff activities.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Supervise or direct other workers providing services to clients or patients.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Supervise or direct other workers who provide services to clients or patients.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Supervise or train other staff members.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:동료·직원"
+},
+"Supervise or train project team members, as necessary.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:동료·직원"
+},
+"Supervise other counselors, social service staff, and assistants.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Supervise other counselors, social service staff, assistants, or graduate students.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Supervise other crew members.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Supervise other social workers.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Supervise others and provide on-the-job training.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Supervise rehabilitation counselors and staff.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Supervise staff and games and mediate disputes.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:동료·직원"
+},
+"Supervise staff, training them, planning their work, and evaluating their performance.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Supervise staff, volunteers, practicum students, or interns engaged in music therapy activities.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Supervise staff, volunteers, practicum students, or interns.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Supervise students or assistants.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Supervise students' housekeeping work to ensure that it is done properly.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Supervise subordinate employees.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Supervise the activities of housekeeping personnel.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Supervise the rehabilitation of injured athletes.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Supervise, train, and direct professional staff and interns.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Supervise, train, and evaluate residence hall staff, including resident assistants, participants in work-study programs, and other student workers.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Supervise, train, or mentor junior team members.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:동료·직원"
+},
+"Supply animals with food, water, and personal care.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "생물"
+},
+"Support children's emotional and social development, encouraging understanding of others and positive self-concepts.": {
+"B": 0.15,
+"A": 0.15
+},
+"Support efforts to reduce substance abuse or other illegal activities in the workplace.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:동료·직원"
+},
+"Take and record measures of patients' physical condition, using devices such as thermometers or blood pressure gauges.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Take animals into treatment areas and assist with physical examinations by performing such duties as obtaining temperature, pulse, or respiration data.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Take residents on community outings.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:노인"
+},
+"Talk to children's parents or guardians about problematic behaviors, emotional or developmental problems, or related issues.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:아이"
+},
+"Talk to or interact with animals to familiarize them to human voices or contact.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "생물"
+},
+"Talk with clients during art or other therapy sessions to build rapport, acknowledge their progress, or reflect upon their reactions to the artistic process.": {
+"B": 0.5,
+"A": 0.5
+},
+"Teach and perform age-appropriate activities, such as lap play, reading, and arts and crafts, to encourage intellectual development of children.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:아이"
+},
+"Teach appropriate parenting behaviors to individuals or families.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Teach art therapy techniques or processes to artists, interns, volunteers, or others.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Teach classes and present self-help or information sessions on subjects related to education and career planning.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Teach classes in mental health topics, such as stress reduction.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Teach instructional courses and advise students.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Teach patients how to deal constructively with their emotions.": {
+"B": 0.5,
+"A": 0.5,
+"obj": "사람(정서)"
+},
+"Teach social skills to students.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Teach students or other staff.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Teach, take continuing education classes, attend conferences or seminars, or conduct research and publish findings to increase understanding of mental, emotional, or behavioral states or disorders.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Track animals by checking for signs such as droppings or destruction of vegetation.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Track research participants, and perform any necessary follow-up tasks.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Train and assist staff with computer usage.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Train and supervise support staff, such as orthopedic and prosthetic assistants and technicians.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Train animals to perform certain tasks.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Train caregivers in providing for the needs of a patient during and after therapy.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Train dogs in human assistance or property protection duties.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Train family members to provide bedside care.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Train horses or other equines for riding, harness, show, racing, or other work, using knowledge of breed characteristics, training methods, performance standards, and the peculiarities of each animal.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Train or instruct new employees on procedures to follow with psychiatric patients.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Train or supervise student interns or new staff members.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Train or supervise workers who handle or care for animals.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "생물"
+},
+"Train other workers or coordinate their work, as necessary.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Train staff members.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Transfer animals between enclosures to facilitate breeding, birthing, shipping, or rearrangement of exhibits.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Transport children to schools, social outings, and medical appointments.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Transport clients to locations outside the home, such as to physicians' offices or on outings, using a motor vehicle.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Transport or arrange for transport of animals, equipment, food, animal feed, and other supplies to and from work sites.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Transport patients to and from the occupational therapy work area.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Travel with or guide tourists who speak another language.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "사람:고객"
+},
+"Treat animal illnesses or injuries, following experience or instructions of veterinarians.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "생물"
+},
+"Treat children who have minor illnesses, acute and chronic health problems, and growth and development concerns.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Treat minor injuries and ailments and contact veterinarians to obtain treatment for animals with serious illnesses or injuries.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "생물"
+},
+"Treat patients for routine physical health problems.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Treat sick or injured animals by prescribing medication, setting bones, dressing wounds, or performing surgery.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Trim, clean, or cure animal hides.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Tutor or assist students individually or in small groups.": {
+"B": 0.3,
+"A": 0.0,
+"obj": "사람:학생"
+},
+"Use a variety of treatment methods, such as psychotherapy, hypnosis, behavior modification, stress reduction therapy, psychodrama, or play therapy.": {
+"B": 0.3,
+"A": 0.3,
+"obj": "사람(정서)"
+},
+"Use oral, spur, rein, or hand commands to condition horses to carry riders or to pull horse-drawn equipment.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Utilize consultation data and social work experience to plan and coordinate client or patient care and rehabilitation, following through to ensure service efficacy.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Visit individuals in homes or attend group meetings to provide information on agency services, requirements, or procedures.": {
+"B": 0.15,
+"A": 0.15
+},
+"Visit people in homes, hospitals, or prisons to provide them with comfort and support.": {
+"B": 0.7,
+"A": 0.7
+},
+"Work as part of a healthcare team to assess patient needs, plan and modify care, and implement interventions.": {
+"B": 0.2,
+"A": 0.0,
+"obj": "몸·건강"
+},
+"Work as part of a team that may include psychiatrists, psychologists, psychiatric nurses, or social workers.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Work under the direction of occupational therapists to plan, implement, or administer educational, vocational, or recreational programs that restore or enhance performance in individuals with functional impairments.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Work with parents to develop and implement discipline programs to promote desirable child behavior.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Write detailed consultation reports to provide information on complex genetic concepts to patients or referring physicians.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Write evaluations of parents and children for use by courts deciding divorce and custody cases, testifying in court if necessary.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Write or prepare detailed clinical neuropsychological reports, using data from psychological or neuropsychological tests, self-report measures, rating scales, direct observations, or interviews.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Write reports on clients and maintain required paperwork.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+},
+"Write treatment plans, case summaries, or progress or other reports related to individual clients or client groups.": {
+"B": 0,
+"A": 0.0,
+"obj": ""
+}
+}
