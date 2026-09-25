@@ -287,7 +287,7 @@ export default function ResultView({ session, contact, preview = false }: { sess
           {jobs.length > 0 && (
             <section className={styles.jobs}>
               <h2 className={styles.jobsTitle}>어울리는 직업</h2>
-              <p className={styles.source}>직업 정보는 미국 노동부(USDOL/ETA)의 O*NET 데이터베이스를 바탕으로 했어요.</p>
+              <p className={styles.source}>직업 정보는 미국 노동부(USDOL/ETA)의 O*NET 31.0 데이터베이스를 바탕으로 했어요.</p>
               {jobs.map((j) => (
                 <div className={styles.job} key={j.code}>
                   <div className={styles.jobT}>{j.title_ko}</div>
@@ -423,14 +423,14 @@ export default function ResultView({ session, contact, preview = false }: { sess
         {jobs.length > 0 && (
           <div className={styles.legal}>
           <p>
-            직업 정보에는 미국 노동부 고용훈련청(USDOL/ETA)의 O*NET 데이터베이스가 쓰였고, CC BY 4.0 라이선스(
+            직업 정보에는 미국 노동부 고용훈련청(USDOL/ETA)의 O*NET 31.0 데이터베이스가 쓰였고, CC BY 4.0 라이선스(
             <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">
               creativecommons.org/licenses/by/4.0
             </a>
             )로 사용했어요. 코어 찾기가 한국어로 옮기고 골랐으며, 미국 노동부가 이 내용을 승인하거나 검증하거나 시험한 것이 아니에요.
           </p>
           <p>
-            This page includes information from the O*NET Database by the U.S. Department of Labor, Employment and Training Administration (USDOL/ETA). Used under the CC BY 4.0 license. 코어 찾기 has
+            This page includes information from the O*NET 31.0 Database by the U.S. Department of Labor, Employment and Training Administration (USDOL/ETA). Used under the CC BY 4.0 license. 코어 찾기 has
             modified all or some of this information. USDOL/ETA has not approved, endorsed, or tested these modifications. O*NET® is a trademark of USDOL/ETA.
           </p>
           </div>

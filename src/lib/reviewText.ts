@@ -43,7 +43,7 @@ export function reportToText(s: Session, link?: string): string {
   }
   if (s.jobPick?.picks.length) {
     parts.push(
-      `[어울리는 직업] (직업 정보는 미국 노동부(USDOL/ETA)의 O*NET 데이터베이스를 바탕으로 했어요.)\n${s.jobPick.picks
+      `[어울리는 직업] (직업 정보는 미국 노동부(USDOL/ETA)의 O*NET 31.0 데이터베이스를 바탕으로 했어요.)\n${s.jobPick.picks
         .map((j) => `- ${j.title_ko}${j.tasks?.length ? `\n  · 실제 하는 일: ${j.tasks.join(" / ")}` : ""}\n  · 연결되는 부분: ${j.why}${j.unknown ? `\n  · 아직 확인 안 된 부분: ${j.unknown}` : ""}${j.scene_question ? `\n  · 떠올려 볼 장면: ${j.scene_question}` : ""}`)
         .join("\n")}`,
     );
@@ -69,7 +69,7 @@ export function reportToText(s: Session, link?: string): string {
   if (r.cores.length > 0) parts.push(`[기록해 보기]\n${OBSERVE.lead}\n${OBSERVE.items.map((x) => `- ${x}`).join("\n")}\n${OBSERVE.closing}`);
   if (r.cores.length > 0) parts.push(`${ENDING.lines.join("\n")}\n${ENDING.strong}\n${ENDING.last.join(" ")}`);
   if (s.jobPick?.picks.length) parts.push(
-      "직업 정보에는 미국 노동부 고용훈련청(USDOL/ETA)의 O*NET 데이터베이스가 쓰였고, CC BY 4.0 라이선스(https://creativecommons.org/licenses/by/4.0/)로 사용했어요. 코어 찾기가 한국어로 옮기고 골랐으며, 미국 노동부가 이 내용을 승인하거나 검증하거나 시험한 것이 아니에요.\nThis page includes information from the O*NET Database by the U.S. Department of Labor, Employment and Training Administration (USDOL/ETA). Used under the CC BY 4.0 license. 코어 찾기 has modified all or some of this information. USDOL/ETA has not approved, endorsed, or tested these modifications. O*NET® is a trademark of USDOL/ETA.",
+      "직업 정보에는 미국 노동부 고용훈련청(USDOL/ETA)의 O*NET 31.0 데이터베이스가 쓰였고, CC BY 4.0 라이선스(https://creativecommons.org/licenses/by/4.0/)로 사용했어요. 코어 찾기가 한국어로 옮기고 골랐으며, 미국 노동부가 이 내용을 승인하거나 검증하거나 시험한 것이 아니에요.\nThis page includes information from the O*NET 31.0 Database by the U.S. Department of Labor, Employment and Training Administration (USDOL/ETA). Used under the CC BY 4.0 license. 코어 찾기 has modified all or some of this information. USDOL/ETA has not approved, endorsed, or tested these modifications. O*NET® is a trademark of USDOL/ETA.",
     );
   return parts.join("\n\n");
 }

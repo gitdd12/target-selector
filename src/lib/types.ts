@@ -134,7 +134,7 @@ export const ExperienceFieldsSchema = z.object({
     extra_effort: WeightSignal.describe("① 요구·필요를 넘어 스스로 더 들인 수고(따로 알아보기, 다시 해보기, 돈·도구 마련). 오래 걸렸다는 것, 마감·평가 때문에 한 것은 제외"),
     repeated: WeightSignal.describe("② 이후 비슷한 일을 실제로 다시 했거나 다른 대상에서도 같은 행동을 했다. 하고 싶다는 의향은 제외"),
     fulfillment_on_action: WeightSignal.describe("③ '됐다' 싶은 순간이 결과·칭찬·마감이 아니라 그 행동 자체에 붙어 있다. 외부 제약 때문에 멈춘 것은 제외"),
-    returned: WeightSignal.describe("④ 같은 대상에서 다른 행동도 해봤지만 이 행동으로 돌아왔거나, 다른 행동에는 끌리지 않았다"),
+    returned: WeightSignal.describe("④ 같은 대상에서 다른 행동을 직접 해 봤고 그 행동이 이 행동보다 덜 끌렸다(그래서 이 행동으로 돌아왔다). 해 보지 않았거나 생각만 한 것은 세지 않는다(present=false). 다른 행동도 똑같이 끌렸다면 present=false"),
   }),
   next_question_and_reason: z.string(),
   status: z.enum(["근거 부족", "후보", "확정(단일 경험)"]),
