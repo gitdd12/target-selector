@@ -129,12 +129,23 @@ export const ExperienceFieldsSchema = z.object({
     result: z.enum(["확인됨", "미확인", "불명확"]),
     reasoning: z.string(),
   }),
-  // 무게 신호 네 가지(스펙 "확정의 실제 조건"). 두 개 이상이면 단일 경험으로 확정 가능. status는 코드가 이 값으로 다시 계산한다.
+  // 무게 신호 세 가지(스펙 "확정의 실제 조건"). 두 개 이상이면 단일 경험으로 확정 가능. status는 코드가 이 값으로 다시 계산한다.
+  // 근거 하나는 신호 하나에만 쓴다(같은 발화를 두 신호의 근거로 겹쳐 쓰지 않는다).
   weight_signals: z.object({
-    extra_effort: WeightSignal.describe("① 요구·필요를 넘어 스스로 더 들인 수고(따로 알아보기, 다시 해보기, 돈·도구 마련). 오래 걸렸다는 것, 마감·평가 때문에 한 것은 제외"),
-    repeated: WeightSignal.describe("② 이후 비슷한 일을 실제로 다시 했거나 다른 대상에서도 같은 행동을 했다. 하고 싶다는 의향은 제외"),
+    extra_effort: WeightSignal.describe("① 그 자리(같은 일 안)에서 요구·필요를 넘어 스스로 더 들인 수고(따로 알아보기, 더 잘하려고 다시 해보기, 돈·도구 마련). 오래 걸렸다는 것, 마감·평가 때문에 한 것은 제외"),
+    repeated: WeightSignal.describe("② 방식의 반복: 이번 경험에서 본인이 정한 방식이 다른 때에도 다시 나왔다(같은 대상이든 다른 대상이든). 일 자체를 다시 한 것, 특히 해야 해서 한 것(취업 준비라 자소서를 또 씀)은 제외. 하고 싶다는 의향도 제외"),
     fulfillment_on_action: WeightSignal.describe("③ '됐다' 싶은 순간이 결과·칭찬·마감이 아니라 그 행동 자체에 붙어 있다. 외부 제약 때문에 멈춘 것은 제외"),
-    returned: WeightSignal.describe("④ 같은 대상에서 다른 행동을 직접 해 봤고 그 행동이 이 행동보다 덜 끌렸다(그래서 이 행동으로 돌아왔다). 해 보지 않았거나 생각만 한 것은 세지 않는다(present=false). 다른 행동도 똑같이 끌렸다면 present=false"),
+  }),
+  // 확정 신호가 아닌 기록(스펙). 비교 선호는 직업 추천에서, 다른 대상 표시는 서술 범위와 직업 추천에서 쓴다.
+  comparison_preference: z.object({
+    tried_other_action: z.boolean().describe("같은 대상에서 다른 행동을 직접 해 봤다. 생각만 했거나 안 해 봤으면 false"),
+    less_engaging: z.enum(["덜 끌림", "똑같이 끌림", "더 끌림", "미상"]).describe("직접 해 본 그 다른 행동이 이 행동과 비교해 어땠나. 해 보지 않았으면 미상"),
+    evidence: z.string().describe("사용자 표현 인용. 없으면 빈 문자열"),
+  }),
+  other_object: z.object({
+    present: z.boolean().describe("② 방식의 반복이 다른 대상에서도 나왔다"),
+    objects: z.string().describe("그 다른 대상(사용자 표현). 없으면 빈 문자열"),
+    evidence: z.string().describe("사용자 표현 인용. 없으면 빈 문자열"),
   }),
   next_question_and_reason: z.string(),
   status: z.enum(["근거 부족", "후보", "확정(단일 경험)"]),

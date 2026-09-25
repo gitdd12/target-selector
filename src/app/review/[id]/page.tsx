@@ -235,13 +235,19 @@ export default async function ReviewDetail({ params }: { params: Promise<{ id: s
                 {(
                   [
                     ["요구 이상의 수고", "extra_effort"],
-                    ["반복", "repeated"],
-                    ["충족 신호", "fulfillment_on_action"],
-                    ["되돌아옴", "returned"],
+                    ["방식의 반복", "repeated"],
+                    ["행동 자체의 충족", "fulfillment_on_action"],
                   ] as const
                 )
-                  .map(([label, key]) => `${label} ${s.records[k]?.weight_signals[key].present ? "○" : "×"}`)
+                  .map(([label, key]) => `${label} ${s.records[k]?.weight_signals[key]?.present ? "○" : "×"}`)
                   .join(" · ")}
+                {s.records[k]?.other_object && (
+                  <>
+                    <br />
+                    다른 대상 {s.records[k]?.other_object.present ? `○ (${s.records[k]?.other_object.objects})` : "×"} · 비교 선호{" "}
+                    {s.records[k]?.comparison_preference?.tried_other_action ? s.records[k]?.comparison_preference.less_engaging : "해 본 적 없음"}
+                  </>
+                )}
               </div>
             )}
             <div className="chat" style={{ marginTop: 14 }}>

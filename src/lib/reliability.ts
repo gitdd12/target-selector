@@ -1,13 +1,12 @@
 import type { Session } from "./types";
 
-// 신뢰도 기준(스펙 "확정의 실제 조건"의 무게 신호 네 가지): 두 개 이상 충족하면 확정이고, 그 개수로 등급을 나눈다.
-//   2개 = 상, 3개 이상 = 최상
+// 신뢰도 기준(스펙 "확정의 실제 조건"의 무게 신호 세 가지): 두 개 이상 충족하면 확정이고, 그 개수로 등급을 나눈다.
+//   2개 = 상, 3개 = 최상
 // 신호 문구는 참가자에게 그대로 보인다.
 export const SIGNAL_LABEL = {
   extra_effort: "요구된 것보다 더 들인 수고",
-  repeated: "다른 때에도 되풀이한 행동",
+  repeated: "다른 때에도 같은 방식으로 되풀이함",
   fulfillment_on_action: "결과가 아니라 행동 자체에서 얻은 만족",
-  returned: "다른 방법도 해봤지만 이 방식으로 돌아옴",
 } as const;
 export type SignalKey = keyof typeof SIGNAL_LABEL;
 
