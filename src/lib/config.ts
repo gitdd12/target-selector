@@ -1,6 +1,6 @@
 // 어떤 AI 모델을 어느 역할에 쓸지 한 곳에서 정한다. 바꾸려면 환경변수만 바꾸면 된다.
 // 미묘한 판단이 핵심인 코어 판정(judge)과 결과지 작성(writer)만 Opus, 나머지는 더 빠르고 싼 Sonnet.
-const OPUS = "claude-opus-5";
+const OPUS = "claude-opus-5-5";
 const SONNET = "claude-sonnet-5";
 export const MODELS = {
   interviewer: process.env.MODEL_INTERVIEWER ?? SONNET,
