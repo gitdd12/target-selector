@@ -36,7 +36,7 @@ export interface ChatMessage {
   kind?: "restatement";
 }
 
-// 경험 창에서 스펙의 "확보 원칙" 아홉 가지 항목. 재진술 카드를 띄우기 전에 각각 확보됐거나 답 없음이어야 한다.
+// 경험 창에서 스펙의 "확보 원칙" 여덟 가지 항목. 재진술 카드를 띄우기 전에 각각 확보됐거나 답 없음이어야 한다.
 export const COVERAGE_KEYS = [
   "scene",
   "actions",
@@ -45,7 +45,6 @@ export const COVERAGE_KEYS = [
   "extra_effort",
   "stopping_reason",
   "fulfillment",
-  "reengagement",
   "same_action_diff_object",
 ] as const;
 export type CoverageKey = (typeof COVERAGE_KEYS)[number];
@@ -57,7 +56,6 @@ export const COVERAGE_LABEL: Record<CoverageKey, string> = {
   extra_effort: "요구 이상으로 들인 수고",
   stopping_reason: "그만둔 계기",
   fulfillment: "과정이나 결과물 자체에서 온 만족",
-  reengagement: "이후 비슷한 일(그때 어떻게 했나)",
   same_action_diff_object: "같은 행동·다른 대상",
 };
 export type CoverageValue = "미확보" | "확보" | "답 없음";
@@ -112,7 +110,7 @@ export const ExperienceFieldsSchema = z.object({
   desired_change: z.string(),
   stopping_reason: z.string(),
   fulfillment_signal: z.string(),
-  reengagement: z.string(),
+  reengagement: z.string().describe("같은 행동 다른 대상 질문의 답: 이번 방식이 나온 다른 실제 경험(무엇에서, 언제, 어떻게). 없으면 없음"),
   external_conditions: z.string(),
   candidate_interpretations: z.array(
     z.object({ core: z.enum(CORES), evidence: z.string() }),
@@ -122,7 +120,7 @@ export const ExperienceFieldsSchema = z.object({
   ),
   comparison_result: z
     .string()
-    .describe("same_object_different_action / same_action_different_object 비교 질문 결과. 없으면 미상"),
+    .describe("same_action_different_object 비교 질문 결과. 없으면 미상"),
   // 확정 기본 조건(스펙): 구체 행동이 확보돼 있고, 방법·순서·범위를 본인이 정하거나 그 방식을 택한 부분이 확인되는가. 흔한 행동이라는 이유로 미충족 판정하지 않는다.
   self_chosen_evidence: z.object({
     result: z.enum(["확인됨", "미확인", "불명확"]),
@@ -132,18 +130,18 @@ export const ExperienceFieldsSchema = z.object({
   // 근거 하나는 신호 하나에만 쓴다(같은 발화를 두 신호의 근거로 겹쳐 쓰지 않는다).
   weight_signals: z.object({
     extra_effort: WeightSignal.describe("① 이번에 포착한 방식(본인이 정한 부분)에 요구·필요보다 더 들인 수고(그 자리에서 더 오래·더 여러 번, 그 방식을 위해 따로 알아보기·도구 마련). 일 전체에 들인 시간·수고와 마감·평가 때문에 한 것은 제외"),
-    repeated: WeightSignal.describe("② 방식의 반복: 이번 경험에서 본인이 정한 방식이 다른 때에도 다시 나왔다(같은 대상이든 다른 대상이든). 일 자체를 다시 한 것, 특히 해야 해서 한 것(취업 준비라 자소서를 또 씀)은 제외. 하고 싶다는 의향도 제외"),
+    repeated: WeightSignal.describe("② 방식의 반복: 이번 경험에서 본인이 정한 방식이 다른 대상에서도 다시 나왔다(비슷한 대상이든 거리가 먼 대상이든). 같은 대상에서 다시 한 것(다른 자소서를 같은 방식으로 또 씀)과 하고 싶다는 의향은 제외"),
     fulfillment_on_action: WeightSignal.describe("③ 과정이나 결과물 자체에서 온 만족을 사용자가 구체적으로 짚었다(결과물을 좋아하는 것 포함). 칭찬·합격 같은 외부 반응이 같이 있어도 된다. 외부 반응뿐이거나 끝난 후련함뿐이거나, 무엇인지 짚지 못하면 제외"),
   }),
   // 확정 신호가 아닌 기록(스펙). 비교 선호는 직업 추천에서, 다른 대상 표시는 서술 범위와 직업 추천에서 쓴다.
   comparison_preference: z.object({
-    tried_other_action: z.boolean().describe("같은 대상에서 다른 행동을 직접 해 봤다. 생각만 했거나 안 해 봤으면 false"),
+    tried_other_action: z.boolean().describe("같은 대상에서 다른 행동을 직접 해 봤다고 사용자가 스스로 말했다(따로 묻지 않는다). 생각만 했거나 말이 없으면 false"),
     less_engaging: z.enum(["덜 끌림", "똑같이 끌림", "더 끌림", "미상"]).describe("직접 해 본 그 다른 행동이 이 행동과 비교해 어땠나. 해 보지 않았으면 미상"),
     evidence: z.string().describe("사용자 표현 인용. 없으면 빈 문자열"),
   }),
   other_object: z.object({
-    present: z.boolean().describe("② 방식의 반복이 다른 대상에서도 나왔다"),
-    objects: z.string().describe("그 다른 대상(사용자 표현). 없으면 빈 문자열"),
+    present: z.boolean().describe("② 방식의 반복이 나왔다(② 근거가 곧 다른 대상이다)"),
+    objects: z.string().describe("그 다른 대상(사용자 표현)과 이번 대상과 비슷한지·거리가 먼지. 없으면 빈 문자열"),
     evidence: z.string().describe("사용자 표현 인용. 없으면 빈 문자열"),
   }),
   next_question_and_reason: z.string(),
