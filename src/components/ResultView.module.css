@@ -193,8 +193,11 @@
 .jobMain b{font-size:17px;font-weight:720;letter-spacing:-.03em;word-break:keep-all}
 .jobMain span{font-size:14.5px;line-height:1.55;color:var(--soft);word-break:keep-all}
 .jobBoth{align-self:flex-start;margin-top:4px;padding:2px 8px;border-radius:8px;background:#ececea;font-style:normal;font-size:12.5px;font-weight:700;color:var(--ink)}
-.jobMatch{flex:none;display:flex;flex-direction:column;align-items:flex-end;font-size:22px;font-weight:780;letter-spacing:-.04em;line-height:1.1;font-variant-numeric:tabular-nums}
-.jobMatch small{font-size:11.5px;font-weight:600;letter-spacing:0;color:var(--dim)}
+.jobMatch{--mbg:#f1f3f1;--mfg:#4a5a50;flex:none;min-width:58px;display:flex;flex-direction:column;align-items:center;padding:6px 10px 7px;border-radius:12px;background:var(--mbg);color:var(--mfg);font-size:21px;font-weight:780;letter-spacing:-.04em;line-height:1.1;font-variant-numeric:tabular-nums}
+.jobMatch small{font-size:11px;font-weight:700;letter-spacing:0;color:inherit;opacity:.8}
+.jobMatch[data-tier="2"]{--mbg:#e7f4ec;--mfg:#2e6b47}
+.jobMatch[data-tier="3"]{--mbg:#c6e8d3;--mfg:#1d5a37}
+.jobMatch[data-tier="4"]{--mbg:#2f8a57;--mfg:#fff}
 .jobEvidence{margin:0 0 14px;padding:12px 14px;border-radius:14px;background:var(--card)}
 .jobEvidence h4{margin:0 0 8px;font-size:13.5px;font-weight:800;color:var(--soft)}
 .jobEvidence ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}

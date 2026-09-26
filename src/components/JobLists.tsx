@@ -5,6 +5,9 @@ import styles from "./ResultView.module.css";
 
 // 코어 칸 안의 직업 목록. 직업 한 줄 = 이름 + 한 줄 설명 + 일치도. 누르면 근거 업무(번역, 행동에 해당하는 구절은 굵게)가 펼쳐진다.
 // 펼치기는 브라우저 기본 기능(details)으로 해서 화면 코드 없이 동작한다.
+// 일치도는 초록 배경의 진하기로 네 단계를 보여준다(80 이상 / 60 이상 / 40 이상 / 그 아래).
+const tierOf = (m: number) => (m >= 80 ? 4 : m >= 60 ? 3 : m >= 40 ? 2 : 1);
+
 function Job({ j }: { j: JobEntry }) {
   return (
     <details className={styles.jobRow}>
@@ -14,7 +17,7 @@ function Job({ j }: { j: JobEntry }) {
           <span>{j.desc}</span>
           {j.both && <em className={styles.jobBoth}>{JOB_TEXT.both}</em>}
         </span>
-        <span className={styles.jobMatch} aria-label={`${JOB_TEXT.match} ${j.match}`}>
+        <span className={styles.jobMatch} data-tier={tierOf(j.match)} aria-label={`${JOB_TEXT.match} ${j.match}`}>
           <small>{JOB_TEXT.match}</small>
           {j.match}
         </span>
