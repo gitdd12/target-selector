@@ -17,6 +17,7 @@
 | `tasks.json` | 업무 문장 18,838개. 아래 필드 참고 | Task Statements, Task Ratings, Tasks to DWAs |
 | `excluded_occupations.json` | 직업 추천에서 빼는 직업 8개(종교 3, 장례 5). 직업 코드로 정확히 제외 | 결정 2026-09-25 |
 | `dwas.json` | 업무 활동 계층 2,087행(GWA 41 → IWA 332 → DWA 2,087) | GWAs to IWAs to DWAs |
+| `occupations_ko.json` | 직업 1,016개의 한국어 이름과 한 줄 설명. `{직업코드: {name, desc}}`. 결과지 직업 목록에 그대로 보여준다(설명은 "…하는 일" 꼴). 원문 title·desc를 보고 직접 썼다(API 번역 아님). 이름은 모두 다르다 | 직접 작성 2026-09-26 |
 
 `tasks.json` 필드
 - `id` 업무 ID, `soc` 이 업무가 속한 직업 코드(업무 하나는 직업 하나에만 속한다), `text` 업무 문장, `type` Core / Supplemental
