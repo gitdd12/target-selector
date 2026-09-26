@@ -6,7 +6,7 @@ import path from "node:path";
 import { OFF_TOPIC, participantSays, pickPersona, pickTargets } from "./persona";
 import { interviewTurn } from "../src/lib/interview";
 import { advance, applyRestatement, applyTurnResult, chooseExtra, finalizeStep, logEvent, startWindow } from "../src/lib/pipeline";
-import { newSession, save } from "../src/lib/store";
+import { getStore, newSession, save } from "../src/lib/store";
 import { COVERAGE_KEYS, WINDOW_ORDER, type Situation } from "../src/lib/types";
 
 const MAX_TURNS = 40;
@@ -14,12 +14,17 @@ const MAX_TURNS = 40;
 const PRESS_MORE_ONCE = new Set(["exp1", "hardship"]);
 
 async function main() {
-  const s = newSession({ ageBand: "20대 후반" });
-  s.targets = pickTargets();
-  s.phase = "interview";
-  logEvent(s, "simulated_run");
-  startWindow(s, "exp1");
-  await save(s);
+  // RESUME=<세션id>: 중간에 멈춘 시험을 저장된 지점부터 이어서 한다(같은 PERSONA로)
+  const resumed = process.env.RESUME ? await getStore().get(process.env.RESUME) : null;
+  if (process.env.RESUME && !resumed) throw new Error("이어서 할 세션을 찾을 수 없습니다: " + process.env.RESUME);
+  const s = resumed ?? newSession({ ageBand: "20대 후반" });
+  if (!resumed) {
+    s.targets = pickTargets();
+    s.phase = "interview";
+    logEvent(s, "simulated_run");
+    startWindow(s, "exp1");
+    await save(s);
+  }
   console.log("세션:", s.id);
 
   const out: string[] = [];

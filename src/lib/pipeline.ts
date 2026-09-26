@@ -21,6 +21,7 @@ import {
   ReportSchema,
   ValuesFieldsSchema,
   WINDOW_ORDER,
+  EXP_WINDOWS,
   isExpWindow,
   type ExperienceFields,
   type Session,
@@ -129,6 +130,17 @@ export async function advance(s: Session) {
 }
 
 /**
+ * 판정이 비어 보이는지: 확정 코어도 보류 설명도 없거나, 기록이 확정인 경험이 있는데 코어도 보류 사유도 없을 때.
+ * (판정이 기록을 뒤집는 건 괜찮지만, 그러면 unresolved나 hold_summary에 이유가 있어야 한다)
+ */
+function emptyJudgment(s: Session): boolean {
+  const f = s.final;
+  if (!f || f.cores.length > 0) return false;
+  const confirmedRecord = EXP_WINDOWS.some((k) => s.records[k]?.status === "확정(단일 경험)");
+  return !f.hold_summary.trim() || (confirmedRecord && f.unresolved.length === 0);
+}
+
+/**
  * 결과지 초안 단계를 한 걸음씩 진행한다: 코어 판정 → 직업 목록 → 결과지 작성 → 유명인 사례 초안.
  * 직업 목록은 결과지의 "직접 해 보기"(아직 확인 안 된 대상)에 쓰여서 결과지 작성보다 먼저 만든다.
  * 직업 목록은 판정할 문장이 많아 여러 번의 호출에 나눠 진행한다(중간 상태는 s.jobWork).
@@ -138,6 +150,18 @@ export async function finalizeStep(s: Session) {
   switch (s.finalizeStep) {
     case "judge": {
       s.final = await callJson("judge", FinalJudgmentSchema, [cached(judgeSystem())], judgeUser(s), s);
+      if (emptyJudgment(s)) {
+        // 시험에서 AI가 칸을 거의 다 비운 판정을 한 번 돌려준 적이 있다(다시 부르면 정상). 한 번만 다시 요청한다.
+        logEvent(s, "judge_empty_retry");
+        s.final = await callJson(
+          "judge",
+          FinalJudgmentSchema,
+          [cached(judgeSystem())],
+          `${judgeUser(s)}\n\n※ 직전 판정이 비어 있었습니다(확정 코어도 보류 사유도 없음). 기록을 다시 보고 cores 또는 hold_summary·unresolved를 빠짐없이 채우세요.`,
+          s,
+        );
+        if (emptyJudgment(s)) logEvent(s, "judge_empty_remaining", "검토 시 코어 판정을 직접 확인할 것");
+      }
       s.finalizeStep = "jobs";
       logEvent(
         s,
