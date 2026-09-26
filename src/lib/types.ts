@@ -48,7 +48,7 @@ export const COVERAGE_KEYS = [
 export type CoverageKey = (typeof COVERAGE_KEYS)[number];
 export const COVERAGE_LABEL: Record<CoverageKey, string> = {
   scene: "장면",
-  actions: "실제 한 행동과 무엇을 가지고 시작했는지",
+  actions: "실제 한 행동, 다룬 대상, 무엇을 가지고 시작했는지",
   chosen_parts: "요구받은 것과 본인이 정한 것",
   extra_effort: "요구 이상으로 들인 수고",
   fulfillment: "과정이나 결과물 자체에서 온 만족",
