@@ -121,12 +121,14 @@ export const ExperienceFieldsSchema = z.object({
   comparison_result: z
     .string()
     .describe("same_action_different_object 비교 질문 결과. 없으면 미상"),
-  // 확정 기본 조건(스펙): 구체 행동이 확보돼 있고, 방법·순서·범위를 본인이 정하거나 그 방식을 택한 부분이 확인되는가. 흔한 행동이라는 이유로 미충족 판정하지 않는다.
+  // 확정 기본 조건(스펙 v0.28): 구체 행동이 확보돼 있는가. 흔한 행동이라는 이유로 미충족 판정하지 않는다.
+  concrete_action_confirmed: z.boolean().describe("기본 조건: 그 경험에서 이 사람이 실제로 한 구체적인 행동이 확보됐다. 평가·성격 표현만 있고 행동이 없으면 false"),
+  // 무게 신호 ④ 본인이 정한 부분(스펙 v0.28부터 기본 조건이 아니라 신호). 시켜서 한 일이면 미확인일 수 있다.
   self_chosen_evidence: z.object({
     result: z.enum(["확인됨", "미확인", "불명확"]),
     reasoning: z.string(),
   }),
-  // 무게 신호 세 가지(스펙 "확정의 실제 조건"). 하나 이상이면 단일 경험으로 확정 가능. status는 코드가 이 값으로 다시 계산한다.
+  // 무게 신호 ①~③(스펙 "확정의 실제 조건"). ④(self_chosen_evidence)와 합쳐 두 개 이상이면 단일 경험으로 확정. status는 코드가 이 값으로 다시 계산한다.
   // 근거 하나는 신호 하나에만 쓴다(같은 발화를 두 신호의 근거로 겹쳐 쓰지 않는다).
   weight_signals: z.object({
     extra_effort: WeightSignal.describe("① 이번에 포착한 방식(본인이 정한 부분)에 요구·필요보다 더 들인 수고(그 자리에서 더 오래·더 여러 번, 그 방식을 위해 따로 알아보기·도구 마련). 일 전체에 들인 시간·수고와 마감·평가 때문에 한 것은 제외"),
