@@ -39,6 +39,7 @@ const BaseShape = {
 const ExpTurnSchema = z.object({ coverage: CoverageSchema, ...BaseShape });
 const ValuesTurnSchema = z.object(BaseShape);
 
+// 예전 코어 이름(여섯 단어). v0.31부터 어디에도 쓰지 않지만, 인터뷰 중 이런 식의 유형 해석이 새어 나가는지 계속 검사한다.
 const NAMES = "알기|짜기|다루기|이끌기|돌보기|꺼내기";
 const LEAK_PATTERNS = [
   /코어/,
@@ -50,17 +51,6 @@ const LEAK_PATTERNS = [
 export function leaksInterpretation(text: string): boolean {
   return LEAK_PATTERNS.some((re) => re.test(text));
 }
-
-/**
- * 결과지 초안 본문에 여섯 단어가 이름처럼 노출됐는지 검사한다(스펙: 결과지에 여섯 단어 노출 금지).
- * "알기 위해" 같은 평범한 문장은 걸리지 않게, 이름으로 쓰인 모양(따옴표·괄호·유형/패턴 표현·나열)만 잡는다.
- */
-const NAME_IN_REPORT = [
-  new RegExp(`['"‘“(（「](${NAMES})['"’”)）」]`),
-  new RegExp(`(${NAMES})\\s*(형|타입|유형|코어|패턴|성향|조합|라는|라고|이라는|이라고)`),
-  new RegExp(`(${NAMES})\\s*[·,、]\\s*(${NAMES})|(${NAMES})(와|과)\\s*(${NAMES})`),
-];
-export const leaksCoreNames = (text: string) => NAME_IN_REPORT.some((re) => re.test(text));
 
 /**
  * 안전장치(그물): 형식이 고정돼 있어도 글 안에 자기 생각 메모("think…"), 참가자 대사("user…"),

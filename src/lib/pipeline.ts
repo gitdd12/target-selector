@@ -1,12 +1,10 @@
 import { cached, callJson } from "./llm";
-import { shortlist } from "./jobs";
+import { jobsStep, jobWorkSummary } from "./jobfinder";
 import { computeReliability } from "./reliability";
-import { leaksCoreNames, type TurnResult } from "./interview";
+import type { TurnResult } from "./interview";
 import {
   celebSystem,
   celebUser,
-  jobPickerSystem,
-  jobPickerUser,
   judgeSystem,
   judgeUser,
   CLOSING_HINT,
@@ -20,13 +18,10 @@ import {
   CelebDraftSchema,
   ExperienceFieldsSchema,
   FinalJudgmentSchema,
-  JobPickSchema,
   ReportSchema,
   ValuesFieldsSchema,
   WINDOW_ORDER,
-  type Core,
   type ExperienceFields,
-  type Report,
   type Session,
   type WindowKind,
 } from "./types";
@@ -105,75 +100,39 @@ export async function advance(s: Session) {
   }
 }
 
-// 사용자에게 갈 글 전체(여섯 단어 노출 검사용). core 필드는 내부 태그라 제외한다.
-const visibleText = (r: Report) =>
-  [
-    ...r.cores.flatMap((c) => [c.behavior, c.restatement, c.pattern, c.cost_note ?? ""]),
-    ...Object.values(r.values ?? {}),
-    r.object?.label ?? "",
-    r.object?.note ?? "",
-    r.hold_note,
-  ].join("\n");
-
 /**
- * 결과지 초안 단계를 한 걸음씩 진행한다: 코어 판정 → 결과지 작성 → 직업 추천 → 유명인 사례 초안.
+ * 결과지 초안 단계를 한 걸음씩 진행한다: 코어 판정 → 직업 목록 → 결과지 작성 → 유명인 사례 초안.
+ * 직업 목록은 결과지의 "직접 해 보기"(아직 확인 안 된 대상)에 쓰여서 결과지 작성보다 먼저 만든다.
+ * 직업 목록은 판정할 문장이 많아 여러 번의 호출에 나눠 진행한다(중간 상태는 s.jobWork).
  * 실패해도 같은 단계부터 다시 할 수 있다. 결과는 참가자에게 보이지 않고, 운영자 검토용으로만 저장된다.
  */
 export async function finalizeStep(s: Session) {
   switch (s.finalizeStep) {
     case "judge": {
       s.final = await callJson("judge", FinalJudgmentSchema, [cached(judgeSystem())], judgeUser(s), s);
-      s.finalizeStep = "write";
-      logEvent(s, "judged", s.final.cores.map((c) => `${c.core}:${c.status}`).join(","));
+      s.finalizeStep = "jobs";
+      logEvent(
+        s,
+        "judged",
+        `${s.final.same_core.result} · ` + s.final.cores.map((c) => `${c.behavior.action}(${c.objects.confirmed.join("/")}):${c.status}`).join(", "),
+      );
+      break;
+    }
+    case "jobs": {
+      const done = await jobsStep(s);
+      logEvent(s, done ? "jobs_listed" : "jobs_progress", `${s.jobWork?.stage ?? "-"} · ${jobWorkSummary(s.jobWork)}`);
+      if (done) s.finalizeStep = "write";
       break;
     }
     case "write": {
       if (!s.final) throw new Error("코어 판정이 없습니다");
-      const base = writerUser(s, s.final);
-      let report = await callJson("writer", ReportSchema, [cached(writerSystem())], base, s);
-      if (leaksCoreNames(visibleText(report))) {
-        // 스펙: 여섯 단어는 결과지 본문에 노출하지 않는다. 한 번 다시 쓰게 하고, 그래도 남으면 검토자가 볼 수 있게 표시한다.
-        logEvent(s, "report_leak_retry");
-        report = await callJson(
-          "writer",
-          ReportSchema,
-          [cached(writerSystem())],
-          `${base}\n\n※ 직전 초안의 본문에 여섯 단어(알기·짜기 등)가 이름처럼 노출됐습니다. 본문에서는 모두 그 자리에서 지은 문구나 행동 서술로 바꿔서 다시 쓰세요.`,
-          s,
-        );
-        if (leaksCoreNames(visibleText(report))) logEvent(s, "report_leak_remaining", "검토 시 본문에서 여섯 단어를 확인할 것");
-      }
+      const report = await callJson("writer", ReportSchema, [cached(writerSystem())], writerUser(s, s.final), s);
+      if (report.cores.length !== s.final.cores.length)
+        logEvent(s, "report_core_count_mismatch", `판정 ${s.final.cores.length}개 / 결과지 ${report.cores.length}개 — 검토 필요`);
       s.report = report;
       s.reliability = computeReliability(s);
-      s.finalizeStep = "jobs";
-      logEvent(s, "report_written");
-      break;
-    }
-    case "jobs": {
-      const cores = (s.final?.cores ?? []).map((c) => c.core as Core);
-      if (cores.length > 0 && s.report) {
-        // 1~3단계: 코드(백분위 → 상위 필터 → gap)
-        s.jobCandidates = shortlist(cores);
-        // 4~5단계: AI(의미 판단 → 최종 5개 안팎)
-        const patterns = s.report.cores
-          .map((c) => `${c.core}: ${c.behavior} / 파악한 코어: ${c.pattern} / 경험: ${c.restatement.split("\n").join(" ")}`)
-          .join("\n");
-        const pick = await callJson(
-          "jobs",
-          JobPickSchema,
-          [cached(jobPickerSystem())],
-          jobPickerUser(cores, patterns, s.jobCandidates),
-          s,
-        );
-        // 후보 밖 직업은 걸러낸다(스펙: 매핑 데이터에 없는 직업은 쓰지 않는다)
-        const allowed = new Map(s.jobCandidates.map((c) => [c.code, c]));
-        pick.picks = pick.picks
-          .filter((p) => allowed.has(p.code))
-          .map((p) => ({ ...p, title_en: allowed.get(p.code)!.title }));
-        s.jobPick = pick;
-        logEvent(s, "jobs_picked", `${pick.picks.length}/${s.jobCandidates.length}`);
-      }
       s.finalizeStep = "celeb";
+      logEvent(s, "report_written");
       break;
     }
     case "celeb": {

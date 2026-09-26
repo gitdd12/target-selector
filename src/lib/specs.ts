@@ -104,12 +104,12 @@ export function interviewerSpec(kind: WindowKind): string {
     return join(
       ...common,
       dropParas(section(q, "필수 질문 흐름"), ["인터뷰 전체는 완전 채팅형이다"]),
-      // "비슷한 후보를 가르는 질문"(판별표)은 v0.25부터 기록·판정 단계의 내부 기준이라 인터뷰어에게는 넣지 않는다.
+      // "행동 설명을 쓰는 법"은 기록·판정 단계의 내부 기준이라 인터뷰어에게는 넣지 않는다(v0.25부터 인터뷰어는 코어를 가르는 질문을 하지 않는다).
       // 확정 조건(기본 조건·무게 신호 표·후보 처리)은 판정용이라 인터뷰어에게는 넣지 않는다. 요구 이상의 수고 질문은 위 필수 질문 표에 들어 있다.
       dropParas(section(q, "두 번째 경험과 비교 질문"), ["확정의 실제 조건.", "(1) 기본 조건", "(2) 무게 조건", "| 무게 신호", "기본 조건은 만족하지만"]),
     );
   }
-  // 가치관 창에는 경험 루프 표와 코어 판별 표를 넣지 않는다(코어를 캐는 방향으로 새는 것을 막음).
+  // 가치관 창에는 경험 루프 표와 행동 설명 기준을 넣지 않는다(코어를 캐는 방향으로 새는 것을 막음).
   return join(...common, section(q, "가치관·성향을 파악하는 질문"));
 }
 
@@ -122,7 +122,7 @@ export function recorderSpec(kind: WindowKind): string {
       fields,
       section(q, "표현을 곧이곧대로 받지 않는 원칙"),
       section(q, "코어와 혼동하기 쉬운 것"),
-      section(q, "비슷한 후보를 가르는 질문"),
+      section(q, "행동 설명을 쓰는 법"),
       section(q, "두 번째 경험과 비교 질문"),
     );
   }
@@ -135,7 +135,7 @@ export function judgeSpec(): string {
   return join(
     splitAdaptive(section(q, "적응형 질문 운영 규칙")).recordFields,
     section(q, "코어와 혼동하기 쉬운 것"),
-    section(q, "비슷한 후보를 가르는 질문"),
+    section(q, "행동 설명을 쓰는 법"),
     section(q, "두 번째 경험과 비교 질문"),
     section(q, "결과 확인과 종료"),
     section(r, "결과지가 반드시 지켜야 할 구조"),
@@ -143,17 +143,14 @@ export function judgeSpec(): string {
 }
 
 /**
- * 형식 예시(스펙의 실제 적용 사례)에서 여섯 단어 내부 태그와, 결과지 본문에 나오면 안 되는 줄을 걷어낸다.
+ * 형식 예시(스펙의 실제 적용 사례)에서 결과지 본문에 나오면 안 되는 줄(예전 방식의 직업 줄)을 걷어낸다.
  * 스펙 원문은 그대로 두고, 프롬프트에 넣을 때만 정리한다(AI가 따라 쓰지 않도록).
  */
-const TAG = "알기|짜기|다루기|이끌기|돌보기|꺼내기";
 function cleanExample(body: string): string {
   return body
     .split("\n")
-    .filter((l) => !/^\s*(이끌기 —|어울리는 방향\(직업 추천)/.test(l)) // 판단유보 메모, 직업 추천 줄(별도 단계에서 붙음)
-    .join("\n")
-    .replace(new RegExp(`\\s*\\((${TAG})\\)`, "g"), "") // 문구 뒤 괄호 내부 태그
-    .replace(/(\(알기\+짜기 확정[^)]*\))/, ""); // 제목의 내부 메모
+    .filter((l) => !/^\s*어울리는 방향/.test(l))
+    .join("\n");
 }
 
 /** 결과지 작성자. 형식 예시는 스펙 안의 실제 적용 사례(익명 처리)를 쓴다. */
@@ -174,8 +171,8 @@ export function celebSpec(): string {
   return join(section(r, "유명인 사례"), section(r, "결과지 전달 방식"));
 }
 
-/** 직업 최종 선정(AI). */
-export function jobPickerSpec(): string {
+/** 직업 목록(검색 문장 만들기·업무 판정·근거 번역). */
+export function jobsSpec(): string {
   const { r } = load();
-  return join(section(r, "직업 매핑 방법론"), section(r, "RAISEC과의 관계"));
+  return join(section(r, "직업 목록 만들기"));
 }

@@ -3,12 +3,12 @@ import {
   celebSystem,
   CLOSING_HINT,
   interviewerSystem,
-  jobPickerSystem,
   judgeSystem,
   OPENING,
   recorderSystem,
   writerSystem,
 } from "@/lib/prompts";
+import { judgeTaskSystem, querySystem, translateSystem } from "@/lib/jobPrompts";
 import { specVersions } from "@/lib/specs";
 import { WINDOW_LABEL, WINDOW_ORDER } from "@/lib/types";
 
@@ -26,7 +26,9 @@ export default function PromptsPage() {
     { label: "코어 판정", note: "4개 창이 끝난 뒤 확정 코어를 정함", text: judgeSystem() },
     { label: "결과지 작성", note: "결과지 초안 작성", text: writerSystem() },
     { label: "유명인 사례 초안", note: "미검증 후보를 제안", text: celebSystem() },
-    { label: "직업 최종 선정", note: "코드가 좁힌 후보에서 5개 안팎을 고름", text: jobPickerSystem() },
+    { label: "직업 목록 — 검색 문장", note: "코어의 행동 설명을 대상 20개에 끼워 넣은 영어 검색 문장(40개)", text: querySystem() },
+    { label: "직업 목록 — 업무 판정", note: "검색·확장된 업무 문장마다 강도·몫·대상을 판정(근거 재확인도 같은 판정)", text: judgeTaskSystem() },
+    { label: "직업 목록 — 근거 번역", note: "결과지에 인용할 근거 업무 문장 번역(한 번 번역해 모든 세션이 같이 씀)", text: translateSystem() },
   ];
 
   return (

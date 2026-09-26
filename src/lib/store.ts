@@ -24,6 +24,9 @@ export interface Store {
   list(): Promise<Session[]>;
   getContact(id: string): Promise<Contact | null>;
   putContact(id: string, c: Contact): Promise<void>;
+  // 여러 세션이 함께 쓰는 값(근거 업무 번역처럼 한 번 만들어 계속 쓰는 것). 못 읽으면 빈 값으로 넘어간다.
+  getCache(keys: string[]): Promise<Record<string, unknown>>;
+  putCache(entries: Record<string, unknown>): Promise<void>;
 }
 
 // 링크에 들어가는 비밀 코드 형식. 폴더 경로 조작 같은 것을 막는 검사도 겸한다.
@@ -79,6 +82,24 @@ class FileStore implements Store {
   async putContact(id: string, c: Contact) {
     this.write("contacts", id, c);
   }
+  private cacheFile() {
+    return path.join(this.root, "cache.json");
+  }
+  private readCache(): Record<string, unknown> {
+    try {
+      return JSON.parse(fs.readFileSync(this.cacheFile(), "utf8"));
+    } catch {
+      return {};
+    }
+  }
+  async getCache(keys: string[]) {
+    const all = this.readCache();
+    return Object.fromEntries(keys.filter((k) => k in all).map((k) => [k, all[k]]));
+  }
+  async putCache(entries: Record<string, unknown>) {
+    fs.mkdirSync(this.root, { recursive: true });
+    fs.writeFileSync(this.cacheFile(), JSON.stringify({ ...this.readCache(), ...entries }), "utf8");
+  }
 }
 
 class SupabaseStore implements Store {
@@ -121,6 +142,22 @@ class SupabaseStore implements Store {
   async putContact(id: string, c: Contact) {
     const { error } = await this.db.from("contacts").upsert({ session_id: id, email: c.email, created_at: c.at });
     if (error) throw new Error(`저장소 쓰기 실패: ${error.message}`);
+  }
+  // cache 표(supabase/schema.sql)가 아직 없으면 경고만 남기고 캐시 없이 진행한다(번역은 되지만 세션마다 새로 한다).
+  async getCache(keys: string[]) {
+    if (keys.length === 0) return {};
+    const { data, error } = await this.db.from("cache").select("key, value").in("key", keys);
+    if (error) {
+      console.warn(`cache 표 읽기 실패(캐시 없이 진행): ${error.message}`);
+      return {};
+    }
+    return Object.fromEntries((data ?? []).map((r) => [r.key as string, r.value as unknown]));
+  }
+  async putCache(entries: Record<string, unknown>) {
+    const rows = Object.entries(entries).map(([key, value]) => ({ key, value }));
+    if (rows.length === 0) return;
+    const { error } = await this.db.from("cache").upsert(rows);
+    if (error) console.warn(`cache 표 쓰기 실패(캐시 없이 진행): ${error.message}`);
   }
 }
 

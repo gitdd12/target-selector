@@ -15,6 +15,14 @@ create table if not exists public.contacts (
   created_at timestamptz not null default now()
 );
 
+-- 여러 세션이 함께 쓰는 값(근거 업무 문장의 한국어 번역 등). 한 번 만들면 다시 쓴다.
+create table if not exists public.cache (
+  key text primary key,
+  value jsonb not null,
+  created_at timestamptz not null default now()
+);
+
 -- 서버(서비스 키)만 읽고 쓸 수 있게 잠근다. 정책을 만들지 않으면 외부 공개 키로는 접근할 수 없다.
 alter table public.sessions enable row level security;
 alter table public.contacts enable row level security;
+alter table public.cache enable row level security;

@@ -36,7 +36,14 @@ export function addUsage(
   s.usage.cacheWrite += u.cache_creation_input_tokens ?? 0;
 }
 
-/** 결과를 정해진 형식(JSON)으로 받는 호출. 기록 정리·코어 판정·결과지·직업 선정에 쓴다. */
+// 시험 스크립트용: AI 대신 정해 둔 답을 돌려주는 함수를 끼운다(비용 없이 코드 흐름만 확인할 때). 앱에서는 쓰지 않는다.
+type Fake = (role: Role, system: Anthropic.TextBlockParam[], user: string) => unknown;
+let fake: Fake | null = null;
+export function setFakeLlm(f: Fake | null) {
+  fake = f;
+}
+
+/** 결과를 정해진 형식(JSON)으로 받는 호출. 기록 정리·코어 판정·결과지·직업 목록에 쓴다. */
 export async function callJson<S extends z.ZodType>(
   role: Role,
   schema: S,
@@ -45,6 +52,7 @@ export async function callJson<S extends z.ZodType>(
   s?: Session,
   maxTokens = 16000, // 이보다 크면 SDK가 "10분 넘을 수 있는 요청은 스트리밍 필수"라며 막는다
 ): Promise<z.infer<S>> {
+  if (fake) return schema.parse(await fake(role, system, user)) as z.infer<S>;
   const attempt = (userText: string) =>
     anthropic().messages.parse({
       model: MODELS[role],

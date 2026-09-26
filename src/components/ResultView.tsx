@@ -1,12 +1,13 @@
-import { approvedPeople, coreBehavior, getObject, getScenes, getValues, objectNoteParts, splitTarget, toLines } from "@/lib/result";
-import { ENDING, FIXED_ACTIONS, OBSERVE } from "@/lib/frame";
+import { approvedPeople, coreBehavior, getObject, getScenes, getValues, legacyCommonWhy, legacyCore, objectNoteParts, splitTarget, toLines } from "@/lib/result";
+import { ENDING, EXPLORE_COMMON_WHY, FIXED_ACTIONS, OBSERVE } from "@/lib/frame";
 import { SITUATION_SHORT, type Session } from "@/lib/types";
+import JobLists from "./JobLists";
 import PeopleCards, { type PersonView } from "./PeopleCards";
 import styles from "./ResultView.module.css";
 
 // 참가자가 받는 결과지 화면. 맨 위에 "내 것으로 채워진 공식"만 두고(틀 설명은 첫 화면에서 이미 했다),
-// 그 아래에 코어 → 가치관 → 닮은 사람들 → 어울리는 방향 순으로 짧은 카드로 보여준다.
-// 코어는 이름(여섯 단어)이 아니라 행동 문장으로만 보여준다.
+// 그 아래에 코어(코어마다 직업 목록) → 가치관 → 닮은 사람들 → 직접 해 보기 순으로 짧은 카드로 보여준다.
+// 코어는 이름이 아니라 행동 문장으로만 보여준다. 예전 세션(대상 칸·어울리는 직업·직무와 연결하면)도 그대로 보여준다.
 export default function ResultView({ session, contact, preview = false }: { session: Session; contact?: string; preview?: boolean }) {
   const r = session.report;
   if (!r) return null;
@@ -22,7 +23,9 @@ export default function ResultView({ session, contact, preview = false }: { sess
     at_your_scale: c.at_your_scale ?? "",
     source_hint: c.source_hint,
   }));
-  const jobs = session.jobPick?.picks ?? [];
+  const jobs = session.jobPick?.picks ?? []; // 예전 방식의 직업(v0.26까지)
+  const jobLists = session.jobLists ?? [];
+  const listFor = (i: number) => jobLists.find((x) => x.core === i);
   const nextQ = session.jobPick?.next_question;
   const targetNames = session.targets?.survivors.map((x) => x.name) ?? [];
   const objNote = objectNoteParts(session);
@@ -61,14 +64,14 @@ export default function ResultView({ session, contact, preview = false }: { sess
                 <span className={styles.slotLabel}>코어</span>
                 {multi ? (
                   <ul className={styles.slotBullets} data-n={Math.min(r.cores.length, 3)}>
-                    {r.cores.map((c) => (
-                      <li key={c.core}>{coreBehavior(c)}</li>
+                    {r.cores.map((c, i) => (
+                      <li key={i}>{coreBehavior(c)}</li>
                     ))}
                   </ul>
                 ) : (
                   <div className={styles.coreSlot} data-n={1}>
-                    {r.cores.map((c) => (
-                      <span className={styles.slotValue} key={c.core}>
+                    {r.cores.map((c, i) => (
+                      <span className={styles.slotValue} key={i}>
                         {coreBehavior(c)}
                       </span>
                     ))}
@@ -91,7 +94,7 @@ export default function ResultView({ session, contact, preview = false }: { sess
                     })}
                   </ul>
                 ) : (
-                  <span className={styles.slotValue}>{object.label || "지금은 정하지 않아요"}</span>
+                  <span className={styles.slotValue}>{object?.label || "지금은 정하지 않아요"}</span>
                 )}
               </div>
             </div>
@@ -118,17 +121,17 @@ export default function ResultView({ session, contact, preview = false }: { sess
                   <h3>파악한 코어</h3>
                   <p>{c.pattern}</p>
                 </div>
-                {c.bridge && (
+                {legacyCore(c).bridge && (
                   <div className={`${styles.row} ${styles.toneWork}`}>
                     <h3>직무와 연결하면</h3>
                     <dl className={styles.dl}>
                       <div>
                         <dt>쓰일 수 있는 일</dt>
-                        <dd>{c.bridge.usable}</dd>
+                        <dd>{legacyCore(c).bridge!.usable}</dd>
                       </div>
                       <div className={styles.dtUnknown}>
                         <dt>아직 모르는 것</dt>
-                        <dd>{c.bridge.unknown}</dd>
+                        <dd>{legacyCore(c).bridge!.unknown}</dd>
                       </div>
                     </dl>
                   </div>
@@ -155,7 +158,7 @@ export default function ResultView({ session, contact, preview = false }: { sess
             const badge = rel && <span className={`${styles.badge} ${rel.grade === "최상" ? styles.badgeGold : rel.grade === "상" ? styles.badgeSilver : styles.badgePlain}`}>신뢰도 {rel.grade}</span>;
             // 코어가 하나면 전부 펼쳐서 보여주고, 여러 개면 제목과 신뢰도만 보이고 나머지는 접어 둔다
             return (
-              <section className={styles.block} key={c.core}>
+              <section className={styles.block} key={i}>
                 <p className={styles.kicker}>코어</p>
                 <h2 className={styles.coreLine}>{coreBehavior(c)}</h2>
                 {rel && (
@@ -165,6 +168,7 @@ export default function ResultView({ session, contact, preview = false }: { sess
                   </div>
                 )}
                 {rows}
+                {listFor(i) && <JobLists jobs={listFor(i)!} first />}
               </section>
             );
           })}
@@ -176,7 +180,7 @@ export default function ResultView({ session, contact, preview = false }: { sess
                 {r.cores.map((c, i) => {
                   const rel = session.reliability?.[i];
                   return (
-                    <li key={c.core}>
+                    <li key={i}>
                       <span className={styles.coreNo}>코어 {i + 1}</span>
                       <b>{coreBehavior(c)}</b>
                       {rel && (
@@ -201,7 +205,7 @@ export default function ResultView({ session, contact, preview = false }: { sess
                   <h3>경험</h3>
                   <ul className={styles.bul}>
                     {r.cores.map((c, i) => (
-                      <li key={c.core}>
+                      <li key={i}>
                         <b>코어 {i + 1}</b> {toLines(c.restatement).join(" ")}
                       </li>
                     ))}
@@ -211,21 +215,21 @@ export default function ResultView({ session, contact, preview = false }: { sess
                   <h3>파악한 코어</h3>
                   <ul className={styles.bul}>
                     {r.cores.map((c, i) => (
-                      <li key={c.core}>
+                      <li key={i}>
                         <b>코어 {i + 1}</b> {c.pattern}
                       </li>
                     ))}
                   </ul>
                 </div>
-                {r.cores.some((c) => c.bridge) && (
+                {r.cores.some((c) => legacyCore(c).bridge) && (
                   <div className={`${styles.row} ${styles.toneWork}`}>
                     <h3>직무와 연결하면</h3>
                     <ul className={styles.bul}>
                       {r.cores.map(
                         (c, i) =>
-                          c.bridge && (
-                            <li key={c.core}>
-                              <b>코어 {i + 1}</b> {c.bridge.usable} {c.bridge.unknown}
+                          legacyCore(c).bridge && (
+                            <li key={i}>
+                              <b>코어 {i + 1}</b> {legacyCore(c).bridge!.usable} {legacyCore(c).bridge!.unknown}
                             </li>
                           ),
                       )}
@@ -239,7 +243,7 @@ export default function ResultView({ session, contact, preview = false }: { sess
                       {r.cores.map(
                         (c, i) =>
                           c.cost_note && (
-                            <li key={c.core}>
+                            <li key={i}>
                               <b>코어 {i + 1}</b> {c.cost_note}
                             </li>
                           ),
@@ -248,6 +252,17 @@ export default function ResultView({ session, contact, preview = false }: { sess
                   </div>
                 )}
               </div>
+              {r.cores.map(
+                (c, i) =>
+                  listFor(i) && (
+                    <div className={styles.coreJobs} key={i}>
+                      <p className={styles.coreJobsTitle}>
+                        <span className={styles.coreNo}>코어 {i + 1}</span> {coreBehavior(c)}
+                      </p>
+                      <JobLists jobs={listFor(i)!} first={i === 0} />
+                    </div>
+                  ),
+              )}
             </section>
           )}
 
@@ -268,6 +283,7 @@ export default function ResultView({ session, contact, preview = false }: { sess
             </section>
           )}
 
+          {object && (
           <section className={styles.block}>
             <p className={styles.kicker}>대상</p>
             <h2 className={styles.big}>{objNote.title}</h2>
@@ -283,6 +299,7 @@ export default function ResultView({ session, contact, preview = false }: { sess
             )}
             <p className={styles.emptyText}>{objNote.outro}</p>
           </section>
+          )}
 
           {jobs.length > 0 && (
             <section className={styles.jobs}>
@@ -357,16 +374,15 @@ export default function ResultView({ session, contact, preview = false }: { sess
               {session.situation === "exploring" ? (
                 r.explore?.items?.length ? (
                   <>
-                    {r.explore.common_why && (
-                      <div className={styles.commonWhy}>
-                        <b>공통 이유 : </b>
-                        {r.explore.common_why}
-                      </div>
-                    )}
+                    <div className={styles.commonWhy}>
+                      <b>공통 이유 : </b>
+                      {legacyCommonWhy(r) || EXPLORE_COMMON_WHY}
+                    </div>
                     <p className={styles.pickNote}>마음에 드는 하나만 해도 돼요.</p>
                     <ol className={styles.doList}>
                       {r.explore.items.map((it) => (
                         <li key={it.title}>
+                          {"object" in it && it.object && <span className={styles.doObject}>{it.object}</span>}
                           <b>{it.title}</b>
                           <p>{it.do}</p>
                           <p className={styles.doWhy}>
@@ -388,11 +404,11 @@ export default function ResultView({ session, contact, preview = false }: { sess
 
               <div className={styles.observeBox}>
                 <p className={styles.observeLead}>{OBSERVE.lead}</p>
-                <ul className={styles.observeList}>
+                <ol className={styles.observeList}>
                   {OBSERVE.items.map((x) => (
                     <li key={x}>{x}</li>
                   ))}
-                </ul>
+                </ol>
                 <p className={styles.observeClosing}>{OBSERVE.closing}</p>
               </div>
             </section>
@@ -420,7 +436,7 @@ export default function ResultView({ session, contact, preview = false }: { sess
             <a href={`mailto:${contact}`}>{contact}</a>
           </>
         )}
-        {jobs.length > 0 && (
+        {(jobs.length > 0 || jobLists.length > 0) && (
           <div className={styles.legal}>
           <p>
             직업 정보에는 미국 노동부 고용훈련청(USDOL/ETA)의 O*NET 31.0 데이터베이스가 쓰였고, CC BY 4.0 라이선스(

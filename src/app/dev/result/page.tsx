@@ -2,7 +2,8 @@ import ResultView from "@/components/ResultView";
 import type { Session } from "@/lib/types";
 
 // 개발용 미리보기: 결과지 화면을 가짜 데이터로 그려 본다(AI 비용 0원). 인물·직업 내용은 모양을 보기 위한 예시일 뿐이다.
-const sample = {
+// 기본은 새 형식(v0.27: 코어 칸 안의 직업 목록, 대상 칸 없음). ?legacy=1 은 예전 형식(대상 칸·어울리는 직업·직무와 연결하면)이 그대로 보이는지 확인용.
+const legacy = {
   report: {
     cores: [
       {
@@ -103,21 +104,484 @@ const sample = {
   },
 } as unknown as Session;
 
+
+// 직업 목록 예시: 수동 판정으로 돌린 직업 로직 결과(근거 번역은 미리보기용 글)
+const JOB_LISTS = [
+  {
+    "core": 0,
+    "confirmed": [
+      {
+        "soc": "27-3043.05",
+        "name": "시인·작사가·창작 작가",
+        "desc": "시·에세이·노랫말 등 창작 글을 쓰는 일",
+        "score": 0.2043,
+        "match": 82,
+        "object": "글·문서",
+        "evidence": [
+          {
+            "text": "Plan project arrangements or outlines, and organize material accordingly.",
+            "quote": "Plan project arrangements or outlines, and organize material accordingly.",
+            "ko": "(미리보기용) Plan project arrangements or outlines, a → [[행동에 해당하는 부분]]을 굵게 보여줘요."
+          },
+          {
+            "text": "Revise written material to meet personal standards and to satisfy needs of clients, publishers, directors, or producers.",
+            "quote": "Revise written material to meet personal standards and to satisfy needs of clients, publishers, directors, or producers.",
+            "ko": "(미리보기용) Revise written material to meet personal → [[행동에 해당하는 부분]]을 굵게 보여줘요."
+          }
+        ]
+      },
+      {
+        "soc": "43-9081.00",
+        "name": "교정원",
+        "desc": "인쇄 전 원고의 오탈자를 찾아 표시하는 일",
+        "score": 0.1866,
+        "match": 75,
+        "object": "글·문서",
+        "evidence": [
+          {
+            "text": "Mark copy to indicate and correct errors in type, arrangement, grammar, punctuation, or spelling, using standard printers' marks.",
+            "quote": "Mark copy to indicate and correct errors in type, arrangement, grammar, punctuation, or spelling, using standard printers' marks.",
+            "ko": "(미리보기용) Mark copy to indicate and correct errors → [[행동에 해당하는 부분]]을 굵게 보여줘요."
+          }
+        ]
+      },
+      {
+        "soc": "43-9022.00",
+        "name": "타이피스트",
+        "desc": "편지·보고서 등을 타이핑하는 일",
+        "score": 0.171,
+        "match": 68,
+        "object": "글·문서",
+        "evidence": [
+          {
+            "text": "Reformat documents, moving paragraphs or columns.",
+            "quote": "Reformat documents, moving paragraphs or columns.",
+            "ko": "(미리보기용) Reformat documents, moving paragraphs or → [[행동에 해당하는 부분]]을 굵게 보여줘요."
+          },
+          {
+            "text": "Electronically sort and compile text and numerical data, retrieving, updating, and merging documents as required.",
+            "quote": "Electronically sort and compile text and numerical data, retrieving, updating, and merging documents as required.",
+            "ko": "(미리보기용) Electronically sort and compile text and → [[행동에 해당하는 부분]]을 굵게 보여줘요."
+          }
+        ]
+      }
+    ],
+    "other": [
+      {
+        "soc": "27-4032.00",
+        "name": "영상 편집자",
+        "desc": "촬영한 영상을 편집해 작품으로 만드는 일",
+        "score": 0.4519,
+        "match": 100,
+        "object": "영상",
+        "evidence": [
+          {
+            "text": "Organize and string together raw footage into a continuous whole according to scripts or the instructions of directors and producers.",
+            "quote": "Organize and string together raw footage into a continuous whole according to scripts or the instructions of directors and producers.",
+            "ko": "촬영한 원본 영상을 대본이나 감독의 지시에 따라 [[하나로 이어지게 정리해 붙인다]]."
+          },
+          {
+            "text": "Select and combine the most effective shots of each scene to form a logical and smoothly running story.",
+            "quote": "Select and combine the most effective shots of each scene to form a logical and smoothly running story.",
+            "ko": "(미리보기용) Select and combine the most effective sh → [[행동에 해당하는 부분]]을 굵게 보여줘요."
+          }
+        ]
+      },
+      {
+        "soc": "43-9031.00",
+        "name": "편집 디자이너(DTP)",
+        "desc": "글과 그림을 배치해 인쇄물 레이아웃을 만드는 일",
+        "score": 0.2617,
+        "match": 100,
+        "object": "그림·이미지·디자인",
+        "evidence": [
+          {
+            "text": "Position text and art elements from a variety of databases in a visually appealing way to design print or web pages, using knowledge of type styles and size and layout patterns.",
+            "quote": "Position text and art elements from a variety of databases in a visually appealing way to design print or web pages, using knowledge of type styles and size and layout patterns.",
+            "ko": "(미리보기용) Position text and art elements from a va → [[행동에 해당하는 부분]]을 굵게 보여줘요."
+          },
+          {
+            "text": "Operate desktop publishing software and equipment to design, lay out, and produce camera-ready copy.",
+            "quote": "Operate desktop publishing software and equipment to design, lay out, and produce camera-ready copy.",
+            "ko": "(미리보기용) Operate desktop publishing software and  → [[행동에 해당하는 부분]]을 굵게 보여줘요."
+          }
+        ]
+      },
+      {
+        "soc": "27-2041.00",
+        "name": "작곡가·지휘자",
+        "desc": "곡을 만들거나 연주를 지휘하는 일",
+        "score": 0.2233,
+        "match": 89,
+        "object": "소리·음악",
+        "evidence": [
+          {
+            "text": "Position members within groups to obtain balance among instrumental or vocal sections.",
+            "quote": "Position members within groups to obtain balance among instrumental or vocal sections.",
+            "ko": "(미리보기용) Position members within groups to obtain → [[행동에 해당하는 부분]]을 굵게 보여줘요."
+          },
+          {
+            "text": "Use gestures to shape the music being played, communicating desired tempo, phrasing, tone, color, pitch, volume, and other performance aspects.",
+            "quote": "Use gestures to shape the music being played, communicating desired tempo, phrasing, tone, color, pitch, volume, and other performance aspects.",
+            "ko": "(미리보기용) Use gestures to shape the music being pl → [[행동에 해당하는 부분]]을 굵게 보여줘요."
+          }
+        ]
+      }
+    ],
+    "exploreObjects": [
+      {
+        "object": "영상",
+        "soc": "27-4032.00",
+        "name": "영상 편집자",
+        "match": 100
+      },
+      {
+        "object": "그림·이미지·디자인",
+        "soc": "43-9031.00",
+        "name": "편집 디자이너(DTP)",
+        "match": 100
+      },
+      {
+        "object": "소리·음악",
+        "soc": "27-2041.00",
+        "name": "작곡가·지휘자",
+        "match": 89
+      },
+      {
+        "object": "물건",
+        "soc": "27-1026.00",
+        "name": "디스플레이어",
+        "match": 60
+      }
+    ]
+  },
+  {
+    "core": 1,
+    "confirmed": [
+      {
+        "soc": "21-1013.00",
+        "name": "가족 치료사",
+        "desc": "부부와 가족의 관계 문제를 상담하고 치료하는 일",
+        "score": 0.2353,
+        "match": 94,
+        "object": "사람·관계",
+        "evidence": [
+          {
+            "text": "Counsel clients on concerns, such as unsatisfactory relationships, divorce and separation, child rearing, home management, or financial difficulties.",
+            "quote": "Counsel clients on concerns, such as unsatisfactory relationships, divorce and separation, child rearing, home management, or financial difficulties.",
+            "ko": "(미리보기용) Counsel clients on concerns, such as uns → [[행동에 해당하는 부분]]을 굵게 보여줘요."
+          },
+          {
+            "text": "Ask questions that will help clients identify their feelings and behaviors.",
+            "quote": "Ask questions that will help clients identify their feelings and behaviors.",
+            "ko": "(미리보기용) Ask questions that will help clients ide → [[행동에 해당하는 부분]]을 굵게 보여줘요."
+          }
+        ]
+      },
+      {
+        "soc": "21-1014.00",
+        "name": "정신건강 상담사",
+        "desc": "마음의 건강을 위해 개인과 집단을 상담하는 일",
+        "score": 0.188,
+        "match": 75,
+        "object": "사람·관계",
+        "evidence": [
+          {
+            "text": "Counsel clients or patients, individually or in group sessions, to assist in overcoming dependencies, adjusting to life, or making changes.",
+            "quote": "Counsel clients or patients, individually or in group sessions, to assist in overcoming dependencies, adjusting to life, or making changes.",
+            "ko": "(미리보기용) Counsel clients or patients, individuall → [[행동에 해당하는 부분]]을 굵게 보여줘요."
+          },
+          {
+            "text": "Encourage clients to express their feelings and discuss what is happening in their lives, helping them to develop insight into themselves or their relationships.",
+            "quote": "Encourage clients to express their feelings and discuss what is happening in their lives, helping them to develop insight into themselves or their relationships.",
+            "ko": "(미리보기용) Encourage clients to express their feeli → [[행동에 해당하는 부분]]을 굵게 보여줘요."
+          }
+        ]
+      },
+      {
+        "soc": "21-1023.00",
+        "name": "정신건강 사회복지사",
+        "desc": "정신건강·중독 문제를 가진 사람을 평가하고 돕는 일",
+        "score": 0.1741,
+        "match": 70,
+        "object": "사람·관계",
+        "evidence": [
+          {
+            "text": "Counsel clients in individual or group sessions to assist them in dealing with substance abuse, mental or physical illness, poverty, unemployment, or physical abuse.",
+            "quote": "Counsel clients in individual or group sessions to assist them in dealing with substance abuse, mental or physical illness, poverty, unemployment, or physical abuse.",
+            "ko": "(미리보기용) Counsel clients in individual or group s → [[행동에 해당하는 부분]]을 굵게 보여줘요."
+          },
+          {
+            "text": "Counsel or aid family members to assist them in understanding, dealing with, or supporting the client or patient.",
+            "quote": "Counsel or aid family members to assist them in understanding, dealing with, or supporting the client or patient.",
+            "ko": "(미리보기용) Counsel or aid family members to assist  → [[행동에 해당하는 부분]]을 굵게 보여줘요."
+          }
+        ]
+      }
+    ],
+    "other": [
+      {
+        "soc": "31-1133.00",
+        "name": "정신병동 보호사",
+        "desc": "정신 질환 환자의 생활을 돕고 살피는 일",
+        "score": 0.2313,
+        "match": 93,
+        "object": "몸·건강",
+        "evidence": [
+          {
+            "text": "Provide patients with cognitive, intellectual, or developmental disabilities with routine physical, emotional, psychological, or rehabilitation care under the direction of nursing or medical staff.",
+            "quote": "Provide patients with cognitive, intellectual, or developmental disabilities with routine physical, emotional, psychological, or rehabilitation care under the direction of nursing or medical staff.",
+            "ko": "(미리보기용) Provide patients with cognitive, intelle → [[행동에 해당하는 부분]]을 굵게 보여줘요."
+          },
+          {
+            "text": "Aid patients in becoming accustomed to hospital routines.",
+            "quote": "Aid patients in becoming accustomed to hospital routines.",
+            "ko": "(미리보기용) Aid patients in becoming accustomed to h → [[행동에 해당하는 부분]]을 굵게 보여줘요."
+          }
+        ]
+      },
+      {
+        "soc": "29-2053.00",
+        "name": "정신건강 요양보호사",
+        "desc": "정신 질환이 있는 사람을 돌보고 치료 계획을 따르는 일",
+        "score": 0.218,
+        "match": 87,
+        "object": "몸·건강",
+        "evidence": [
+          {
+            "text": "Monitor patients' physical and emotional well-being and report unusual behavior or physical ailments to medical staff.",
+            "quote": "Monitor patients' physical and emotional well-being and report unusual behavior or physical ailments to medical staff.",
+            "ko": "(미리보기용) Monitor patients' physical and emotional → [[행동에 해당하는 부분]]을 굵게 보여줘요."
+          }
+        ]
+      },
+      {
+        "soc": "21-1021.00",
+        "name": "아동·가족 사회복지사",
+        "desc": "아동과 가족이 어려움을 이겨내도록 지원하는 일",
+        "score": 0.2158,
+        "match": 86,
+        "object": "대상 없음",
+        "evidence": [
+          {
+            "text": "Counsel students whose behavior, school progress, or mental or physical impairment indicate a need for assistance, diagnosing students' problems and arranging for needed services.",
+            "quote": "Counsel students whose behavior, school progress, or mental or physical impairment indicate a need for assistance, diagnosing students' problems and arranging for needed services.",
+            "ko": "(미리보기용) Counsel students whose behavior, school  → [[행동에 해당하는 부분]]을 굵게 보여줘요."
+          },
+          {
+            "text": "Serve as liaisons between students, homes, schools, family services, child guidance clinics, courts, protective services, doctors, and other contacts to help children who face problems, such as disabilities, abuse, or poverty.",
+            "quote": "Serve as liaisons between students, homes, schools, family services, child guidance clinics, courts, protective services, doctors, and other contacts to help children who face problems, such as disabilities, abuse, or poverty.",
+            "ko": "(미리보기용) Serve as liaisons between students, home → [[행동에 해당하는 부분]]을 굵게 보여줘요."
+          }
+        ]
+      }
+    ],
+    "exploreObjects": [
+      {
+        "object": "몸·건강",
+        "soc": "31-1133.00",
+        "name": "정신병동 보호사",
+        "match": 93
+      },
+      {
+        "object": "생물",
+        "soc": "39-2011.00",
+        "name": "동물 훈련사",
+        "match": 41
+      },
+      {
+        "object": "돈·재무",
+        "soc": "13-2052.00",
+        "name": "개인 자산관리사",
+        "match": 7
+      }
+    ]
+  },
+  {
+    "core": 2,
+    "confirmed": [
+      {
+        "soc": "27-3043.05",
+        "name": "시인·작사가·창작 작가",
+        "desc": "시·에세이·노랫말 등 창작 글을 쓰는 일",
+        "score": 0.2043,
+        "match": 82,
+        "object": "글·문서",
+        "evidence": [
+          {
+            "text": "Plan project arrangements or outlines, and organize material accordingly.",
+            "quote": "Plan project arrangements or outlines, and organize material accordingly.",
+            "ko": "(미리보기용) Plan project arrangements or outlines, a → [[행동에 해당하는 부분]]을 굵게 보여줘요."
+          },
+          {
+            "text": "Revise written material to meet personal standards and to satisfy needs of clients, publishers, directors, or producers.",
+            "quote": "Revise written material to meet personal standards and to satisfy needs of clients, publishers, directors, or producers.",
+            "ko": "(미리보기용) Revise written material to meet personal → [[행동에 해당하는 부분]]을 굵게 보여줘요."
+          }
+        ]
+      },
+      {
+        "soc": "43-9081.00",
+        "name": "교정원",
+        "desc": "인쇄 전 원고의 오탈자를 찾아 표시하는 일",
+        "score": 0.1866,
+        "match": 75,
+        "object": "글·문서",
+        "evidence": [
+          {
+            "text": "Mark copy to indicate and correct errors in type, arrangement, grammar, punctuation, or spelling, using standard printers' marks.",
+            "quote": "Mark copy to indicate and correct errors in type, arrangement, grammar, punctuation, or spelling, using standard printers' marks.",
+            "ko": "(미리보기용) Mark copy to indicate and correct errors → [[행동에 해당하는 부분]]을 굵게 보여줘요."
+          }
+        ]
+      },
+      {
+        "soc": "43-9022.00",
+        "name": "타이피스트",
+        "desc": "편지·보고서 등을 타이핑하는 일",
+        "score": 0.171,
+        "match": 68,
+        "object": "글·문서",
+        "evidence": [
+          {
+            "text": "Reformat documents, moving paragraphs or columns.",
+            "quote": "Reformat documents, moving paragraphs or columns.",
+            "ko": "(미리보기용) Reformat documents, moving paragraphs or → [[행동에 해당하는 부분]]을 굵게 보여줘요."
+          },
+          {
+            "text": "Electronically sort and compile text and numerical data, retrieving, updating, and merging documents as required.",
+            "quote": "Electronically sort and compile text and numerical data, retrieving, updating, and merging documents as required.",
+            "ko": "(미리보기용) Electronically sort and compile text and → [[행동에 해당하는 부분]]을 굵게 보여줘요."
+          }
+        ]
+      }
+    ],
+    "other": [
+      {
+        "soc": "27-4032.00",
+        "name": "영상 편집자",
+        "desc": "촬영한 영상을 편집해 작품으로 만드는 일",
+        "score": 0.4519,
+        "match": 100,
+        "object": "영상",
+        "evidence": [
+          {
+            "text": "Organize and string together raw footage into a continuous whole according to scripts or the instructions of directors and producers.",
+            "quote": "Organize and string together raw footage into a continuous whole according to scripts or the instructions of directors and producers.",
+            "ko": "촬영한 원본 영상을 대본이나 감독의 지시에 따라 [[하나로 이어지게 정리해 붙인다]]."
+          },
+          {
+            "text": "Select and combine the most effective shots of each scene to form a logical and smoothly running story.",
+            "quote": "Select and combine the most effective shots of each scene to form a logical and smoothly running story.",
+            "ko": "(미리보기용) Select and combine the most effective sh → [[행동에 해당하는 부분]]을 굵게 보여줘요."
+          }
+        ]
+      },
+      {
+        "soc": "43-9031.00",
+        "name": "편집 디자이너(DTP)",
+        "desc": "글과 그림을 배치해 인쇄물 레이아웃을 만드는 일",
+        "score": 0.2617,
+        "match": 100,
+        "object": "그림·이미지·디자인",
+        "evidence": [
+          {
+            "text": "Position text and art elements from a variety of databases in a visually appealing way to design print or web pages, using knowledge of type styles and size and layout patterns.",
+            "quote": "Position text and art elements from a variety of databases in a visually appealing way to design print or web pages, using knowledge of type styles and size and layout patterns.",
+            "ko": "(미리보기용) Position text and art elements from a va → [[행동에 해당하는 부분]]을 굵게 보여줘요."
+          },
+          {
+            "text": "Operate desktop publishing software and equipment to design, lay out, and produce camera-ready copy.",
+            "quote": "Operate desktop publishing software and equipment to design, lay out, and produce camera-ready copy.",
+            "ko": "(미리보기용) Operate desktop publishing software and  → [[행동에 해당하는 부분]]을 굵게 보여줘요."
+          }
+        ]
+      },
+      {
+        "soc": "27-2041.00",
+        "name": "작곡가·지휘자",
+        "desc": "곡을 만들거나 연주를 지휘하는 일",
+        "score": 0.2233,
+        "match": 89,
+        "object": "소리·음악",
+        "evidence": [
+          {
+            "text": "Position members within groups to obtain balance among instrumental or vocal sections.",
+            "quote": "Position members within groups to obtain balance among instrumental or vocal sections.",
+            "ko": "(미리보기용) Position members within groups to obtain → [[행동에 해당하는 부분]]을 굵게 보여줘요."
+          },
+          {
+            "text": "Use gestures to shape the music being played, communicating desired tempo, phrasing, tone, color, pitch, volume, and other performance aspects.",
+            "quote": "Use gestures to shape the music being played, communicating desired tempo, phrasing, tone, color, pitch, volume, and other performance aspects.",
+            "ko": "(미리보기용) Use gestures to shape the music being pl → [[행동에 해당하는 부분]]을 굵게 보여줘요."
+          }
+        ]
+      }
+    ],
+    "exploreObjects": [
+      {
+        "object": "영상",
+        "soc": "27-4032.00",
+        "name": "영상 편집자",
+        "match": 100
+      },
+      {
+        "object": "그림·이미지·디자인",
+        "soc": "43-9031.00",
+        "name": "편집 디자이너(DTP)",
+        "match": 100
+      },
+      {
+        "object": "소리·음악",
+        "soc": "27-2041.00",
+        "name": "작곡가·지휘자",
+        "match": 89
+      },
+      {
+        "object": "물건",
+        "soc": "27-1026.00",
+        "name": "디스플레이어",
+        "match": 60
+      }
+    ]
+  }
+];
+
+const sample = {
+  ...legacy,
+  report: {
+    ...legacy.report!,
+    cores: legacy.report!.cores.map((c) => ({ behavior: c.behavior, restatement: c.restatement, pattern: c.pattern, cost_note: c.cost_note, say: "" })),
+    object: undefined,
+    explore: {
+      items: [
+        { core: 1, object: "영상", title: "영상 클립 순서 바꿔 잇기", do: "짧은 영상 클립 3~4개를 순서를 바꿔 가며 이어 보세요.", why: "이게 끌리면 영상 편집자 같은 일에서도 이 행동이 쓰여요." },
+        { core: 1, object: "그림·이미지·디자인", title: "포스터 요소 자리 바꾸기", do: "포스터 한 장의 글과 그림 자리를 바꿔 가며 가장 잘 읽히는 배치를 찾아보세요.", why: "이게 끌리면 편집 디자이너 같은 일에서도 이 행동이 쓰여요." },
+        { core: 2, object: "몸·건강", title: "가족 건강 루틴 챙기기", do: "요즘 지쳐 보이는 가족의 하루 루틴을 함께 살펴보고 무리한 부분을 하나 덜어 보세요.", why: "이게 끌리면 정신병동 보호사 같은 일에서도 이 행동이 쓰여요." },
+      ],
+    },
+  },
+  jobPick: undefined,
+  jobLists: JOB_LISTS,
+} as unknown as Session;
+
 // ?n=1|2|3 으로 코어 개수를 바꿔 볼 수 있다. DEV_REPORT_FILE 환경변수에 결과지 JSON 경로를 주면 그 내용으로 그린다(시험용).
-export default async function DevResult({ searchParams }: { searchParams: Promise<{ n?: string }> }) {
-  const { n } = await searchParams;
+export default async function DevResult({ searchParams }: { searchParams: Promise<{ n?: string; legacy?: string }> }) {
+  const { n, legacy: old } = await searchParams;
   const count = Math.max(1, Math.min(3, Number(n) || 3));
-  let session = sample;
+  const base = old ? legacy : sample;
+  let session = base;
   const file = process.env.DEV_REPORT_FILE;
   if (file) {
     const fs = await import("node:fs");
     const loaded = JSON.parse(fs.readFileSync(file, "utf8"));
-    session = { ...sample, ...loaded, report: { ...sample.report, ...loaded.report } } as Session;
+    session = { ...base, ...loaded, report: { ...base.report, ...loaded.report } } as Session;
   } else {
     session = {
-      ...sample,
-      report: { ...sample.report, cores: sample.report!.cores.slice(0, count) },
-      reliability: sample.reliability?.slice(0, count),
+      ...base,
+      report: { ...base.report, cores: base.report!.cores.slice(0, count) },
+      reliability: base.reliability?.slice(0, count),
+      jobLists: base.jobLists?.filter((j) => j.core < count),
     } as Session;
   }
   return (

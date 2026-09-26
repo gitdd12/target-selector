@@ -30,8 +30,10 @@ export function evidenceQuote(evidence: string | undefined): string {
 // 근거 경험이 여러 개면 각 경험에서 충족된 신호를 합쳐서 센다.
 export function computeReliability(s: Session): Reliability[] {
   const finals = s.final?.cores ?? [];
-  return (s.report?.cores ?? []).map((rc) => {
-    const f = finals.find((x) => x.core === rc.core);
+  // 결과지 코어는 코어 판정과 같은 순서로 쓴다(예전 세션은 코어 이름 태그로 맞춘다).
+  return (s.report?.cores ?? []).map((rc, i) => {
+    const tag = (rc as { core?: string }).core;
+    const f = tag ? finals.find((x) => (x as { core?: string }).core === tag) : finals[i];
     const found = new Map<SignalKey, string>();
     for (const n of f?.basis_experiences ?? []) {
       const rec = n === 1 ? s.records.exp1 : n === 2 ? s.records.exp2 : undefined;

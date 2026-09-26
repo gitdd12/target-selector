@@ -1,5 +1,5 @@
 // 어떤 AI 모델을 어느 역할에 쓸지 한 곳에서 정한다. 바꾸려면 환경변수만 바꾸면 된다.
-// 미묘한 판단이 핵심인 코어 판정(judge)과 결과지 작성(writer)만 Opus, 나머지는 더 빠르고 싼 Sonnet.
+// 미묘한 판단이 핵심인 코어 판정(judge)·결과지 작성(writer)·직업 판정(jobs)은 Opus, 나머지는 더 빠르고 싼 Sonnet.
 const OPUS = "claude-opus-5-5";
 const SONNET = "claude-sonnet-5";
 export const MODELS = {
@@ -7,7 +7,8 @@ export const MODELS = {
   recorder: process.env.MODEL_RECORDER ?? SONNET,
   judge: process.env.MODEL_JUDGE ?? OPUS,
   writer: process.env.MODEL_WRITER ?? OPUS,
-  jobs: process.env.MODEL_JOBS ?? SONNET,
+  // 직업 목록: 검색 문장 만들기·업무 판정·근거 재확인·근거 번역(docs/직업추천_재설계 2단계, 판정은 Opus)
+  jobs: process.env.MODEL_JOBS ?? OPUS,
   celeb: process.env.MODEL_CELEB ?? SONNET,
 };
 
@@ -19,7 +20,7 @@ export const EFFORT: Record<keyof typeof MODELS, Effort> = {
   recorder: "medium",
   judge: "high",
   writer: "high",
-  jobs: "medium",
+  jobs: "low", // 업무 판정은 문장 수가 많아(사람당 약 1,300~2,300문장) 생각을 짧게 한다
   celeb: "high",
 };
 
@@ -59,4 +60,19 @@ export const EMBED = {
   dim: 768,
   queryPrefix: "query: ", // e5 규칙: 검색 문장은 "query: ", 업무 문장은 "passage: "를 앞에 붙여 임베딩
   perQuery: 30, // 검색 문장 하나당 가져오는 업무 문장 수 [임시 숫자, 2026-09-25 시험 2개 행동 기준]
+};
+
+// 직업 목록 로직의 숫자들(docs/직업추천_재설계 "임시 숫자들"). 두 행동으로만 정한 임시값이라,
+// 베타 사용자 결과(판정 결과가 곧 새 정답지)가 쌓이면 여기서 다시 맞춘다.
+export const JOBS = {
+  expandTop: 20, // 확장할 후보 직업: A·B 각각 상위 N개 + 대상별 1등
+  matchBase: 0.25, // 일치도 = min(100, 직업 점수 ÷ 이 값 × 100). 한 번 정하면 자주 바꾸지 않는다(예전 결과지와 숫자 뜻이 달라짐)
+  citeMin: 0.5, // 결과지에 인용하는 근거 업무의 최소 판정 점수(강도 × 몫)
+  exploreMinMatch: 40, // 직접 해 보기에 쓰는 "아직 확인 안 된 대상"의 1등 직업 최소 일치도
+  listOne: 5, // 코어가 하나일 때 목록마다 직업 수(확인된 대상 / 아직 확인 안 된 대상)
+  listTwo: 3, // 코어가 둘 이상일 때 코어마다 목록마다 직업 수
+  evidenceShown: 2, // 직업 하나에 보여줄 근거 업무 수(재확인을 통과한 것만)
+  evidenceTries: 4, // 직업 하나에 재확인해 볼 근거 업무 최대 수
+  judgeBatch: 40, // 판정 호출 한 번에 넣는 업무 문장 수
+  concurrency: 8, // 동시에 보내는 판정 호출 수
 };

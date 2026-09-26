@@ -1,6 +1,15 @@
-import { approvedPeople, coreBehavior, getObject, getScenes, getValues, objectNoteParts, toLines } from "./result";
-import { ENDING, FIXED_ACTIONS, OBSERVE } from "./frame";
-import { SITUATION_SHORT, type Session } from "./types";
+import { approvedPeople, coreBehavior, getObject, getScenes, getValues, legacyCommonWhy, legacyCore, objectNoteParts, splitBold, toLines } from "./result";
+import { ENDING, EXPLORE_COMMON_WHY, FIXED_ACTIONS, JOB_TEXT, OBSERVE } from "./frame";
+import { SITUATION_SHORT, type CoreJobs, type JobEntry, type Session } from "./types";
+
+const plainKo = (ko: string) => splitBold(ko).map((p) => p.text).join("");
+
+function jobsText(c: CoreJobs, first: boolean): string {
+  const row = (j: JobEntry) =>
+    `- ${j.name} (${JOB_TEXT.match} ${j.match})${j.both ? ` · ${JOB_TEXT.both}` : ""}\n  ${j.desc}${j.evidence.map((e) => `\n  · ${e.ko ? plainKo(e.ko) : e.text}`).join("")}`;
+  const group = (title: string, list: JobEntry[]) => `${title}\n${list.length ? list.map(row).join("\n") : JOB_TEXT.empty}`;
+  return `[이 행동이 쓰이는 일]${first ? `\n${JOB_TEXT.objectNote}` : ""}\n${group(JOB_TEXT.confirmed, c.confirmed)}\n${group(JOB_TEXT.other, c.other)}`;
+}
 
 // 이메일 본문에 붙여넣기 좋은 결과지 글(참가자에게 갈 내용만). 링크가 있으면 맨 위에 둔다.
 export function reportToText(s: Session, link?: string): string {
@@ -12,7 +21,7 @@ export function reportToText(s: Session, link?: string): string {
   if (link) parts.push(`결과지는 여기에서 볼 수 있어요\n${link}`);
   if (r.hold_note) parts.push(r.hold_note);
   if (r.cores.length > 0) {
-    parts.push(`가치관 × 코어 × 대상\n${[v.short || v.summary, r.cores.map(coreBehavior).join(" / "), s.targets?.survivors.map((t) => t.name).join(", ") || o.label].filter(Boolean).join(" × ")}`);
+    parts.push(`가치관 × 코어 × 대상\n${[v.short || v.summary, r.cores.map(coreBehavior).join(" / "), s.targets?.survivors.map((t) => t.name).join(", ") || o?.label].filter(Boolean).join(" × ")}`);
   }
   r.cores.forEach((c, i) => {
     const rel = s.reliability?.[i];
@@ -20,13 +29,15 @@ export function reportToText(s: Session, link?: string): string {
       `■ 코어: ${coreBehavior(c)}${rel ? `\n신뢰도 ${rel.grade} (${rel.met.map((m, qi) => m + (rel.quotes?.[qi] ? ` — “${rel.quotes[qi]}”` : "")).join(", ")})` : ""}`,
       `[경험]\n${toLines(c.restatement).map((x) => `- ${x}`).join("\n")}`,
       `[파악한 코어]\n${c.pattern}`,
-      ...(c.bridge
+      ...(legacyCore(c).bridge
         ? [
-            `[직무와 연결하면]\n- 쓰일 수 있는 일: ${c.bridge.usable}\n- 아직 모르는 것: ${c.bridge.unknown}`,
+            `[직무와 연결하면]\n- 쓰일 수 있는 일: ${legacyCore(c).bridge!.usable}\n- 아직 모르는 것: ${legacyCore(c).bridge!.unknown}`,
           ]
         : []),
       ...(c.cost_note ? [`[이 방식이 힘들어질 때]\n${c.cost_note}`] : []),
     );
+    const jobs = s.jobLists?.find((x) => x.core === i);
+    if (jobs) parts.push(jobsText(jobs, i === 0));
   });
   const vparts: [string, string][] = [
     ["중요하게 여기는 것", v.important],
@@ -36,7 +47,8 @@ export function reportToText(s: Session, link?: string): string {
   if (v.summary || vparts.some(([, t]) => t)) {
     parts.push(`[가치관]\n${[v.summary, ...vparts.filter(([, t]) => t).map(([l, t]) => `- ${l}: ${t}`)].filter(Boolean).join("\n")}`);
   }
-  if (r.cores.length > 0) {
+  if (r.cores.length > 0 && o) {
+    // 예전 결과지(v0.26까지)에만 있는 대상 칸
     const n = objectNoteParts(s);
     const boxes = [n.picked, n.observed].filter((x): x is NonNullable<typeof x> => Boolean(x)).map((x) => `${x.label}: ${x.value}\n${x.note}`);
     parts.push(`[대상] ${n.title}\n${boxes.join("\n\n")}\n${n.outro}`);
@@ -63,12 +75,12 @@ export function reportToText(s: Session, link?: string): string {
     const fixed = s.situation === "working" || s.situation === "applying" ? FIXED_ACTIONS[s.situation] : null;
     const body = fixed
       ? `${fixed.todo}\n이유 : ${fixed.why}`
-      : `${r.explore?.common_why ? `공통 이유 : ${r.explore.common_why}\n` : ""}마음에 드는 하나만 해도 돼요.\n${(r.explore?.items ?? []).map((it, i) => `${i + 1}. ${it.title}\n   ${it.do}\n   이유 : ${it.why}`).join("\n")}`;
+      : `공통 이유 : ${legacyCommonWhy(r) || EXPLORE_COMMON_WHY}\n마음에 드는 하나만 해도 돼요.\n${(r.explore?.items ?? []).map((it, i) => `${i + 1}. ${"object" in it && it.object ? `[${it.object}] ` : ""}${it.title}\n   ${it.do}\n   이유 : ${it.why}`).join("\n")}`;
     parts.push(`[직접 해 보기] ‘${SITUATION_SHORT[s.situation]}’으로 선택하셔서 아래와 같이 준비했어요.\n${body}`);
   }
-  if (r.cores.length > 0) parts.push(`[기록해 보기]\n${OBSERVE.lead}\n${OBSERVE.items.map((x) => `- ${x}`).join("\n")}\n${OBSERVE.closing}`);
+  if (r.cores.length > 0) parts.push(`[기록해 보기]\n${OBSERVE.lead}\n${OBSERVE.items.map((x, i) => `${i + 1}. ${x}`).join("\n")}\n${OBSERVE.closing}`);
   if (r.cores.length > 0) parts.push(`${ENDING.lines.join("\n")}\n${ENDING.strong}\n${ENDING.last.join(" ")}`);
-  if (s.jobPick?.picks.length) parts.push(
+  if (s.jobPick?.picks.length || s.jobLists?.length) parts.push(
       "직업 정보에는 미국 노동부 고용훈련청(USDOL/ETA)의 O*NET 31.0 데이터베이스가 쓰였고, CC BY 4.0 라이선스(https://creativecommons.org/licenses/by/4.0/)로 사용했어요. 코어 찾기가 한국어로 옮기고 골랐으며, 미국 노동부가 이 내용을 승인하거나 검증하거나 시험한 것이 아니에요.\nThis page includes information from the O*NET 31.0 Database by the U.S. Department of Labor, Employment and Training Administration (USDOL/ETA). Used under the CC BY 4.0 license. 코어 찾기 has modified all or some of this information. USDOL/ETA has not approved, endorsed, or tested these modifications. O*NET® is a trademark of USDOL/ETA.",
     );
   return parts.join("\n\n");

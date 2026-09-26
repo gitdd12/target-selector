@@ -1,7 +1,31 @@
 import { z } from "zod";
 
-export const CORES = ["알기", "짜기", "다루기", "이끌기", "돌보기", "꺼내기"] as const;
-export type Core = (typeof CORES)[number];
+// 직업 검색용 대상 19개(docs/직업추천_재설계 1-1). 앞 15개는 10초 선택 화면의 대상, 뒤 4개는 검색 전용.
+// 판정 단계가 업무마다 이 중 하나를 표시하고, 확인된 대상(A 목록)도 이 이름으로 적는다.
+export const SEARCH_OBJECTS = [
+  "신체",
+  "재료",
+  "기계·장비",
+  "공간",
+  "물건",
+  "생물",
+  "사람·관계",
+  "글·문서",
+  "데이터·숫자",
+  "코드",
+  "수식",
+  "개념·전략·규칙",
+  "그림·이미지·디자인",
+  "소리·음악",
+  "영상",
+  "일정·절차",
+  "돈·재무",
+  "조직·프로젝트",
+  "몸·건강",
+] as const;
+export type SearchObject = (typeof SEARCH_OBJECTS)[number];
+// 대상을 넣지 않은 검색 문장(19개에 없는 대상을 잡는 안전망)
+export const NO_OBJECT = "대상 없음";
 
 // 인터뷰 끝에 팝업에서 고르는 현재 상태(셋 중 하나)
 export const SITUATIONS = ["working", "applying", "exploring"] as const;
@@ -109,7 +133,10 @@ export const ExperienceFieldsSchema = z.object({
   reengagement: z.string().describe("같은 행동 다른 대상 질문의 답: 이번 방식이 나온 다른 실제 경험(무엇에서, 언제, 어떻게). 없으면 없음"),
   external_conditions: z.string(),
   candidate_interpretations: z.array(
-    z.object({ core: z.enum(CORES), evidence: z.string() }),
+    z.object({
+      behavior: z.string().describe("가능한 코어 후보를 행동으로(동작 + 다루는 것의 모양 + 기준, 대상 이름 없이). 이름·유형을 붙이지 않는다"),
+      evidence: z.string(),
+    }),
   ),
   competing_interpretations: z.array(
     z.object({ explanation: z.string(), evidence: z.string() }),
@@ -154,17 +181,42 @@ export const ValuesFieldsSchema = z.object({
 export type ValuesFields = z.infer<typeof ValuesFieldsSchema>;
 
 // ── 코어 판정(모든 창이 끝난 뒤) ───────────────────────────────
+// 코어 이름(여섯 단어)은 쓰지 않는다(v0.31). 코어는 행동 설명(동작·다루는 것의 모양·기준)으로 적고,
+// 이 행동 설명이 직업 목록의 검색·판정 기준이 된다(docs/직업추천_재설계 0단계).
+export const BehaviorSchema = z.object({
+  action: z.string().describe("① 동작(한국어, 짧게). 예: 순서·배치를 바꾼다"),
+  shape: z.string().describe("② 다루는 것의 모양(대상 이름 없이). 예: 이미 있는 여러 조각 / 힘들어하는 사람의 상태"),
+  criterion: z.string().describe("③ 기준: 언제까지·무엇이 되면 멈추는지. 예: 전체가 매끄럽게 이어질 때까지. 기록에 없으면 빈 문자열"),
+  en: z
+    .string()
+    .describe("①②③을 합친 영어 한 문장. 대상 자리는 일반화(existing parts, a person 등)하고 방식과 기준은 구체적으로 남긴다. 업무 문장 판정의 기준이 된다"),
+});
+export type Behavior = z.infer<typeof BehaviorSchema>;
+
 export const FinalJudgmentSchema = z.object({
+  // 두 경험이 같은 코어인지(0-1단계). 두 경험 모두 코어 후보 이상일 때만 판정한다.
+  same_core: z.object({
+    result: z.enum(["같은 코어", "다른 코어", "해당 없음"]),
+    exp1_quote: z.string().describe("경험 1에서 판정 근거가 된 사용자 표현 인용. 해당 없음이면 빈 문자열"),
+    exp2_quote: z.string().describe("경험 2에서 판정 근거가 된 사용자 표현 인용. 해당 없음이면 빈 문자열"),
+    reasoning: z.string(),
+  }),
   cores: z.array(
     z.object({
-      core: z.enum(CORES),
       status: z.enum(["확정(단일 경험)", "확정(반복 확인)"]),
       basis_experiences: z.array(z.number().int()),
       reasoning: z.string(),
       scope_note: z.string().describe("어디까지 확인됐고 어디부터 추정인지"),
+      behavior: BehaviorSchema,
+      objects: z.object({
+        experience: z.string().describe("이 코어가 실제로 나온 대상(사용자 표현). ②로 확인된 다른 대상도 함께"),
+        confirmed: z
+          .array(z.enum(SEARCH_OBJECTS))
+          .describe("확인된 대상: 경험의 대상 + ② 방식의 반복으로 확인된 다른 대상을 검색용 대상 19개로 옮긴 것(중복 없이)"),
+      }),
     }),
   ),
-  unresolved: z.array(z.object({ core: z.string().describe("보류한 코어 후보 이름"), reason: z.string() })),
+  unresolved: z.array(z.object({ label: z.string().describe("보류한 후보를 행동으로 짧게"), reason: z.string() })),
   cross_experience_pattern: z.string(),
   hold_summary: z
     .string()
@@ -173,21 +225,15 @@ export const FinalJudgmentSchema = z.object({
 export type FinalJudgment = z.infer<typeof FinalJudgmentSchema>;
 
 // ── 결과지 ──────────────────────────────────────────────────
-// 결과지 초안. core는 내부 태그(직업 매핑용)라 화면에 보이지 않는다. 화면에는 코어 행동 문장(behavior)만 나온다. 여섯 단어는 어디에도 쓰지 않는다.
+// 결과지 초안. 화면에는 코어 행동 문장(behavior)이 코어의 제목으로 나온다. 코어 이름·유형은 어디에도 쓰지 않는다.
 export const ReportSchema = z.object({
   cores: z.array(
     z.object({
-      core: z.enum(CORES).describe("내부 태그. 화면에도 본문에도 쓰지 않는다"),
-      behavior: z.string().describe("이 사람의 코어 행동을 한 문장으로(해요체, 20~30자). 이름이나 유형이 아니라 하는 행동. 예: 끊긴 흐름이 이어질 때까지 앞뒤를 맞춰 봐요"),
+      behavior: z.string().describe("이 사람의 코어 행동을 한 문장으로(해요체, 20~30자). 이름이나 유형이 아니라 하는 행동. 대상 이름 없이. 예: 끊긴 흐름이 이어질 때까지 앞뒤를 맞춰 봐요"),
       restatement: z.string().describe("경험: 실제로 있었던 일을 짧은 문장 2~3개로. 문장마다 줄바꿈(\n)으로 구분. 문장당 45자 안팎, 사용자 표현 인용은 짧게"),
       pattern: z.string().describe("파악한 코어: 그 경험에서 파악한 행동 방식을 1~2문장(해요체). 짧고 바로 알아듣게, 센스 있게. 작성 메모·범위 안내·이름 붙이기 금지"),
       cost_note: z.string().describe("이 방식이 힘들어질 때 1문장(해요체): 이 행동 자체가 낳는 부작용(예: 내 몫 밖까지 손대다 시간이 더 듦)만. 못 견디는 상황(가치관 쪽)과 겹치면 쓰지 않는다. 기록에 근거가 없으면 빈 문자열"),
-      // 직무와 연결하면: 이 행동이 쓰일 만한 업무와 아직 모르는 것. say(면접 한 문장)는 취업 준비 분기용으로 저장만 하고 화면에는 아직 안 보인다.
-      bridge: z.object({
-        usable: z.string().describe("쓰일 수 있는 일: 이 행동이 쓰일 만한 업무 내용을 한 문장. 직업명이 아니라 하는 일. 확정하지 않고 '~수 있어요' 꼴"),
-        unknown: z.string().describe("아직 모르는 것: 이 경험만으로는 확인되지 않은 것을 한 문장"),
-        say: z.string().describe("면접에서 이 경험을 한 문장으로 말한다면(해요체, 큰따옴표 없이, 경험 그대로 요약). 화면에는 아직 안 나온다"),
-      }),
+      say: z.string().describe("면접에서 이 경험을 한 문장으로 말한다면(해요체, 큰따옴표 없이, 경험 그대로 요약). 저장만 하고 화면에는 아직 안 나온다"),
     }),
   ),
   // 가치관: 결과지에서 코어와 나란히 놓이는 별도 항목
@@ -199,27 +245,34 @@ export const ReportSchema = z.object({
     alive: z.string().describe("가치관과 코어가 만나 살아나는 일·환경 1~2문장"),
     stuck: z.string().describe("사용하지 않는다(못 견디는 것에 통합). 항상 빈 문자열"),
   }),
-  // 대상: 공식 칸에 들어가는 짧은 표시(별도 섹션으로 만들지 않는다)
-  object: z.object({
-    label: z.string().describe("참가자가 말한 두 경험에서 실제로 다룬 대상을 짧은 명사구로(예: 발표 자료, 경제 개념). 처음에 고른 대상 목록에서 가져오지 않는다. 확정 코어가 없으면 빈 문자열"),
-    note: z.string().describe("사용하지 않는다. 항상 빈 문자열(대상 안내는 결과지 화면의 고정 문구가 한다)"),
-  }),
   // 직접 해 보기: 진로 탐색 중일 때만 채운다(직장이 있다·가고 싶은 분야를 정했다는 고정 문구를 코드가 붙인다). 그 외에는 items를 빈 배열로.
+  // 공통 이유는 고정 문구라 코드가 붙인다.
   explore: z.object({
     items: z
       .array(
         z.object({
-          title: z.string().describe("해 볼 일의 이름(참가자의 실제 표현이나 실제로 한 일의 이름. 만든 용어 금지)"),
-          do: z.string().describe("지금 혼자 바로 할 수 있는 일 한 문장(\"~해 보세요\"). 표시·기록·적기가 아니라 직접 하는 일. 시간 조건은 쓰지 않는다"),
-          why: z.string().describe("이 일 하나가 무엇을 알려주는지 한 문장. 다른 일과 견주는 말 금지"),
+          core: z.number().int().describe("어느 코어의 해 볼 일인지(코어 순번, 1부터)"),
+          object: z.string().describe("해 볼 대상(주어진 '해 볼 대상 후보'의 대상 이름 그대로, 또는 채울 때 쓴 비슷한 대상)"),
+          title: z.string().describe("해 볼 일의 이름(짧게, 만든 용어 금지)"),
+          do: z.string().describe("지금 혼자 바로 할 수 있는 일 한 문장(\"~해 보세요\"). 같은 행동을 그 대상에 옮긴 작은 일. 표시·기록·적기가 아니라 직접 하는 일. 시간 조건은 쓰지 않는다"),
+          why: z.string().describe("그 대상의 직업과 잇는 한 문장. 예: 이게 끌리면 영상 편집자 같은 일에서도 이 행동이 쓰여요"),
         }),
       )
-      .describe("진로 탐색 중이면 정확히 3개(서로 다른 종류의 일), 아니면 빈 배열"),
-    common_why: z.string().describe("공통 이유 한 문장. 예: 팀플 슬라이드를 다시 짜고 환율 이유를 찾아보면서 하셨던 많은 행동 중에서, 정확히 어떤 행동이 끌리는지 찾아내는 거예요. 진로 탐색 중이 아니면 빈 문자열"),
+      .describe("진로 탐색 중이면 정확히 3개(대상이 서로 겹치지 않게, 코어가 둘 이상이면 코어마다 최소 1개), 아니면 빈 배열"),
   }),
   hold_note: z.string(),
 });
 export type Report = z.infer<typeof ReportSchema>;
+
+// 예전 결과지(v0.26까지)에만 있던 칸. 예전 세션을 화면에 그대로 보여주려고 형태만 남긴다.
+export interface LegacyReportCore {
+  core?: string;
+  bridge?: { usable: string; unknown: string; say: string };
+}
+export interface LegacyReport {
+  object?: { label: string; note: string };
+  explore?: { common_why?: string; items?: { title?: string; do: string; why: string }[] };
+}
 
 // 인물 사례 초안. 운영자가 출처를 확인해 승인한 것만 참가자에게 보인다.
 export const CelebDraftSchema = z.object({
@@ -274,11 +327,55 @@ export const JobPickSchema = z.object({
 });
 export type JobPick = z.infer<typeof JobPickSchema>;
 
+// 예전 방식(6개 코어 점수표)의 직업 후보. 예전 세션 검토 화면용으로만 남긴다.
 export interface JobCandidate {
   code: string;
   title: string;
-  percentiles: Record<Core, number>;
+  percentiles: Record<string, number>;
   gap: number;
+}
+
+// ── 직업 목록(새 방식, docs/직업추천_재설계) ─────────────────────
+// 업무 문장 판정 하나. 문장은 data/onet31/task_emb_texts.json의 순번(i)으로 가리킨다.
+export interface TaskJudgment {
+  s: number; // 강도(0 / 0.3 / 0.5 / 0.7 / 1)
+  f: number; // 몫(0~1)
+  o: string; // 이 업무의 대상(검색용 19개 중 하나 또는 대상 없음)
+  q: string; // 행동에 해당하는 구절(원문 그대로). 0점이면 빈 문자열
+}
+
+export interface JobEntry {
+  soc: string;
+  name: string; // 한국어 이름
+  desc: string; // 한 줄 설명
+  score: number; // 직업 점수(그 직업이 하는 일 중 이 행동이 차지하는 비중)
+  match: number; // 일치도(0~100)
+  object: string; // 이 직업의 대상(점수에 가장 많이 기여한 대상)
+  both?: boolean; // 두 코어 모두에서 쓰이는 일
+  evidence: { text: string; quote: string; ko?: string }[]; // 재확인을 통과한 근거 업무(원문, 구절, 번역)
+}
+
+export interface CoreJobs {
+  core: number; // final.cores 순번(0부터)
+  confirmed: JobEntry[]; // 확인된 대상에서 이어지는 일(A)
+  other: JobEntry[]; // 아직 확인 안 된 대상에서 쓰이는 일(B−A)
+  // 직접 해 보기 후보: 아직 확인 안 된 대상마다 1등 직업(일치도 순)
+  exploreObjects: { object: string; soc: string; name: string; match: number }[];
+}
+
+// 직업 목록 만들기의 중간 상태(여러 번에 나눠 진행해도 이어서 하도록 세션에 저장)
+export interface JobWork {
+  cores: {
+    queries?: { object: string; text: string }[];
+    pending: number[]; // 아직 판정 안 한 문장 순번
+    judged: Record<number, TaskJudgment>; // 점수가 있는 판정
+    zero: number[]; // 0점으로 판정한 문장
+    expanded: boolean; // 후보 직업 확장을 했는지
+    lists?: { confirmed: string[]; other: string[] }; // 근거 재확인 전 후보 순서(직업 코드)
+  }[];
+  stage: "search" | "judge" | "lists" | "evidence" | "translate" | "done";
+  both?: string[]; // 두 코어 모두에 걸린 직업 코드
+  recheck?: Record<number, boolean>; // 근거 재확인 결과(문장 순번 → 통과 여부)
 }
 
 // finalizing: 인터뷰 끝, 이메일을 받으며 결과지 초안을 만드는 중 / complete: 초안 생성까지 끝남
@@ -304,10 +401,14 @@ export interface Session {
     advice?: ValuesFields;
   };
   final?: FinalJudgment;
+  // 예전 방식의 직업 추천(v0.26까지). 새 세션에는 없다
   jobCandidates?: JobCandidate[];
   jobPick?: JobPick;
+  // 새 방식의 직업 목록(코어마다)
+  jobWork?: JobWork;
+  jobLists?: CoreJobs[];
   report?: Report;
-  // 코어별 신뢰도(report.cores와 같은 순서). 무게 신호 개수로 코드가 정한다: 1개 = 중, 2개 = 상, 3개 = 최상
+  // 코어별 신뢰도(report.cores와 같은 순서). 무게 신호 개수로 코드가 정한다: 2개 = 중, 3개 = 상, 4개 = 최상
   reliability?: { grade: "중" | "상" | "최상"; met: string[]; quotes?: string[] }[];
   celebDraft?: CelebDraft;
   // 운영자가 검토를 마치고 결과지를 공개했는지, 그리고 출처를 확인해 승인한 인물 사례(candidates 순번)
@@ -323,6 +424,7 @@ export interface Session {
   // budget: 총량 상한에 걸림(인터뷰를 거기서 마무리) / misuse: 인터뷰와 무관한 요청·오용이 반복돼 중단(결과지 초안을 만들지 않음)
   flagged?: "budget" | "misuse";
   // 마지막 단계 진행 상황(새로고침해도 이어서 하도록)
+  // 새 순서: judge → jobs → write → celeb. 직업 목록은 결과지 작성(직접 해 보기)에 쓰여서 먼저 만든다.
   finalizeStep?: "judge" | "write" | "jobs" | "celeb" | "done";
   log: { at: string; event: string; detail?: string }[];
 }

@@ -2,7 +2,8 @@ import Link from "next/link";
 import CopyButton from "@/components/CopyButton";
 import { isReviewer } from "@/lib/reviewAuth";
 import PublishPanel from "@/components/PublishPanel";
-import { coreBehavior, getScenes } from "@/lib/result";
+import { coreBehavior, getScenes, legacyCore } from "@/lib/result";
+import { jobWorkSummary } from "@/lib/jobfinder";
 import { estimateCost, reportToText } from "@/lib/reviewText";
 import { headers } from "next/headers";
 import { getStore, isValidId } from "@/lib/store";
@@ -95,34 +96,62 @@ export default async function ReviewDetail({ params }: { params: Promise<{ id: s
           {/* 2. 검토 메모 */}
           <h2 style={h2}>2. 검토 메모 (참가자에게 보내지 않음)</h2>
           <div style={box}>
-            <div className="eyebrow">화면에 나가는 코어 행동 ← 내부 코어 태그 (태그는 화면·본문 어디에도 나가지 않아야 함)</div>
+            <div className="eyebrow">화면에 나가는 코어 행동 ← 코어 판정의 행동 설명</div>
             <div className="q-sub" style={{ marginTop: 0 }}>
-              {r.cores.map((c, i) => `'${coreBehavior(c)}' ← ${c.core}${s.reliability?.[i] ? ` · 신뢰도 ${s.reliability[i].grade}` : ""}`).join(" / ") || "확정된 코어 없음"}
+              {r.cores
+                .map((c, i) => {
+                  const f = s.final?.cores[i] as (NonNullable<typeof s.final>["cores"][number] & { core?: string }) | undefined;
+                  const tag = f?.behavior ? `${f.behavior.action} / ${f.behavior.shape} / ${f.behavior.criterion || "기준 없음"}` : (legacyCore(c).core ?? "");
+                  return `'${coreBehavior(c)}' ← ${tag}${s.reliability?.[i] ? ` · 신뢰도 ${s.reliability[i].grade}` : ""}`;
+                })
+                .join(" / ") || "확정된 코어 없음"}
             </div>
             {s.final && (
               <>
                 <div className="eyebrow" style={{ marginTop: 18 }}>
                   코어 판정
                 </div>
-                {s.final.cores.map((c) => (
-                  <div key={c.core} style={{ marginTop: 8, fontSize: 14, lineHeight: 1.75, color: "var(--ink-soft)" }}>
-                    <b>
-                      {c.core} · {c.status} · 근거 경험 {c.basis_experiences.join("+")}
-                    </b>
+                {s.final.same_core && (
+                  <div style={{ marginTop: 8, fontSize: 14, lineHeight: 1.75, color: "var(--ink-soft)" }}>
+                    <b>두 경험: {s.final.same_core.result}</b>
+                    {s.final.same_core.exp1_quote && ` — 경험1 “${s.final.same_core.exp1_quote}” / 경험2 “${s.final.same_core.exp2_quote}”`}
                     <br />
-                    {c.reasoning}
-                    <br />
-                    <span style={{ color: "var(--dim)" }}>서술 범위: {c.scope_note}</span>
+                    {s.final.same_core.reasoning}
                   </div>
-                ))}
+                )}
+                {s.final.cores.map((c, i) => {
+                  const legacy = (c as { core?: string }).core;
+                  return (
+                    <div key={i} style={{ marginTop: 8, fontSize: 14, lineHeight: 1.75, color: "var(--ink-soft)" }}>
+                      <b>
+                        코어 {i + 1}
+                        {legacy ? ` (${legacy})` : ""} · {c.status} · 근거 경험 {c.basis_experiences.join("+")}
+                      </b>
+                      {c.behavior && (
+                        <>
+                          <br />
+                          행동 설명: {c.behavior.action} / {c.behavior.shape} / {c.behavior.criterion || "기준 없음"}
+                          <br />
+                          <span style={{ color: "var(--dim)" }}>{c.behavior.en}</span>
+                          <br />
+                          확인된 대상: {c.objects.confirmed.join(", ") || "없음"} ({c.objects.experience})
+                        </>
+                      )}
+                      <br />
+                      {c.reasoning}
+                      <br />
+                      <span style={{ color: "var(--dim)" }}>서술 범위: {c.scope_note}</span>
+                    </div>
+                  );
+                })}
                 {s.final.unresolved.length > 0 && (
                   <>
                     <div className="eyebrow" style={{ marginTop: 18 }}>
                       보류한 후보
                     </div>
-                    {s.final.unresolved.map((u) => (
-                      <div key={u.core} style={{ marginTop: 8, fontSize: 14, lineHeight: 1.75, color: "var(--ink-soft)" }}>
-                        <b>{u.core}</b> — {u.reason}
+                    {s.final.unresolved.map((u, i) => (
+                      <div key={i} style={{ marginTop: 8, fontSize: 14, lineHeight: 1.75, color: "var(--ink-soft)" }}>
+                        <b>{u.label ?? (u as { core?: string }).core}</b> — {u.reason}
                       </div>
                     ))}
                   </>
@@ -131,6 +160,21 @@ export default async function ReviewDetail({ params }: { params: Promise<{ id: s
                   두 경험의 관계
                 </div>
                 <div style={{ marginTop: 6, fontSize: 14, lineHeight: 1.75, color: "var(--ink-soft)" }}>{s.final.cross_experience_pattern}</div>
+              </>
+            )}
+            {s.jobWork && (
+              <>
+                <div className="eyebrow" style={{ marginTop: 18 }}>
+                  직업 목록 만들기
+                </div>
+                <div style={{ marginTop: 6, fontSize: 13.5, color: "var(--ink-soft)", lineHeight: 1.65 }}>
+                  {jobWorkSummary(s.jobWork)}
+                  {s.jobWork.cores.map((w, i) => (
+                    <div key={i} style={{ marginTop: 6 }}>
+                      코어 {i + 1} 검색 문장: {(w.queries ?? []).map((q) => `[${q.object}] ${q.text}`).join(" · ")}
+                    </div>
+                  ))}
+                </div>
               </>
             )}
             {s.jobPick && (
