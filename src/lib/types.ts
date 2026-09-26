@@ -56,7 +56,7 @@ export const COVERAGE_LABEL: Record<CoverageKey, string> = {
   chosen_parts: "본인이 정해서 한 부분",
   extra_effort: "요구 이상으로 들인 수고",
   stopping_reason: "그만둔 계기",
-  fulfillment: "'됐다' 싶은 순간과 직전과의 차이",
+  fulfillment: "과정이나 결과물 자체에서 온 만족",
   reengagement: "이후 비슷한 일(그때 어떻게 했나)",
   same_action_diff_object: "같은 행동·다른 대상",
 };
@@ -133,7 +133,7 @@ export const ExperienceFieldsSchema = z.object({
   weight_signals: z.object({
     extra_effort: WeightSignal.describe("① 이번에 포착한 방식(본인이 정한 부분)에 요구·필요보다 더 들인 수고(그 자리에서 더 오래·더 여러 번, 그 방식을 위해 따로 알아보기·도구 마련). 일 전체에 들인 시간·수고와 마감·평가 때문에 한 것은 제외"),
     repeated: WeightSignal.describe("② 방식의 반복: 이번 경험에서 본인이 정한 방식이 다른 때에도 다시 나왔다(같은 대상이든 다른 대상이든). 일 자체를 다시 한 것, 특히 해야 해서 한 것(취업 준비라 자소서를 또 씀)은 제외. 하고 싶다는 의향도 제외"),
-    fulfillment_on_action: WeightSignal.describe("③ '됐다' 싶은 순간이 결과·칭찬·마감이 아니라 그 행동 자체에 붙어 있다. 외부 제약 때문에 멈춘 것은 제외"),
+    fulfillment_on_action: WeightSignal.describe("③ 과정이나 결과물 자체에서 온 만족을 사용자가 구체적으로 짚었다(결과물을 좋아하는 것 포함). 칭찬·합격 같은 외부 반응이 같이 있어도 된다. 외부 반응뿐이거나 끝난 후련함뿐이거나, 무엇인지 짚지 못하면 제외"),
   }),
   // 확정 신호가 아닌 기록(스펙). 비교 선호는 직업 추천에서, 다른 대상 표시는 서술 범위와 직업 추천에서 쓴다.
   comparison_preference: z.object({

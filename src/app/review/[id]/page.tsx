@@ -236,7 +236,7 @@ export default async function ReviewDetail({ params }: { params: Promise<{ id: s
                   [
                     ["요구 이상의 수고", "extra_effort"],
                     ["방식의 반복", "repeated"],
-                    ["행동 자체의 충족", "fulfillment_on_action"],
+                    ["과정·결과물 자체의 만족", "fulfillment_on_action"],
                   ] as const
                 )
                   .map(([label, key]) => `${label} ${s.records[k]?.weight_signals[key]?.present ? "○" : "×"}`)

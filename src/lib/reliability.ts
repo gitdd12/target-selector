@@ -6,7 +6,7 @@ import type { Session } from "./types";
 export const SIGNAL_LABEL = {
   extra_effort: "요구된 것보다 더 들인 수고",
   repeated: "다른 때에도 같은 방식으로 되풀이함",
-  fulfillment_on_action: "결과가 아니라 행동 자체에서 얻은 만족",
+  fulfillment_on_action: "과정이나 결과물 자체에서 얻은 만족",
 } as const;
 export type SignalKey = keyof typeof SIGNAL_LABEL;
 
