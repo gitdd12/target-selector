@@ -1,6 +1,7 @@
 import { cached, callJson } from "./llm";
 import { jobsStep, jobWorkSummary } from "./jobfinder";
 import { computeReliability } from "./reliability";
+import { explorePlan, shownCandidates } from "./explore";
 import type { TurnResult } from "./interview";
 import {
   celebSystem,
@@ -179,6 +180,12 @@ export async function finalizeStep(s: Session) {
       const report = await callJson("writer", ReportSchema, [cached(writerSystem())], writerUser(s, s.final), s);
       if (report.cores.length !== s.final.cores.length)
         logEvent(s, "report_core_count_mismatch", `판정 ${s.final.cores.length}개 / 결과지 ${report.cores.length}개 — 검토 필요`);
+      // 코어 후보 칸은 판정의 후보(신호 1개, 최대 2개) 수에 맞추고, 해 볼 일의 종류는 코드가 정한 칸을 따른다.
+      report.candidates = report.candidates.slice(0, shownCandidates(s.final).length);
+      const plan = explorePlan(s);
+      report.explore.items = report.explore.items
+        .filter((it) => plan.some((p) => p.slot === it.slot))
+        .map((it) => ({ ...it, kind: plan.find((p) => p.slot === it.slot)!.kind }));
       s.report = report;
       s.reliability = computeReliability(s);
       s.finalizeStep = "celeb";

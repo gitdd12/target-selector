@@ -1,7 +1,8 @@
-import { approvedPeople, coreBehavior, getObject, getScenes, getValues, legacyCommonWhy, legacyCore, objectNoteParts, splitTarget, toLines } from "@/lib/result";
-import { ENDING, EXPLORE_COMMON_WHY, FIXED_ACTIONS, OBSERVE } from "@/lib/frame";
-import { SITUATION_SHORT, type Session } from "@/lib/types";
+import { approvedPeople, coreBehavior, getObject, getScenes, getValues, legacyCore, objectNoteParts, splitTarget, toLines } from "@/lib/result";
+import { ENDING } from "@/lib/frame";
+import type { Session } from "@/lib/types";
 import JobLists from "./JobLists";
+import { CandidateSection, ExploreSection } from "./ResultExtras";
 import PeopleCards, { type PersonView } from "./PeopleCards";
 import styles from "./ResultView.module.css";
 
@@ -50,7 +51,14 @@ export default function ResultView({ session, contact, preview = false }: { sess
           <h2 className={styles.formulaTitle}>이번에는 아직 정하지 않았어요</h2>
           <div className={styles.hold}>{r.hold_note}</div>
         </section>
-      ) : (
+      ) : null}
+      {!hasCores && (r.candidates?.length ?? 0) > 0 && (
+        <>
+          <CandidateSection session={session} />
+          <ExploreSection session={session} />
+        </>
+      )}
+      {!hasCores ? null : (
         <>
           <section className={styles.hero}>
             <h1 className={styles.pageTitle}>당신의 결과지</h1>
@@ -266,6 +274,8 @@ export default function ResultView({ session, contact, preview = false }: { sess
             </section>
           )}
 
+          <CandidateSection session={session} />
+
           {valuesCards.some(([, t]) => t) && (
             <section className={styles.block}>
               <p className={styles.kicker}>가치관</p>
@@ -367,52 +377,7 @@ export default function ResultView({ session, contact, preview = false }: { sess
             </section>
           )}
 
-          {(session.situation || true) && (
-            <section className={styles.doSection}>
-              <h2 className={styles.jobsTitle}>직접 해 보기</h2>
-              {session.situation && <p className={styles.stateLine}>‘{SITUATION_SHORT[session.situation]}’으로 선택하셔서 아래와 같이 준비했어요.</p>}
-              {session.situation === "exploring" ? (
-                r.explore?.items?.length ? (
-                  <>
-                    <div className={styles.commonWhy}>
-                      <b>공통 이유 : </b>
-                      {legacyCommonWhy(r) || EXPLORE_COMMON_WHY}
-                    </div>
-                    <p className={styles.pickNote}>마음에 드는 하나만 해도 돼요.</p>
-                    <ol className={styles.doList}>
-                      {r.explore.items.map((it) => (
-                        <li key={it.title}>
-                          {"object" in it && it.object && <span className={styles.doObject}>{it.object}</span>}
-                          <b>{it.title}</b>
-                          <p>{it.do}</p>
-                          <p className={styles.doWhy}>
-                            <em>이유 :</em> {it.why}
-                          </p>
-                        </li>
-                      ))}
-                    </ol>
-                  </>
-                ) : null
-              ) : session.situation ? (
-                <div className={styles.doBox}>
-                  <p className={styles.doText}>{FIXED_ACTIONS[session.situation].todo}</p>
-                  <p className={styles.doWhy}>
-                    <em>이유 :</em> {FIXED_ACTIONS[session.situation].why}
-                  </p>
-                </div>
-              ) : null}
-
-              <div className={styles.observeBox}>
-                <p className={styles.observeLead}>{OBSERVE.lead}</p>
-                <ol className={styles.observeList}>
-                  {OBSERVE.items.map((x) => (
-                    <li key={x}>{x}</li>
-                  ))}
-                </ol>
-                <p className={styles.observeClosing}>{OBSERVE.closing}</p>
-              </div>
-            </section>
-          )}
+          <ExploreSection session={session} />
 
           <section className={styles.ending}>
             {ENDING.lines.map((x) => (

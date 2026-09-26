@@ -4,6 +4,7 @@ import { isReviewer } from "@/lib/reviewAuth";
 import PublishPanel from "@/components/PublishPanel";
 import { coreBehavior, getScenes, legacyCore } from "@/lib/result";
 import { jobWorkSummary } from "@/lib/jobfinder";
+import { candidateSeen, shownCandidates } from "@/lib/explore";
 import { estimateCost, reportToText } from "@/lib/reviewText";
 import { headers } from "next/headers";
 import { getStore, isValidId } from "@/lib/store";
@@ -164,6 +165,18 @@ export default async function ReviewDetail({ params }: { params: Promise<{ id: s
                     {s.final.unresolved.map((u, i) => (
                       <div key={i} style={{ marginTop: 8, fontSize: 14, lineHeight: 1.75, color: "var(--ink-soft)" }}>
                         <b>{u.label ?? (u as { core?: string }).core}</b> — {u.reason}
+                      </div>
+                    ))}
+                  </>
+                )}
+                {shownCandidates(s.final).length > 0 && (
+                  <>
+                    <div className="eyebrow" style={{ marginTop: 18 }}>
+                      결과지에 올린 코어 후보(신호 1개)
+                    </div>
+                    {shownCandidates(s.final).map((c, i) => (
+                      <div key={i} style={{ marginTop: 8, fontSize: 14, lineHeight: 1.75, color: "var(--ink-soft)" }}>
+                        <b>{c.label}</b> — 경험 {c.experience} · {candidateSeen(c).join(", ")}
                       </div>
                     ))}
                   </>

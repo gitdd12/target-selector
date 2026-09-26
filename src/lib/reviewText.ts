@@ -1,5 +1,6 @@
 import { approvedPeople, coreBehavior, getObject, getScenes, getValues, legacyCommonWhy, legacyCore, objectNoteParts, splitBold, toLines } from "./result";
-import { ENDING, EXPLORE_COMMON_WHY, FIXED_ACTIONS, JOB_TEXT, OBSERVE } from "./frame";
+import { CANDIDATE_TEXT, ENDING, EXPLORE_COMMON_WHY, EXPLORE_GROUPS, FIXED_ACTIONS, JOB_TEXT, OBSERVE } from "./frame";
+import { candidateSeen, shownCandidates } from "./explore";
 import { SITUATION_SHORT, type CoreJobs, type JobEntry, type Session } from "./types";
 
 const plainKo = (ko: string) => splitBold(ko).map((p) => p.text).join("");
@@ -39,6 +40,18 @@ export function reportToText(s: Session, link?: string): string {
     const jobs = s.jobLists?.find((x) => x.core === i);
     if (jobs) parts.push(jobsText(jobs, i === 0));
   });
+  const cands = r.candidates ?? [];
+  if (cands.length) {
+    const judged = shownCandidates(s.final);
+    parts.push(
+      `[${CANDIDATE_TEXT.title}]\n${CANDIDATE_TEXT.note}\n${cands
+        .map((c, i) => {
+          const seen = judged[i] ? candidateSeen(judged[i]) : [];
+          return `- ${c.behavior}\n  ${c.scene}${seen.length ? `\n  ${CANDIDATE_TEXT.seen} : ${seen.join(", ")}` : ""}`;
+        })
+        .join("\n")}`,
+    );
+  }
   const vparts: [string, string][] = [
     ["중요하게 여기는 것", v.important],
     ["못 견디는 것", [v.hard, v.stuck].filter(Boolean).join(" ")],
@@ -71,14 +84,24 @@ export function reportToText(s: Session, link?: string): string {
         (c.source_hint ? `\n출처: ${c.source_hint}` : ""),
     );
   }
-  if (r.cores.length > 0 && s.situation) {
+  const hasBody = r.cores.length > 0 || cands.length > 0;
+  if (hasBody && s.situation) {
     const fixed = s.situation === "working" || s.situation === "applying" ? FIXED_ACTIONS[s.situation] : null;
+    const items = r.explore?.items ?? [];
+    const itemText = (list: typeof items) =>
+      list.map((it, i) => `${i + 1}. ${it.object ? `[${it.object}] ` : ""}${it.title}\n   ${it.do}${it.why ? `\n   이유 : ${it.why}` : ""}`).join("\n");
+    const grouped = items.some((it) => it.kind);
     const body = fixed
       ? `${fixed.todo}\n이유 : ${fixed.why}`
-      : `공통 이유 : ${legacyCommonWhy(r) || EXPLORE_COMMON_WHY}\n마음에 드는 하나만 해도 돼요.\n${(r.explore?.items ?? []).map((it, i) => `${i + 1}. ${"object" in it && it.object ? `[${it.object}] ` : ""}${it.title}\n   ${it.do}\n   이유 : ${it.why}`).join("\n")}`;
+      : grouped
+        ? `마음에 드는 하나만 해도 돼요.\n${(["확인", "탐색"] as const)
+            .filter((k) => items.some((it) => it.kind === k))
+            .map((k) => `<${EXPLORE_GROUPS[k].title}>\n이유 : ${EXPLORE_GROUPS[k].why}\n${itemText(items.filter((it) => it.kind === k))}`)
+            .join("\n\n")}`
+        : `공통 이유 : ${legacyCommonWhy(r) || EXPLORE_COMMON_WHY}\n마음에 드는 하나만 해도 돼요.\n${itemText(items)}`;
     parts.push(`[직접 해 보기] ‘${SITUATION_SHORT[s.situation]}’으로 선택하셔서 아래와 같이 준비했어요.\n${body}`);
   }
-  if (r.cores.length > 0) parts.push(`[기록해 보기]\n${OBSERVE.lead}\n${OBSERVE.items.map((x, i) => `${i + 1}. ${x}`).join("\n")}\n${OBSERVE.closing}`);
+  if (hasBody) parts.push(`[기록해 보기]\n${OBSERVE.lead}\n${OBSERVE.items.map((x, i) => `${i + 1}. ${x}`).join("\n")}\n${OBSERVE.closing}`);
   if (r.cores.length > 0) parts.push(`${ENDING.lines.join("\n")}\n${ENDING.strong}\n${ENDING.last.join(" ")}`);
   if (s.jobPick?.picks.length || s.jobLists?.length) parts.push(
       "직업 정보에는 미국 노동부 고용훈련청(USDOL/ETA)의 O*NET 31.0 데이터베이스가 쓰였고, CC BY 4.0 라이선스(https://creativecommons.org/licenses/by/4.0/)로 사용했어요. 코어 찾기가 한국어로 옮기고 골랐으며, 미국 노동부가 이 내용을 승인하거나 검증하거나 시험한 것이 아니에요.\nThis page includes information from the O*NET 31.0 Database by the U.S. Department of Labor, Employment and Training Administration (USDOL/ETA). Used under the CC BY 4.0 license. 코어 찾기 has modified all or some of this information. USDOL/ETA has not approved, endorsed, or tested these modifications. O*NET® is a trademark of USDOL/ETA.",

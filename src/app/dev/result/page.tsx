@@ -553,22 +553,35 @@ const sample = {
     ...legacy.report!,
     cores: legacy.report!.cores.map((c) => ({ behavior: c.behavior, restatement: c.restatement, pattern: c.pattern, cost_note: c.cost_note, say: "" })),
     object: undefined,
+    candidates: [
+      { behavior: "장면 조각을 박자에 맞을 때까지 다시 놓아 봐요", scene: "좋아하는 애니 장면을 모아 노래에 맞춰 짧은 영상을 만들었어요." },
+    ],
     explore: {
       items: [
-        { core: 1, object: "영상", title: "영상 클립 순서 바꿔 잇기", do: "짧은 영상 클립 3~4개를 순서를 바꿔 가며 이어 보세요.", why: "이게 끌리면 영상 편집자 같은 일에서도 이 행동이 쓰여요." },
-        { core: 1, object: "그림·이미지·디자인", title: "포스터 요소 자리 바꾸기", do: "포스터 한 장의 글과 그림 자리를 바꿔 가며 가장 잘 읽히는 배치를 찾아보세요.", why: "이게 끌리면 편집 디자이너 같은 일에서도 이 행동이 쓰여요." },
-        { core: 2, object: "몸·건강", title: "가족 건강 루틴 챙기기", do: "요즘 지쳐 보이는 가족의 하루 루틴을 함께 살펴보고 무리한 부분을 하나 덜어 보세요.", why: "이게 끌리면 정신병동 보호사 같은 일에서도 이 행동이 쓰여요." },
+        { slot: 1, kind: "확인", object: "짧은 영상", title: "다른 노래로 장면 다시 맞추기", do: "좋아하는 장면 몇 개를 골라 다른 노래 박자에 맞춰 순서를 다시 놓아 보세요.", why: "" },
+        { slot: 2, kind: "확인", object: "행사 준비물 목록", title: "모임 준비 목록 묶어 보기", do: "다가오는 모임 하나의 할 일을 모아 담당별로 묶어 보세요.", why: "" },
+        { slot: 3, kind: "탐색", object: "영상", title: "영상 클립 순서 바꿔 잇기", do: "짧은 영상 클립 3~4개를 순서를 바꿔 가며 이어 보세요.", why: "이게 끌리면 영상 편집자 같은 일에서도 이 행동이 쓰여요." },
       ],
     },
+  },
+  final: {
+    candidates: [
+      {
+        experience: 3,
+        label: "장면 조각을 박자에 맞춰 순서를 바꾼다",
+        signals: { added: { present: false, quote: "" }, satisfaction: { present: true, quote: "맞춰가는 과정 자체가 좋았어요" }, repeated: { present: false, quote: "" } },
+      },
+    ],
   },
   jobPick: undefined,
   jobLists: JOB_LISTS,
 } as unknown as Session;
 
-// ?n=1|2|3 으로 코어 개수를 바꿔 볼 수 있다. DEV_REPORT_FILE 환경변수에 결과지 JSON 경로를 주면 그 내용으로 그린다(시험용).
+// ?n=0|1|2|3 으로 코어 개수를 바꿔 볼 수 있다(0은 코어 후보만). DEV_REPORT_FILE 환경변수에 결과지 JSON 경로를 주면 그 내용으로 그린다(시험용).
 export default async function DevResult({ searchParams }: { searchParams: Promise<{ n?: string; legacy?: string }> }) {
   const { n, legacy: old } = await searchParams;
-  const count = Math.max(1, Math.min(3, Number(n) || 3));
+  // ?n=0: 확정 코어 없이 코어 후보만 있는 결과지
+  const count = n === "0" ? 0 : Math.max(1, Math.min(3, Number(n) || 3));
   const base = old ? legacy : sample;
   let session = base;
   const file = process.env.DEV_REPORT_FILE;
@@ -579,7 +592,16 @@ export default async function DevResult({ searchParams }: { searchParams: Promis
   } else {
     session = {
       ...base,
-      report: { ...base.report, cores: base.report!.cores.slice(0, count) },
+      report: {
+        ...base.report,
+        cores: base.report!.cores.slice(0, count),
+        ...(count === 0
+          ? {
+              hold_note: "이번 이야기만으로는 어떤 방식이 계속 나오는지 아직 가리기 어려워요.",
+              explore: { items: base.report!.explore.items.slice(0, 1) },
+            }
+          : {}),
+      },
       reliability: base.reliability?.slice(0, count),
       jobLists: base.jobLists?.filter((j) => j.core < count),
     } as Session;

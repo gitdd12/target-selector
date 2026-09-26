@@ -235,6 +235,17 @@ export const FinalJudgmentSchema = z.object({
     }),
   ),
   unresolved: z.array(z.object({ label: z.string().describe("보류한 후보를 행동으로 짧게"), reason: z.string() })),
+  // 코어 후보(결과지 v0.28): 구체 행동이 있고 무게 신호가 정확히 하나인 행동. 결과지의 "코어 후보" 칸과 해 볼 일(코어 확인)에 쓴다.
+  candidates: z
+    .array(
+      z.object({
+        experience: z.number().int().describe("이 후보가 나온 경험의 experience_id"),
+        label: z.string().describe("후보를 행동으로 짧게(대상 이름 없이)"),
+        signals: z.object({ added: CoreSignal, satisfaction: CoreSignal, repeated: CoreSignal }),
+      }),
+    )
+    .describe("unresolved 중 구체 행동이 있고 무게 신호가 정확히 하나인 것만(근거가 뚜렷한 순, 최대 2개). 신호가 없거나 행동이 불명확하거나 경험끼리 모순인 것은 넣지 않는다. 없으면 빈 배열")
+    .optional(),
   cross_experience_pattern: z.string(),
   hold_summary: z
     .string()
@@ -263,20 +274,30 @@ export const ReportSchema = z.object({
     alive: z.string().describe("가치관과 코어가 만나 살아나는 일·환경 1~2문장"),
     stuck: z.string().describe("사용하지 않는다(못 견디는 것에 통합). 항상 빈 문자열"),
   }),
+  // 코어 후보 칸(결과지 v0.28): 코어 판정의 candidates와 같은 순서·개수. 어떤 신호가 부족한지는 쓰지 않는다(참가자가 기준에 맞추게 되므로).
+  candidates: z
+    .array(
+      z.object({
+        behavior: z.string().describe("후보 행동 한 문장(해요체, 20~30자, 대상 이름 없이). 코어 행동 문장과 같은 방식으로 쓴다"),
+        scene: z.string().describe("이 행동이 나온 장면 한 줄(해요체, 45자 안팎, 사실 그대로)"),
+      }),
+    )
+    .describe("코어 판정의 candidates와 같은 순서·같은 개수. 없으면 빈 배열"),
   // 직접 해 보기: 진로 탐색 중일 때만 채운다(직장이 있다·가고 싶은 분야를 정했다는 고정 문구를 코드가 붙인다). 그 외에는 items를 빈 배열로.
-  // 공통 이유는 고정 문구라 코드가 붙인다.
+  // 해 볼 일은 코드가 정한 칸(slot)마다 하나씩 쓴다. 칸의 종류(코어 확인 / 대상 탐색)와 묶음별 이유는 고정 문구라 코드가 붙인다.
   explore: z.object({
     items: z
       .array(
         z.object({
-          core: z.number().int().describe("어느 코어의 해 볼 일인지(코어 순번, 1부터)"),
-          object: z.string().describe("해 볼 대상(주어진 '해 볼 대상 후보'의 대상 이름 그대로, 또는 채울 때 쓴 비슷한 대상)"),
+          slot: z.number().int().describe("사용자 메시지의 '해 볼 일 칸' 번호 그대로"),
+          kind: z.enum(["확인", "탐색"]).describe("칸의 종류 그대로"),
+          object: z.string().describe("해 볼 대상(칸에 적힌 대상 이름 그대로, 또는 칸이 정해 준 범위 안에서 고른 비슷한 대상)"),
           title: z.string().describe("해 볼 일의 이름(짧게, 만든 용어 금지)"),
           do: z.string().describe("지금 혼자 바로 할 수 있는 일 한 문장(\"~해 보세요\"). 같은 행동을 그 대상에 옮긴 작은 일. 표시·기록·적기가 아니라 직접 하는 일. 시간 조건은 쓰지 않는다"),
-          why: z.string().describe("그 대상의 직업과 잇는 한 문장. 예: 이게 끌리면 영상 편집자 같은 일에서도 이 행동이 쓰여요"),
+          why: z.string().describe("탐색 칸: 그 대상의 직업과 잇는 한 문장. 예: 이게 끌리면 영상 편집자 같은 일에서도 이 행동이 쓰여요. 확인 칸: 빈 문자열"),
         }),
       )
-      .describe("진로 탐색 중이면 정확히 3개(대상이 서로 겹치지 않게, 코어가 둘 이상이면 코어마다 최소 1개), 아니면 빈 배열"),
+      .describe("진로 탐색 중이면 '해 볼 일 칸'마다 하나씩 칸 순서대로, 아니면 빈 배열"),
   }),
   hold_note: z.string(),
 });
