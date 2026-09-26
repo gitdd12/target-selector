@@ -17,7 +17,7 @@ const t0 = "2026-01-01T00:00:00.000Z";
 const A = (content: string, kind?: "restatement"): ChatMessage => ({ role: "assistant", content, at: t0, kind });
 const U = (content: string): ChatMessage => ({ role: "user", content, at: t0 });
 
-const OPEN = A("골랐던 대상들과 관련해서 일상 속에서 겪은 경험을 말해줘요.\n잘 안 떠오르면 꼭 위의 대상이 아니어도 돼요. 아주 사소한 것이어도 괜찮으니, 머릿속에서 바로 떠오르는 걸 말해주세요.");
+const OPEN = A("골랐던 대상들과 관련해서 직접 해 본 일 하나를 말해줘요.\n잘 안 떠오르면 꼭 위의 대상이 아니어도 돼요. 단순 취미나 아주 사소한 것이어도 괜찮으니, 머릿속에서 바로 떠오르는 걸 말해주세요.");
 const TALK: ChatMessage[] = [
   OPEN,
   U("얼마전에 제육볶음 한 거. 레시피 찾아보고 입맛대로 좀 바꿔서 했어"),
