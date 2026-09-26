@@ -49,3 +49,14 @@ export const LIMITS = {
 
 // 동의 안내문 버전. 문구를 바꾸면 올린다(누가 어느 버전에 동의했는지 기록됨).
 export const CONSENT_VERSION = "2026-09-19";
+
+// 업무 문장 검색용 임베딩. 업무 임베딩(data/onet31/task_emb_e5.f16)을 만든 모델과 반드시 같아야 한다.
+// 모델을 바꾸면 업무 임베딩도 다시 만들어야 한다(data/onet31/README.md 참고).
+export const EMBED = {
+  model: "Xenova/e5-base-v2", // intfloat/e5-base-v2의 ONNX 변환본
+  revision: "21f8d0e36fdfe76e6a023802dfb293fc6d750ad1", // 받는 파일이 바뀌지 않게 고정
+  dtype: "fp16" as const,
+  dim: 768,
+  queryPrefix: "query: ", // e5 규칙: 검색 문장은 "query: ", 업무 문장은 "passage: "를 앞에 붙여 임베딩
+  perQuery: 30, // 검색 문장 하나당 가져오는 업무 문장 수 [임시 숫자, 2026-09-25 시험 2개 행동 기준]
+};
