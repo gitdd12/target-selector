@@ -4,10 +4,11 @@
 //   say <sessionId> <text>         참가자 발화 한 번 보내고 인터뷰어 응답 출력
 //   restate <sessionId> more|next  재진술 카드 버튼
 //   advance <sessionId>            현재 창 마감 후 다음 창으로(또는 결과지 단계로)
+//   extra <sessionId> yes|no       경험 2 뒤 "경험 하나 더 이야기하기" 선택
 //   finalize <sessionId> [situation]  결과지 초안까지 전체 진행
 //   dump <sessionId>               세션 상태 요약 출력
 import { interviewTurn } from "../src/lib/interview";
-import { advance, applyRestatement, applyTurnResult, finalizeStep, logEvent, startWindow } from "../src/lib/pipeline";
+import { advance, applyRestatement, applyTurnResult, chooseExtra, finalizeStep, logEvent, startWindow } from "../src/lib/pipeline";
 import { newSession, save, getStore } from "../src/lib/store";
 import { COVERAGE_KEYS, COVERAGE_LABEL, WINDOW_ORDER, type Situation, type Target } from "../src/lib/types";
 
@@ -82,6 +83,18 @@ async function main() {
     return;
   }
 
+  if (cmd === "extra") {
+    const [id, choice] = rest;
+    if (choice !== "yes" && choice !== "no") throw new Error("yes 또는 no");
+    const s = await getStore().get(id);
+    if (!s) throw new Error("세션을 찾을 수 없습니다: " + id);
+    chooseExtra(s, choice);
+    await save(s);
+    console.log(`\n===== ${s.currentWindow} =====`);
+    console.log("인터뷰어:", s.windows[s.currentWindow].messages[0].content);
+    return;
+  }
+
   if (cmd === "advance") {
     const [id] = rest;
     const s = await getStore().get(id);
@@ -93,6 +106,8 @@ async function main() {
       console.log(`(${prevKind} 종료 → 모든 창 끝, 결과지 단계로 넘어갑니다. finalize 명령을 쓰세요)`);
     } else if ((s.phase as string) === "complete") {
       console.log(`(오용으로 중단됨)`);
+    } else if (s.extraOffer === "pending") {
+      console.log(`(${prevKind} 종료 → 「경험 하나 더 이야기하기 / 다음 질문으로 넘어가기」 선택 카드. extra 명령을 쓰세요)`);
     } else {
       console.log(`\n===== ${s.currentWindow} =====`);
       console.log("인터뷰어:", s.windows[s.currentWindow].messages[0].content);

@@ -7,6 +7,7 @@ import { interviewerStatus, interviewerSystem } from "./prompts";
 import {
   COVERAGE_KEYS,
   COVERAGE_LABEL,
+  isExpWindow,
   type CloseReason,
   type CoverageKey,
   type CoverageValue,
@@ -33,7 +34,7 @@ const BaseShape = {
   finish: z
     .enum(["none", "no_experience", "user_stopped", "misuse"])
     .describe(
-      "none: 계속 / no_experience: 서로 다른 회상 경로를 두 번 시도했는데도 두 번째 경험이 없음(경험 2 창에서만) / user_stopped: 사용자가 그만하고 싶어 함 / misuse: 인터뷰와 무관한 요청이나 의미 없는 입력이 반복돼 중단",
+      "none: 계속 / no_experience: 경험 2 창에서 서로 다른 회상 경로를 두 번 시도했는데도 경험이 없음, 또는 경험 3 창에서 더 떠오르는 게 없음 / user_stopped: 사용자가 그만하고 싶어 함 / misuse: 인터뷰와 무관한 요청이나 의미 없는 입력이 반복돼 중단",
     ),
 };
 const ExpTurnSchema = z.object({ coverage: CoverageSchema, ...BaseShape });
@@ -102,7 +103,7 @@ function toApiMessages(s: Session, kind: WindowKind): Anthropic.MessageParam[] {
 
 export async function interviewTurn(s: Session, kind: WindowKind): Promise<TurnResult> {
   const w = s.windows[kind];
-  const isExp = kind === "exp1" || kind === "exp2";
+  const isExp = isExpWindow(kind);
   const userTurns = w.messages.filter((m) => m.role === "user").length;
   let retryNote: string | undefined;
 
@@ -177,7 +178,8 @@ export async function interviewTurn(s: Session, kind: WindowKind): Promise<TurnR
 
     // ── 두 번째 경험이 없음: 서로 다른 회상 경로를 두 번 시도한 뒤(사용자 발화 3번째 이후)에만 ──
     if (parsed.finish === "no_experience") {
-      if (userTurns < LIMITS.minTurnsNoExperience && !last) {
+      // 경험 3은 참가자가 스스로 고른 창이라 "없어요"를 바로 받아들인다
+      if (kind === "exp2" && userTurns < LIMITS.minTurnsNoExperience && !last) {
         retryNote =
           "첫 '없어요'를 바로 받아들이지 마세요. 서로 다른 회상 경로로 두 번 시도한 뒤(사용자가 세 번째로 없다고 한 뒤)에만 no_experience로 끝냅니다. finish를 none으로 하고 다른 회상 경로로 물어보세요.";
         continue;

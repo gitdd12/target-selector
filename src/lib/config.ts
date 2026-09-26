@@ -32,17 +32,17 @@ export const AGE_BANDS = ["10대", "20대 초반", "20대 후반", "30대", "40�
 // 인터뷰 창 하나가 끝없이 길어지지 않게 하는 안전장치
 export const LIMITS = {
   // 사용자 발화가 이만큼 넘으면 AI에게 "슬슬 재진술로 정리하라"고 알린다
-  softUserTurns: { exp1: 24, exp2: 24, hardship: 10, advice: 10 },
+  softUserTurns: { exp1: 24, exp2: 24, exp3: 24, hardship: 10, advice: 10 },
   // 이만큼 넘으면 서버가 창을 강제로 닫는다
-  hardUserTurns: { exp1: 45, exp2: 45, hardship: 22, advice: 22 },
+  hardUserTurns: { exp1: 45, exp2: 45, exp3: 45, hardship: 22, advice: 22 },
   // AI가 너무 일찍 창을 닫지 못하게 하는 최소 사용자 발화 수
-  minUserTurns: { exp1: 4, exp2: 4, hardship: 2, advice: 2 },
+  minUserTurns: { exp1: 4, exp2: 4, exp3: 4, hardship: 2, advice: 2 },
   maxUserChars: 2500, // 메시지 하나의 최대 글자 수
   // 두 번째 경험이 "없다"로 끝나려면 서로 다른 회상 경로를 두 번 시도한 뒤여야 한다(사용자가 세 번째로 없다고 답한 뒤)
   minTurnsNoExperience: 3,
   // 한 사람이 인터뷰 전체(4개 창)에서 쓸 수 있는 총량. 넘으면 그 창을 닫고 바로 결과지 단계로 넘어간다.
-  totalUserTurns: 70,
-  totalUserChars: 45000,
+  totalUserTurns: 90, // 경험 3(선택)을 고른 사람도 끝까지 갈 수 있게 70에서 늘림(v0.32)
+  totalUserChars: 58000,
   // 도배 방지: 같은 세션에서 메시지 사이 최소 간격, 같은 IP에서 10분 동안 보낼 수 있는 메시지 수
   minMsgIntervalMs: 1500,
   perIpChatsPer10Min: 90,

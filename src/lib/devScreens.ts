@@ -22,6 +22,7 @@ export const DEV_SCREENS: DevScreenInfo[] = [
   { key: "chat-after-card", group: "채팅", label: "채팅 — 카드를 본 뒤 (‘다음 질문으로 넘어가기’ 남음)" },
   { key: "chat-closing", group: "채팅", label: "채팅 — 창이 끝나고 정리하는 중" },
   { key: "chat-closing-error", group: "채팅", label: "채팅 — 정리하다 오류 (다시 시도 버튼)" },
+  { key: "chat-extra", group: "채팅", label: "채팅 — 경험 2 뒤 ‘경험 하나 더 이야기하기’ 선택 카드" },
   { key: "chat-values", group: "채팅", label: "채팅 — 가치관 질문 창 (대상 표시 없음)" },
 
   { key: "situation", group: "끝난 뒤", label: "현재 상태 고르기 팝업 (이메일 화면 앞)" },

@@ -34,6 +34,7 @@ export default function Chat({
   session,
   onSend,
   onRestatement,
+  onExtra,
   onRetry,
   sending,
   error,
@@ -41,6 +42,7 @@ export default function Chat({
   session: PublicSession;
   onSend: (text: string) => Promise<boolean>;
   onRestatement: (action: "more" | "next") => Promise<void>;
+  onExtra: (choice: "yes" | "no") => Promise<void>;
   onRetry: () => void;
   sending: boolean;
   error: string;
@@ -52,6 +54,7 @@ export default function Chat({
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const closed = session.awaitingAdvance;
   const pending = session.pendingRestatement;
+  const offer = session.extraOffer; // 경험 2 뒤 "경험 하나 더 이야기하기" 선택 카드
 
   // 맨 아래에 붙어 있는 상태인지(사용자가 위로 올려서 지난 대화를 읽는 중이면 억지로 내리지 않는다)
   const stick = useRef(true);
@@ -65,7 +68,7 @@ export default function Chat({
     stick.current = true;
     const id = requestAnimationFrame(() => requestAnimationFrame(toBottom));
     return () => cancelAnimationFrame(id);
-  }, [session.messages.length, sending, pending, closed]);
+  }, [session.messages.length, sending, pending, closed, offer]);
 
   // 폰 키보드가 올라오거나 내려가서 화면 크기가 바뀔 때도, 맨 아래에 붙어 있었다면 다시 맨 아래로 내린다.
   // (AI가 답하는 사이 키보드가 움직이면 마지막 답이 가려지던 문제를 막는다)
@@ -91,6 +94,12 @@ export default function Chat({
     const ok = await onSend(t);
     if (ok) setText("");
     inputRef.current?.focus(); // 보낸 뒤에도 입력창에 커서를 유지해서 키보드가 내려가지 않게 한다
+  }
+
+  async function chooseExtra(choice: "yes" | "no") {
+    setChoosing(true);
+    await onExtra(choice);
+    setChoosing(false);
   }
 
   async function choose(action: "more" | "next") {
@@ -169,6 +178,20 @@ export default function Chat({
               </div>
             ),
           )}
+          {offer && (
+            <div className="restate-card fade-in">
+              <div className="restate-label">경험 하나 더</div>
+              <div className="restate-text">더 이야기하고 싶은 경험이 있으면 하나 더 들려주세요. 없으면 다음 질문으로 넘어가도 돼요.</div>
+              <div className="restate-btns">
+                <button className="btn-primary" disabled={choosing} onClick={() => chooseExtra("no")}>
+                  다음 질문으로 넘어가기
+                </button>
+                <button className="btn-ghost" disabled={choosing} onClick={() => chooseExtra("yes")}>
+                  경험 하나 더 이야기하기
+                </button>
+              </div>
+            </div>
+          )}
           {sending && (
             <div className="bubble ai">
               <span className="typing">
@@ -196,7 +219,7 @@ export default function Chat({
             </span>{" "}
             이야기를 정리하고 있어요
           </div>
-        ) : pending ? (
+        ) : pending || offer ? (
           <div className="q-sub" style={{ textAlign: "center", margin: "6px 0" }}>
             위 카드에서 골라주세요
           </div>

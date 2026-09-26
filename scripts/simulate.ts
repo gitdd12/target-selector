@@ -3,9 +3,9 @@
 // 끝나면 세션 id를 알려준다. 이어서 `npm run review -- <id>`로 검토용 원고를 만든다.
 import fs from "node:fs";
 import path from "node:path";
-import { OFF_TOPIC, participantSays, pickTargets } from "./persona";
+import { OFF_TOPIC, participantSays, pickPersona, pickTargets } from "./persona";
 import { interviewTurn } from "../src/lib/interview";
-import { advance, applyRestatement, applyTurnResult, finalizeStep, logEvent, startWindow } from "../src/lib/pipeline";
+import { advance, applyRestatement, applyTurnResult, chooseExtra, finalizeStep, logEvent, startWindow } from "../src/lib/pipeline";
 import { newSession, save } from "../src/lib/store";
 import { COVERAGE_KEYS, WINDOW_ORDER, type Situation } from "../src/lib/types";
 
@@ -30,6 +30,7 @@ async function main() {
 
   for (const kind of WINDOW_ORDER) {
     if ((s.phase as string) !== "interview") break;
+    if (s.currentWindow !== kind) continue; // 경험 3을 고르지 않아 건너뛴 창
     const w = s.windows[kind];
     say(`\n===== ${kind} =====`);
     say(`인터뷰어: ${w.messages[0].content}`);
@@ -69,6 +70,12 @@ async function main() {
       say(`(시험 스크립트가 ${MAX_TURNS}턴에서 강제로 닫음)`);
     }
     await advance(s);
+    // 경험 2 뒤 선택 카드: EXTRA=yes면 경험 3을 연다(기본: 참가자 설정에 경험 C가 있으면 yes)
+    if (s.extraOffer === "pending") {
+      const choice = (process.env.EXTRA ?? (pickPersona().includes("경험 C") ? "yes" : "no")) === "yes" ? "yes" : "no";
+      chooseExtra(s, choice);
+      say(`   → 선택 카드: 「${choice === "yes" ? "경험 하나 더 이야기하기" : "다음 질문으로 넘어가기"}」`);
+    }
     await save(s);
   }
 

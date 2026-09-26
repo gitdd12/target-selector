@@ -42,7 +42,7 @@ export async function POST(req: Request, { params }: Ctx) {
 
     // 이 창의 길이, 그리고 인터뷰 전체의 총량을 확인한다
     const userTurns = w.messages.filter((m) => m.role === "user").length;
-    const all = WINDOW_ORDER.flatMap((k) => s.windows[k].messages).filter((m) => m.role === "user");
+    const all = WINDOW_ORDER.flatMap((k) => s.windows[k]?.messages ?? []).filter((m) => m.role === "user");
     const totalTurns = all.length;
     const totalChars = all.reduce((n, m) => n + m.content.length, 0);
 

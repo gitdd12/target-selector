@@ -43,11 +43,16 @@ export const SITUATION_SHORT: Record<Situation, string> = {
   exploring: "진로 탐색 중",
 };
 
-export type WindowKind = "exp1" | "exp2" | "hardship" | "advice";
-export const WINDOW_ORDER: WindowKind[] = ["exp1", "exp2", "hardship", "advice"];
+// 경험 3은 선택이다(v0.32): 경험 2가 끝나면 참가자가 "경험 하나 더 이야기하기"를 고를 때만 연다. 로직은 경험 2와 같다.
+export type WindowKind = "exp1" | "exp2" | "exp3" | "hardship" | "advice";
+export const WINDOW_ORDER: WindowKind[] = ["exp1", "exp2", "exp3", "hardship", "advice"];
+export const EXP_WINDOWS = ["exp1", "exp2", "exp3"] as const;
+export type ExpWindow = (typeof EXP_WINDOWS)[number];
+export const isExpWindow = (k: WindowKind): k is ExpWindow => (EXP_WINDOWS as readonly string[]).includes(k);
 export const WINDOW_LABEL: Record<WindowKind, string> = {
   exp1: "경험 1",
   exp2: "경험 2",
+  exp3: "경험 3",
   hardship: "견디기 힘들었던 상황",
   advice: "친구에게 해줄 조언",
 };
@@ -98,7 +103,8 @@ export interface TargetSelection {
 }
 
 export type WindowStatus = "pending" | "active" | "done" | "skipped";
-export type CloseReason = "completed" | "no_experience" | "user_stopped" | "turn_limit" | "misuse";
+// declined: 경험 3을 고르지 않음(창을 열지 않고 건너뜀)
+export type CloseReason = "completed" | "no_experience" | "user_stopped" | "turn_limit" | "misuse" | "declined";
 
 export interface WindowState {
   kind: WindowKind;
@@ -194,13 +200,17 @@ export const BehaviorSchema = z.object({
 export type Behavior = z.infer<typeof BehaviorSchema>;
 
 export const FinalJudgmentSchema = z.object({
-  // 두 경험이 같은 코어인지(0-1단계). 두 경험 모두 코어 후보 이상일 때만 판정한다.
-  same_core: z.object({
-    result: z.enum(["같은 코어", "다른 코어", "해당 없음"]),
-    exp1_quote: z.string().describe("경험 1에서 판정 근거가 된 사용자 표현 인용. 해당 없음이면 빈 문자열"),
-    exp2_quote: z.string().describe("경험 2에서 판정 근거가 된 사용자 표현 인용. 해당 없음이면 빈 문자열"),
-    reasoning: z.string(),
-  }),
+  // 경험끼리 같은 코어인지(0-1단계). 두 경험 모두 코어 후보 이상인 쌍마다 판정한다(경험이 셋이면 최대 세 쌍).
+  same_core: z
+    .array(
+      z.object({
+        experiences: z.array(z.number().int()).describe("비교한 두 경험의 번호(experience_id). 예: [1, 2]"),
+        result: z.enum(["같은 코어", "다른 코어"]),
+        quotes: z.array(z.string()).describe("두 경험에서 판정 근거가 된 사용자 표현 인용(experiences와 같은 순서로 두 개)"),
+        reasoning: z.string(),
+      }),
+    )
+    .describe("비교할 쌍이 없으면(코어 후보 이상인 경험이 하나 이하) 빈 배열"),
   cores: z.array(
     z.object({
       status: z.enum(["확정(단일 경험)", "확정(반복 확인)"]),
@@ -397,6 +407,7 @@ export interface Session {
   records: {
     exp1?: ExperienceFields;
     exp2?: ExperienceFields;
+    exp3?: ExperienceFields;
     hardship?: ValuesFields;
     advice?: ValuesFields;
   };
@@ -415,6 +426,8 @@ export interface Session {
   published?: boolean;
   publishedAt?: string;
   approvedCelebs?: number[];
+  // 경험 2가 끝난 뒤 "경험 하나 더 이야기하기" 선택: pending(버튼을 기다림) / yes(경험 3 창을 엶) / no(건너뜀)
+  extraOffer?: "pending" | "yes" | "no";
   // 인터뷰가 끝난 뒤 참가자가 고른 현재 상태. 결과지의 "직접 해 보기"가 이 선택에 맞춰진다.
   situation?: Situation;
   // 이메일은 대화 기록과 분리해 저장한다(store의 contacts). 여기에는 받았는지 여부만 둔다.

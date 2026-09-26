@@ -135,6 +135,16 @@ export default function SessionApp({ id }: { id: string }) {
     }
   }
 
+  // 경험 2 뒤 선택 카드: 경험 하나 더 이야기하기(yes) / 다음 질문으로 넘어가기(no)
+  async function extra(choice: "yes" | "no") {
+    setError("");
+    try {
+      setS(await api(`${base}/extra`, { method: "POST", body: JSON.stringify({ choice }) }));
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "잠시 문제가 생겼어요. 다시 시도해주세요.");
+    }
+  }
+
   if (missing) {
     return (
       <div className="app">
@@ -164,6 +174,7 @@ export default function SessionApp({ id }: { id: string }) {
         session={s}
         onSend={send}
         onRestatement={restate}
+        onExtra={extra}
         onRetry={() => setRetry((n) => n + 1)}
         sending={sending}
         error={error}

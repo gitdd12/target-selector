@@ -38,6 +38,7 @@ async function call(path: string, body?: unknown, method = "POST") {
 
   let s = (await call(`${base}/targets`, TARGETS)).data;
   for (const kind of WINDOW_ORDER as WindowKind[]) {
+    if (s.phase !== "interview" || s.currentWindow !== kind) continue; // 경험 3을 고르지 않아 건너뛴 창
     console.log(`\n== ${kind} ==`);
     let pressedMore = false;
     for (let turn = 1; turn <= 45; turn++) {
@@ -66,12 +67,19 @@ async function call(path: string, body?: unknown, method = "POST") {
     if (a.status !== 200) return console.log("advance 실패로 중단");
     s = a.data;
     console.log(`  다음 창으로 (기록 정리 ${(a.ms / 1000).toFixed(1)}초) → phase=${s.phase}`);
+    if (s.extraOffer) {
+      const choice = process.env.EXTRA === "yes" ? "yes" : "no";
+      const x = await call(`${base}/extra`, { choice });
+      if (x.status !== 200) return console.log("경험 3 선택 실패로 중단");
+      s = x.data;
+      console.log(`  선택 카드 → 「${choice === "yes" ? "경험 하나 더 이야기하기" : "다음 질문으로 넘어가기"}」`);
+    }
   }
 
   console.log("\n== 이메일 + 결과지 초안 ==");
   const em = await call(`${base}/email`, { email: "test-e2e@example.com" });
   console.log("이메일 접수:", em.status === 200 ? "OK" : em.status);
-  for (let i = 0; i < 6 && s.phase === "finalizing"; i++) {
+  for (let i = 0; i < 30 && s.phase === "finalizing"; i++) {
     const f = await call(`${base}/finalize`);
     if (f.status !== 200) return console.log("finalize 실패로 중단");
     s = f.data;

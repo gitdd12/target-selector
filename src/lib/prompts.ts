@@ -1,5 +1,5 @@
 import type { ChatMessage, CoverageKey, CoverageValue, ExperienceFields, FinalJudgment, Session, TargetSelection, ValuesFields, WindowKind } from "./types";
-import { SITUATION_LABEL, WINDOW_LABEL } from "./types";
+import { EXP_WINDOWS, SITUATION_LABEL, WINDOW_LABEL, WINDOW_ORDER, isExpWindow } from "./types";
 import { celebSpec, interviewerSpec, judgeSpec, recorderSpec, writerSpec } from "./specs";
 import { exploreCandidates } from "./jobfinder";
 
@@ -11,6 +11,8 @@ export const OPENING: Record<WindowKind, string> = {
     "골랐던 대상들과 관련해서 직접 해 본 일 하나를 말해줘요.\n잘 안 떠오르면 꼭 위의 대상이 아니어도 돼요. 단순 취미나 아주 사소한 것이어도 괜찮으니, 머릿속에서 바로 떠오르는 걸 말해주세요. 정말 없으면 '없어요'라고 해도 돼요.",
   exp2:
     "이번엔 직접 해 본 다른 일 하나를 들려주세요.\n잘 안 떠오르면 꼭 위의 대상이 아니어도 돼요. 단순 취미나 아주 사소한 것이어도 괜찮으니, 머릿속에서 바로 떠오르는 걸 말해주세요. 정말 없으면 '없어요'라고 해도 돼요.",
+  exp3:
+    "직접 해 본 또 다른 일 하나를 더 들려주세요.\n잘 안 떠오르면 꼭 위의 대상이 아니어도 돼요. 단순 취미나 아주 사소한 것이어도 괜찮으니, 머릿속에서 바로 떠오르는 걸 말해주세요. 정말 없으면 '없어요'라고 해도 돼요.",
   hardship: "가장 견디기 힘들었던 상황이나 싫었던 상황이 있었어요?",
   advice:
     "나랑 똑같은 상황에 있는 친구를 만났을 때, 해주고 싶은 조언은 뭐예요?\n(지금 본인이 겪고 있거나 겪었던 일·진로 고민을 떠올려서 편하게 답해줘도 돼요.)",
@@ -18,7 +20,9 @@ export const OPENING: Record<WindowKind, string> = {
 
 export const CLOSING_HINT: Record<WindowKind, string> = {
   exp1: "이야기 잘 들었어요. 다음 질문으로 넘어갈게요.",
-  exp2: "이야기 잘 들었어요. 다음 질문으로 넘어갈게요.",
+  // 경험 2 뒤에는 "경험 하나 더 이야기하기 / 다음 질문으로 넘어가기" 선택 카드가 이어진다
+  exp2: "이야기 잘 들었어요.",
+  exp3: "이야기 잘 들었어요. 다음 질문으로 넘어갈게요.",
   hardship: "말해줘서 고마워요. 다음 질문으로 넘어갈게요.",
   advice: "이야기 잘 들었어요. 이제 지금까지 나눈 이야기를 정리해볼게요.",
 };
@@ -64,6 +68,10 @@ ${KEYS_GUIDE}`,
 이 창은 "경험 2" 하나만 다룹니다. 첫 질문은 이미 화면에 나갔습니다. 앞선 경험 1의 내용은 이 창에서는 알 수 없으니, 사용자가 언급하면 말한 만큼만 받아들이고 새로 캐묻지 않습니다. 경험 1과 똑같이 여섯 항목을 채웁니다.
 ${KEYS_GUIDE}
 두 번째 경험이 없다고 해도 첫 "없어요"를 바로 받아들이지 않습니다(스펙 "기억이 안 남" 원칙: 서로 다른 회상 경로로 두 번 시도). 사용자가 세 번째로 없다고 하면 억지로 만들어내게 하지 말고 reply에 짧은 인사를 쓰고 finish를 "no_experience"로 설정합니다.`,
+  exp3: `## 지금 진행 중인 질문 로직: 경험 3(참가자가 원해서 연 추가 경험)
+이 창은 "경험 3" 하나만 다룹니다. 참가자가 경험을 하나 더 이야기하고 싶다고 골라서 열린 창입니다. 첫 질문은 이미 화면에 나갔습니다. 앞선 경험 1·2의 내용은 이 창에서는 알 수 없으니, 사용자가 언급하면 말한 만큼만 받아들이고 새로 캐묻지 않습니다. 경험 1·2와 똑같이 여섯 항목을 채웁니다.
+${KEYS_GUIDE}
+참가자가 스스로 고른 창이므로, 막상 떠오르는 게 없다고 하면 다시 캐묻지 말고 reply에 짧은 인사를 쓰고 finish를 "no_experience"로 설정합니다.`,
   hardship: `## 지금 진행 중인 질문 로직: 가장 견디기 힘들었던/싫었던 상황
 이 창은 이 질문 하나만 다룹니다. 첫 질문은 이미 화면에 나갔습니다. 이 답은 코어 근거가 아니라 가치관·성향 자료라서 경험 루프의 항목을 돌리지 않습니다(이 창에는 coverage가 없습니다). 답이 추상적이면 스펙의 되묻기 원칙으로 실제 장면으로 되돌립니다. 보통 3~6번 주고받으면 충분하고, 충분한 답과 구체적인 장면 하나를 얻으면 restatement로 마무리합니다.`,
   advice: `## 지금 진행 중인 질문 로직: 친구에게 해주고 싶은 조언
@@ -87,7 +95,7 @@ export function interviewerStatus(opts: {
   if (opts.coverage) {
     lines.push(`- 직전 턴에 기록한 coverage(대화를 다시 확인해 이번 턴에 정확히 갱신하세요): ${JSON.stringify(opts.coverage)}`);
   }
-  if ((opts.kind === "exp1" || opts.kind === "exp2") && opts.targets) {
+  if (isExpWindow(opts.kind) && opts.targets) {
     lines.push(
       `- 사용자가 앞서 10초 안에 고른 대상(화면 맨 위에 떠 있음): ${opts.targets.survivors.map((s) => s.name).join(" / ")}`,
       "  → 이 대상은 경험을 떠올리는 입구일 뿐, 경험의 범위를 제한하지 않습니다.",
@@ -123,7 +131,7 @@ export function recorderSystem(kind: WindowKind) {
 }
 
 export function recorderUser(kind: WindowKind, messages: ChatMessage[]): string {
-  const isExp = kind === "exp1" || kind === "exp2";
+  const isExp = isExpWindow(kind);
   return `다음은 "${WINDOW_LABEL[kind]}" 창의 인터뷰 대화 전체입니다.
 
 <대화>
@@ -140,7 +148,7 @@ ${
 // ─────────────────────────────────────────────────────────────
 // 코어 판정
 // ─────────────────────────────────────────────────────────────
-const JUDGE_RULES = `당신은 "코어 찾기"의 코어 판정 담당입니다. 두 경험의 기록을 보고 확정된 코어를 정합니다. 이 단계는 인터뷰가 모두 끝난 뒤 처음으로 해석을 하는 자리입니다. 코어에는 이름을 붙이지 않고 행동 설명으로 적습니다.
+const JUDGE_RULES = `당신은 "코어 찾기"의 코어 판정 담당입니다. 경험 기록(보통 두 개, 참가자가 원하면 세 개)을 보고 확정된 코어를 정합니다. 이 단계는 인터뷰가 모두 끝난 뒤 처음으로 해석을 하는 자리입니다. 코어에는 이름을 붙이지 않고 행동 설명으로 적습니다.
 
 ## 판정 원칙 (스펙 기준)
 - 확정 조건은 두 층입니다. 기본 조건: 그 경험에서 구체적인 행동이 확보돼 있음(concrete_action_confirmed). 무게 조건: 네 신호 — weight_signals 세 가지(요구 이상의 수고, 방식의 반복, 과정·결과물 자체의 만족)와 ④ 본인이 정한 부분(self_chosen_evidence가 "확인됨") — 중 두 개 이상. 네 신호 모두 일 전체가 아니라 포착한 행동(방식)을 기준으로 봅니다. 남이 시켜서 한 일이어도 ①~③ 중 두 개가 있으면 확정입니다. comparison_preference는 확정 판단에 쓰지 않습니다. 신호 하나만으로는 확정하지 않습니다 — 사소한 선택 하나까지 확정하면 결과지가 칭찬만 하게 됩니다. 남과 비교해 독특한지는 보지 않으며, 흔한 행동이라는 이유만으로 제외하지도 않습니다.
@@ -148,12 +156,12 @@ const JUDGE_RULES = `당신은 "코어 찾기"의 코어 판정 담당입니다.
 - 똑똑함(지능)이 필요한 방식이라는 이유만으로 코어에서 제외하지 않습니다.
 - 과정·결과물 자체의 만족은 사용자가 무엇이 만족스러웠는지 구체적으로 짚었을 때만 present입니다. 외부 반응(칭찬·합격 등)이 같이 있어도 되지만, 외부 반응뿐이거나 끝난 후련함뿐이면 absent입니다. 마감·피로 같은 외부 조건 때문에 한 것은 코어의 근거로 쓰지 않습니다.
 
-## 두 경험이 같은 코어인지 (same_core)
-- 두 경험 모두 구체 행동이 있고 코어 후보 이상일 때만 판정합니다. 한쪽이 없거나 근거 부족이면 "해당 없음"입니다.
+## 경험끼리 같은 코어인지 (same_core)
+- 두 경험 모두 구체 행동이 있고 코어 후보 이상인 쌍만 판정합니다. 한쪽이 없거나 근거 부족이면 그 쌍은 적지 않습니다.
 - 두 경험의 행동 설명을 비교합니다. 동작과 다루는 것의 모양이 같으면(대상만 다른 경우 포함 — 대상은 코어가 아닙니다) 같은 코어. 동작이 다르면(문단 순서 바꾸기 / 처음부터 새로 쓰기) 다른 코어. 동작은 같고 기준만 다르면(흐름을 맞추려고 / 효율을 높이려고 순서를 바꿈) 같은 코어로 보고 차이는 reasoning에 적습니다. 일부만 겹치면 두 경험의 본인이 정한 부분끼리 겹칠 때 같은 코어로 보고, 겹치는 부분만으로 행동 설명을 새로 씁니다.
-- 두 경험에서 판정 근거가 된 사용자 표현을 하나씩 인용합니다(exp1_quote, exp2_quote).
+- 경험이 셋이면(경험 3은 참가자가 원할 때만 있음) 코어 후보 이상인 경험끼리 쌍마다 판정합니다. same_core에 쌍마다 experiences(예: [1, 3]), result, 두 경험에서 판정 근거가 된 사용자 표현 인용 두 개(quotes), reasoning을 적습니다. 비교할 쌍이 없으면 빈 배열입니다.
 - **애매하면 다른 코어로 둡니다.** 같다고 하면 ② 방식의 반복이 생겨 확정이 쉬워지므로, 잘못 합치면 근거보다 부풀려 말하게 됩니다.
-- 같은 코어면: 두 번째가 해야 해서 한 것이 아닐 때 ②로 치고(대상이 같아도 됩니다) 두 경험의 신호를 합쳐 두 개 이상이면 코어 하나로 "확정(반복 확인)", basis_experiences는 [1, 2]입니다. 후보 두 개가 합쳐져 확정될 수도 있습니다.
+- 같은 코어면: 두 번째가 해야 해서 한 것이 아닐 때 ②로 치고(대상이 같아도 됩니다) 같은 코어인 경험들의 신호를 합쳐 두 개 이상이면 코어 하나로 "확정(반복 확인)", basis_experiences에는 그 경험들을 모두 넣습니다(예: [1, 2] 또는 [1, 2, 3]). 후보 두 개가 합쳐져 확정될 수도 있습니다.
 - 다른 코어면: 각 코어가 자기 경험의 신호로만 확정됩니다(각각 "확정(단일 경험)"). 후보가 반복되지 않으면 unresolved에 "무게 신호 부족(한 장면뿐)" 사유로 넣습니다.
 
 ## 코어마다 적을 것
@@ -180,15 +188,16 @@ function windowDump(s: Session, k: WindowKind): string {
 
 export function judgeUser(s: Session): string {
   const parts: string[] = [];
-  for (const k of ["exp1", "exp2"] as const) {
+  for (const k of EXP_WINDOWS) {
+    if (k === "exp3" && (!s.windows.exp3 || s.windows.exp3.closeReason === "declined")) continue; // 경험 3을 고르지 않음
     parts.push(
-      `## ${WINDOW_LABEL[k]} (experience_id=${k === "exp1" ? 1 : 2})\n### 분석 기록\n${JSON.stringify(s.records[k] ?? "(기록 없음: 건너뜀)", null, 1)}\n### 사용자 원문 대화\n${windowDump(s, k)}`,
+      `## ${WINDOW_LABEL[k]} (experience_id=${EXP_WINDOWS.indexOf(k) + 1})\n### 분석 기록\n${JSON.stringify(s.records[k] ?? "(기록 없음: 건너뜀)", null, 1)}\n### 사용자 원문 대화\n${windowDump(s, k)}`,
     );
   }
   for (const k of ["hardship", "advice"] as const) {
     parts.push(`## ${WINDOW_LABEL[k]} (참고: 코어 근거로 쓰지 않음)\n${JSON.stringify(s.records[k] ?? "(없음)", null, 1)}`);
   }
-  return `${parts.join("\n\n")}\n\n위 기록으로 확정 코어를 판정하세요. basis_experiences에는 experience_id(1 또는 2)를 넣습니다.`;
+  return `${parts.join("\n\n")}\n\n위 기록으로 확정 코어를 판정하세요. basis_experiences에는 experience_id(1, 2, 3)를 넣습니다.`;
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -241,7 +250,7 @@ function exploreText(s: Session): string {
 }
 
 export function writerUser(s: Session, final: FinalJudgment): string {
-  const userQuotes = (["exp1", "exp2", "hardship", "advice"] as const)
+  const userQuotes = WINDOW_ORDER.filter((k) => s.windows[k])
     .map((k) => {
       const w = s.windows[k];
       const said = w.messages.filter((m) => m.role === "user").map((m) => `- ${m.content}`);
@@ -261,7 +270,7 @@ ${JSON.stringify(final, null, 1)}
 ${exploreText(s)}
 
 ## 경험별 분석 기록
-${JSON.stringify({ exp1: s.records.exp1 ?? null, exp2: s.records.exp2 ?? null }, null, 1)}
+${JSON.stringify({ exp1: s.records.exp1 ?? null, exp2: s.records.exp2 ?? null, ...(s.records.exp3 ? { exp3: s.records.exp3 } : {}) }, null, 1)}
 
 ## 가치관 기록 (values_signal)
 ${JSON.stringify({ hardship: (s.records.hardship as ValuesFields | undefined) ?? null, advice: (s.records.advice as ValuesFields | undefined) ?? null }, null, 1)}

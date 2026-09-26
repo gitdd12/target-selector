@@ -7,7 +7,7 @@ import { jobWorkSummary } from "@/lib/jobfinder";
 import { estimateCost, reportToText } from "@/lib/reviewText";
 import { headers } from "next/headers";
 import { getStore, isValidId } from "@/lib/store";
-import { COVERAGE_KEYS, COVERAGE_LABEL, WINDOW_LABEL, WINDOW_ORDER } from "@/lib/types";
+import { COVERAGE_KEYS, COVERAGE_LABEL, WINDOW_LABEL, WINDOW_ORDER, isExpWindow } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
@@ -111,14 +111,17 @@ export default async function ReviewDetail({ params }: { params: Promise<{ id: s
                 <div className="eyebrow" style={{ marginTop: 18 }}>
                   코어 판정
                 </div>
-                {s.final.same_core && (
-                  <div style={{ marginTop: 8, fontSize: 14, lineHeight: 1.75, color: "var(--ink-soft)" }}>
-                    <b>두 경험: {s.final.same_core.result}</b>
-                    {s.final.same_core.exp1_quote && ` — 경험1 “${s.final.same_core.exp1_quote}” / 경험2 “${s.final.same_core.exp2_quote}”`}
-                    <br />
-                    {s.final.same_core.reasoning}
-                  </div>
-                )}
+                {Array.isArray(s.final.same_core) &&
+                  s.final.same_core.map((p, i) => (
+                    <div key={i} style={{ marginTop: 8, fontSize: 14, lineHeight: 1.75, color: "var(--ink-soft)" }}>
+                      <b>
+                        경험 {p.experiences.join("·")}: {p.result}
+                      </b>
+                      {p.quotes.length > 0 && ` — ${p.quotes.map((q) => `“${q}”`).join(" / ")}`}
+                      <br />
+                      {p.reasoning}
+                    </div>
+                  ))}
                 {s.final.cores.map((c, i) => {
                   const legacy = (c as { core?: string }).core;
                   return (
@@ -259,7 +262,7 @@ export default async function ReviewDetail({ params }: { params: Promise<{ id: s
 
       {/* 4. 원문 대화 */}
       <h2 style={h2}>4. 원문 대화 (사실 대조용)</h2>
-      {WINDOW_ORDER.map((k) => {
+      {WINDOW_ORDER.filter((k) => s.windows[k]).map((k) => {
         const w = s.windows[k];
         return (
           <details key={k} style={{ ...box, marginTop: 10 }}>
@@ -273,7 +276,7 @@ export default async function ReviewDetail({ params }: { params: Promise<{ id: s
                 {COVERAGE_KEYS.map((k) => `${COVERAGE_LABEL[k]}: ${w.coverage?.[k] ?? "-"}`).join(" · ")}
               </div>
             )}
-            {(k === "exp1" || k === "exp2") && s.records[k]?.weight_signals && (
+            {isExpWindow(k) && s.records[k]?.weight_signals && (
               <div className="q-note" style={{ marginTop: 10 }}>
                 <b>기록 판정</b> {s.records[k]?.status} · 본인 선택 {s.records[k]?.self_chosen_evidence.result} · 무게 신호{" "}
                 {(

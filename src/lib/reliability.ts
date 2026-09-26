@@ -36,7 +36,7 @@ export function computeReliability(s: Session): Reliability[] {
     const f = tag ? finals.find((x) => (x as { core?: string }).core === tag) : finals[i];
     const found = new Map<SignalKey, string>();
     for (const n of f?.basis_experiences ?? []) {
-      const rec = n === 1 ? s.records.exp1 : n === 2 ? s.records.exp2 : undefined;
+      const rec = n === 1 ? s.records.exp1 : n === 2 ? s.records.exp2 : n === 3 ? s.records.exp3 : undefined;
       for (const k of Object.keys(SIGNAL_LABEL) as SignalKey[]) {
         if (found.has(k)) continue;
         if (k === "self_chosen") {

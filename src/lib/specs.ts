@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import type { WindowKind } from "./types";
+import { isExpWindow, type WindowKind } from "./types";
 
 // 스펙 문서(질문흐름, 결과지_작성_기준)는 specs 폴더의 원문 그대로 두고,
 // 실행 중에 제목 단위로 잘라서 역할별 프롬프트로 조립한다.
@@ -87,7 +87,7 @@ function dropParas(text: string, starts: string[]): string {
     .join("\n\n");
 }
 
-/** 인터뷰어. 경험 창(exp1/exp2)과 가치관 창(hardship/advice)에 넣는 규칙이 다르다. */
+/** 인터뷰어. 경험 창(exp1/exp2/exp3)과 가치관 창(hardship/advice)에 넣는 규칙이 다르다. */
 export function interviewerSpec(kind: WindowKind): string {
   const { q } = load();
   const adaptive = splitAdaptive(section(q, "적응형 질문 운영 규칙")).rules;
@@ -99,7 +99,7 @@ export function interviewerSpec(kind: WindowKind): string {
     adaptive,
     section(q, "결과 확인과 종료"),
   ];
-  if (kind === "exp1" || kind === "exp2") {
+  if (isExpWindow(kind)) {
     // "코어와 혼동하기 쉬운 것"과 "확정의 실제 조건"은 기록 정리·코어 판정용이라 인터뷰어에게는 넣지 않는다.
     return join(
       ...common,
@@ -117,7 +117,7 @@ export function interviewerSpec(kind: WindowKind): string {
 export function recorderSpec(kind: WindowKind): string {
   const { q } = load();
   const fields = splitAdaptive(section(q, "적응형 질문 운영 규칙")).recordFields;
-  if (kind === "exp1" || kind === "exp2") {
+  if (isExpWindow(kind)) {
     return join(
       fields,
       section(q, "표현을 곧이곧대로 받지 않는 원칙"),

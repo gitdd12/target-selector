@@ -21,6 +21,7 @@ import {
   ReportSchema,
   ValuesFieldsSchema,
   WINDOW_ORDER,
+  isExpWindow,
   type ExperienceFields,
   type Session,
   type WindowKind,
@@ -52,6 +53,23 @@ export function startWindow(s: Session, kind: WindowKind) {
   logEvent(s, "window_start", kind);
 }
 
+/** 경험 3 창을 열지 않고 건너뛴 것으로 기록한다. */
+function skipExtra(s: Session) {
+  s.windows.exp3 = { kind: "exp3", status: "skipped", closeReason: "declined", messages: [], recorded: true };
+}
+
+/** 경험 2 뒤 선택 카드: yes면 경험 3 창을 열고, no면 건너뛰고 가치관 질문으로 간다. AI를 부르지 않는다. */
+export function chooseExtra(s: Session, choice: "yes" | "no") {
+  if (s.extraOffer !== "pending") return;
+  s.extraOffer = choice;
+  logEvent(s, "extra_chosen", choice);
+  if (choice === "yes") startWindow(s, "exp3");
+  else {
+    skipExtra(s);
+    startWindow(s, "hardship");
+  }
+}
+
 /** 창 하나가 끝난 뒤: 기록 정리(분석)를 하고 다음 창을 연다. 마지막 창이면 결과지 초안 단계로 넘어간다. */
 export async function advance(s: Session) {
   const kind = s.currentWindow;
@@ -62,7 +80,7 @@ export async function advance(s: Session) {
     const hasUserText = w.messages.some((m) => m.role === "user");
     // 오용으로 중단된 창은 분석하지 않는다(쓸모없는 입력에 비용을 쓰지 않음)
     if (w.status === "done" && hasUserText && w.closeReason !== "no_experience" && w.closeReason !== "misuse") {
-      if (kind === "exp1" || kind === "exp2") {
+      if (isExpWindow(kind)) {
         const rec = await callJson(
           "recorder",
           ExperienceFieldsSchema,
@@ -86,7 +104,17 @@ export async function advance(s: Session) {
     w.recorded = true;
   }
 
-  const next = WINDOW_ORDER[WINDOW_ORDER.indexOf(kind) + 1];
+  let next = WINDOW_ORDER[WINDOW_ORDER.indexOf(kind) + 1];
+  if (kind === "exp2" && !s.flagged) {
+    // 경험 2를 실제로 이야기했으면 "경험 하나 더 이야기하기"를 고를 수 있게 멈춘다(v0.32). 없다고 끝났으면 묻지 않고 건너뛴다.
+    if (w.status === "done" && w.closeReason !== "no_experience") {
+      s.extraOffer = "pending";
+      logEvent(s, "extra_offered");
+      return;
+    }
+    skipExtra(s);
+    next = "hardship";
+  }
   if (s.flagged === "misuse") {
     // 오용으로 중단: 결과지 초안을 만들지 않고 종료 화면으로 보낸다
     s.phase = "complete";
@@ -114,7 +142,7 @@ export async function finalizeStep(s: Session) {
       logEvent(
         s,
         "judged",
-        `${s.final.same_core.result} · ` + s.final.cores.map((c) => `${c.behavior.action}(${c.objects.confirmed.join("/")}):${c.status}`).join(", "),
+        s.final.same_core.map((p) => `${p.experiences.join("·")} ${p.result}`).join(", ") + " · " + s.final.cores.map((c) => `${c.behavior.action}(${c.objects.confirmed.join("/")}):${c.status}`).join(", "),
       );
       break;
     }

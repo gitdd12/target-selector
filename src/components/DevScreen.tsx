@@ -36,7 +36,7 @@ const VALUES: ChatMessage[] = [
   A("실제로 그런 적이 있었던 팀플 하나만 떠올려 볼까요? 그때 어떤 장면이었어요?"),
 ];
 
-type ChatState = "normal" | "typing" | "card" | "after-card" | "closing" | "closing-error" | "values";
+type ChatState = "normal" | "typing" | "card" | "after-card" | "closing" | "closing-error" | "extra" | "values";
 const CHAT_STATES: { key: ChatState; label: string }[] = [
   { key: "normal", label: "대화 중" },
   { key: "typing", label: "생각 중" },
@@ -44,6 +44,7 @@ const CHAT_STATES: { key: ChatState; label: string }[] = [
   { key: "after-card", label: "카드 뒤" },
   { key: "closing", label: "정리 중" },
   { key: "closing-error", label: "오류" },
+  { key: "extra", label: "경험 하나 더?" },
   { key: "values", label: "가치관 창" },
 ];
 
@@ -54,12 +55,14 @@ function makeSession(state: ChatState, extra: ChatMessage[]): PublicSession {
   const messages = [...base, ...(withCard ? [A("지금까지 들은 걸 정리해봤어요."), CARD] : []), ...extra];
   if (state === "after-card") messages.push(A("네, 더 들려주세요. 다르게 이해한 부분이 있으면 그것도 편하게 말해주세요."));
   if (state === "closing" || state === "closing-error") messages.push(A("이야기 잘 들었어요. 다음 질문으로 넘어갈게요."));
+  if (state === "extra") messages.push(A("지금까지 들은 걸 정리해봤어요."), CARD, A("이야기 잘 들었어요."));
   return {
     id: "dev",
     phase: "interview",
-    currentWindow: values ? "hardship" : "exp1",
-    windowIndex: values ? 2 : 0,
+    currentWindow: values ? "hardship" : state === "extra" ? "exp2" : "exp1",
+    windowIndex: values ? 2 : state === "extra" ? 1 : 0,
     windowCount: 4,
+    extraOffer: state === "extra",
     awaitingAdvance: state === "closing" || state === "closing-error",
     pendingRestatement: state === "card",
     canProceed: state === "after-card",
@@ -111,6 +114,7 @@ function DevChat({ initial }: { initial: ChatState }) {
           if (action === "more") pick("after-card");
           else pick("closing");
         }}
+        onExtra={async () => pick("values")}
         onRetry={() => pick("closing")}
       />
     </>
