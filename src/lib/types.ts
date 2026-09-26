@@ -180,6 +180,11 @@ export const ValuesFieldsSchema = z.object({
 });
 export type ValuesFields = z.infer<typeof ValuesFieldsSchema>;
 
+const CoreSignal = z.object({
+  present: z.boolean(),
+  quote: z.string().describe("근거가 된 사용자 표현(원문 그대로 짧게). 없으면 빈 문자열"),
+});
+
 // ── 코어 판정(모든 창이 끝난 뒤) ───────────────────────────────
 // 코어 이름(여섯 단어)은 쓰지 않는다(v0.31). 코어는 행동 설명(동작·다루는 것의 모양·기준)으로 적고,
 // 이 행동 설명이 직업 목록의 검색·판정 기준이 된다(docs/직업추천_재설계 0단계).
@@ -211,6 +216,15 @@ export const FinalJudgmentSchema = z.object({
       basis_experiences: z.array(z.number().int()),
       reasoning: z.string(),
       scope_note: z.string().describe("어디까지 확인됐고 어디부터 추정인지"),
+      // 이 코어에 실제로 인정한 무게 신호(신뢰도 등급을 코드가 이 값으로 센다). 경험 기록의 신호를 그대로 옮기지 않고,
+      // 이 코어의 방식에 해당하는 것만 인정한다(예: 반복 근거가 다른 코어로 판정된 방식이면 false).
+      signals: z
+        .object({
+          added: CoreSignal.describe("보탬"),
+          satisfaction: CoreSignal.describe("만족"),
+          repeated: CoreSignal.describe("반복"),
+        })
+        .optional(),
       behavior: BehaviorSchema,
       objects: z.object({
         experience: z.string().describe("이 코어가 실제로 나온 대상(사용자 표현). 반복으로 확인된 다른 대상도 함께"),

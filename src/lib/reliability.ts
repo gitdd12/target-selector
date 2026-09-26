@@ -34,6 +34,15 @@ export function computeReliability(s: Session): Reliability[] {
     const tag = (rc as { core?: string }).core;
     const f = tag ? finals.find((x) => (x as { core?: string }).core === tag) : finals[i];
     const found = new Map<SignalKey, string>();
+    // 코어 판정이 이 코어에 인정한 신호가 있으면 그것만 센다(경험 기록의 신호는 다른 코어의 방식을 근거로 적었을 수 있다).
+    if (f?.signals) {
+      for (const k of Object.keys(SIGNAL_LABEL) as SignalKey[]) {
+        const sig = f.signals[k];
+        if (sig?.present) found.set(k, evidenceQuote(`"${sig.quote}"`) || sig.quote.slice(0, 46));
+      }
+      const keys = [...found.keys()];
+      return { grade: gradeOf(keys.length), met: keys.map((k) => SIGNAL_LABEL[k]), quotes: keys.map((k) => found.get(k) ?? "") };
+    }
     for (const n of f?.basis_experiences ?? []) {
       const rec = n === 1 ? s.records.exp1 : n === 2 ? s.records.exp2 : n === 3 ? s.records.exp3 : undefined;
       for (const k of Object.keys(SIGNAL_LABEL) as SignalKey[]) {
