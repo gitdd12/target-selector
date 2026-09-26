@@ -101,6 +101,9 @@ function toApiMessages(s: Session, kind: WindowKind): Anthropic.MessageParam[] {
   return out;
 }
 
+// 행동 복원 고정 문구의 뒷부분(앞의 "그 경험"은 사용자가 말한 일로 바뀔 수 있다)
+const BEHAVIOR_PROBE = "머릿속으로 생각하거나 판단한 것도";
+
 export async function interviewTurn(s: Session, kind: WindowKind): Promise<TurnResult> {
   const w = s.windows[kind];
   const isExp = isExpWindow(kind);
@@ -194,6 +197,9 @@ export async function interviewTurn(s: Session, kind: WindowKind): Promise<TurnR
         continue;
       }
       const missing = coverage ? COVERAGE_KEYS.filter((k) => coverage[k] === "미확보") : [];
+      // 행동 복원은 경험마다 반드시 한 번 묻는다(v0.32). 고정 문구가 이 창에 한 번도 안 나왔으면 행동을 미확보로 본다.
+      if (isExp && !w.messages.some((m) => m.role === "assistant" && m.content.includes(BEHAVIOR_PROBE)) && !missing.includes("actions"))
+        missing.push("actions");
       if (isExp && missing.length > 0 && !last) {
         retryNote = `재진술 카드는 coverage에 "미확보"가 하나도 없을 때만 띄웁니다. 아직 미확보인 항목: ${missing
           .map((k) => COVERAGE_LABEL[k])
