@@ -36,11 +36,10 @@ export interface ChatMessage {
   kind?: "restatement";
 }
 
-// 경험 창에서 스펙의 "확보 원칙" 일곱 가지 항목. 재진술 카드를 띄우기 전에 각각 확보됐거나 답 없음이어야 한다.
+// 경험 창에서 스펙의 "확보 원칙" 여섯 가지 항목. 재진술 카드를 띄우기 전에 각각 확보됐거나 답 없음이어야 한다.
 export const COVERAGE_KEYS = [
   "scene",
   "actions",
-  "required_parts",
   "chosen_parts",
   "extra_effort",
   "fulfillment",
@@ -50,8 +49,7 @@ export type CoverageKey = (typeof COVERAGE_KEYS)[number];
 export const COVERAGE_LABEL: Record<CoverageKey, string> = {
   scene: "장면과 시작 상태",
   actions: "실제 한 행동",
-  required_parts: "꼭 해야 했던 부분",
-  chosen_parts: "본인이 정해서 한 부분",
+  chosen_parts: "요구받은 것과 본인이 정한 것",
   extra_effort: "요구 이상으로 들인 수고",
   fulfillment: "과정이나 결과물 자체에서 온 만족",
   same_action_diff_object: "같은 행동·다른 대상",
