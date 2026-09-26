@@ -65,19 +65,19 @@ export interface ChatMessage {
   kind?: "restatement";
 }
 
-// 경험 창에서 스펙의 "확보 원칙" 여섯 가지 항목. 재진술 카드를 띄우기 전에 각각 확보됐거나 답 없음이어야 한다.
-export const COVERAGE_KEYS = [
-  "scene",
-  "actions",
-  "chosen_parts",
-  "extra_effort",
-  "fulfillment",
-  "same_action_diff_object",
-] as const;
+// 경험 창에서 스펙의 "받아야 할 정보 네 가지"(v0.34). 재진술 카드를 띄우기 전에 각각 확보됐거나 답 없음이어야 한다.
+export const COVERAGE_KEYS = ["action", "added", "satisfaction", "repeat"] as const;
 export type CoverageKey = (typeof COVERAGE_KEYS)[number];
 export const COVERAGE_LABEL: Record<CoverageKey, string> = {
+  action: "구체적인 행동과 다룬 대상",
+  added: "스스로 보탠 것",
+  satisfaction: "만족",
+  repeat: "같은 방식이 다시 나온 것",
+};
+// 예전 세션(v0.33까지)의 확보 항목 이름. 운영자 검토 화면에서만 쓴다.
+export const LEGACY_COVERAGE_LABEL: Record<string, string> = {
   scene: "장면",
-  actions: "실제 한 행동, 다룬 대상, 무엇을 가지고 시작했는지",
+  actions: "실제 한 행동",
   chosen_parts: "요구받은 것과 본인이 정한 것",
   extra_effort: "요구 이상으로 들인 수고",
   fulfillment: "과정이나 결과물 자체에서 온 만족",
@@ -128,15 +128,14 @@ const WeightSignal = z.object({ present: z.boolean(), evidence: z.string().descr
 export const ExperienceFieldsSchema = z.object({
   scene_title: z.string().describe("이 경험을 가리키는 짧은 제목(사용자 표현 위주, 해석 금지)"),
   context_and_objects: z.string(),
-  starting_state: z.string().describe("손대기 전 대상의 모습(사용자 표현). 무엇을 가지고 시작했나(이미 있던 것 / 흩어진 재료 / 머릿속 생각 / 모르던 것 / 사람의 상태 등). 끝났을 때의 모습도 알면 함께 적는다. 없으면 미상"),
+  starting_state: z.string().describe("손대기 전 대상의 모습(사용자 표현). 무엇을 가지고 시작했나(이미 있던 것 / 흩어진 재료 / 머릿속 생각 / 모르던 것 / 사람의 상태 등). 따로 묻지 않으므로 이야기에 나온 만큼만 적고, 끝났을 때의 모습도 알면 함께 적는다. 없으면 미상"),
   actions: z.string(),
   required_parts: z.string(),
-  chosen_parts: z.string(),
-  extra_effort: z.string().describe("요구·필요 이상으로 스스로 더 들인 수고. 없으면 없음(사용자 답변). 시간이 길었다는 것만으로는 수고로 치지 않는다"),
+  added_parts: z.string().describe("스스로 보탠 것: 그 일이 요구하지 않았는데 본인이 정하거나 더 한 부분(방법·순서·범위를 정함, 더 오래·더 여러 번, 따로 알아보거나 도구 마련). 없으면 없음(사용자 답변)"),
   desired_change: z.string(),
   stopping_reason: z.string(),
   fulfillment_signal: z.string(),
-  reengagement: z.string().describe("같은 행동 다른 대상 질문의 답: 이번 방식이 나온 다른 실제 경험(무엇에서, 언제, 어떻게). 없으면 없음"),
+  reengagement: z.string().describe("반복 질문의 답: 이번 방식이 나온 다른 실제 경험(무엇에서, 언제, 어떻게, 시켜서 한 것인지). 없으면 없음"),
   external_conditions: z.string(),
   candidate_interpretations: z.array(
     z.object({
@@ -149,20 +148,15 @@ export const ExperienceFieldsSchema = z.object({
   ),
   comparison_result: z
     .string()
-    .describe("same_action_different_object 비교 질문 결과. 없으면 미상"),
+    .describe("반복(같은 방식이 다시 나왔는지) 질문 결과. 없으면 미상"),
   // 확정 기본 조건(스펙 v0.28): 구체 행동이 확보돼 있는가. 흔한 행동이라는 이유로 미충족 판정하지 않는다.
   concrete_action_confirmed: z.boolean().describe("기본 조건: 그 경험에서 이 사람이 실제로 한 구체적인 행동이 확보됐다. 평가·성격 표현만 있고 행동이 없으면 false"),
-  // 무게 신호 ④ 본인이 정한 부분(스펙 v0.28부터 기본 조건이 아니라 신호). 시켜서 한 일이면 미확인일 수 있다.
-  self_chosen_evidence: z.object({
-    result: z.enum(["확인됨", "미확인", "불명확"]),
-    reasoning: z.string(),
-  }),
-  // 무게 신호 ①~③(스펙 "확정의 실제 조건"). ④(self_chosen_evidence)와 합쳐 두 개 이상이면 단일 경험으로 확정. status는 코드가 이 값으로 다시 계산한다.
+  // 무게 신호 세 가지(스펙 v0.34 "확정의 실제 조건"). 두 개 이상이면 단일 경험으로 확정. status는 코드가 이 값으로 다시 계산한다.
   // 근거 하나는 신호 하나에만 쓴다(같은 발화를 두 신호의 근거로 겹쳐 쓰지 않는다).
   weight_signals: z.object({
-    extra_effort: WeightSignal.describe("① 이번에 포착한 방식(본인이 정한 부분)에 요구·필요보다 더 들인 수고(그 자리에서 더 오래·더 여러 번, 그 방식을 위해 따로 알아보기·도구 마련). 일 전체에 들인 시간·수고와 마감·평가 때문에 한 것은 제외"),
-    repeated: WeightSignal.describe("② 방식의 반복: 이번 경험에서 본인이 정한 방식이 다른 때에, 시키지 않았는데 다시 나왔다. 대상은 같아도(다른 자소서) 비슷해도(보고서) 멀어도(영상) 된다. 해야 해서 다시 한 것(취업 준비라 자소서를 또 씀)과 하고 싶다는 의향만 제외"),
-    fulfillment_on_action: WeightSignal.describe("③ 과정이나 결과물 자체에서 온 만족을 사용자가 구체적으로 짚었다(결과물을 좋아하는 것 포함). 칭찬·합격 같은 외부 반응이 같이 있어도 된다. 외부 반응뿐이거나 끝난 후련함뿐이거나, 무엇인지 짚지 못하면 제외"),
+    added: WeightSignal.describe("보탬: 그 일이 원래 요구하는 것 말고 본인이 정하거나 더 한 부분(방법·순서·범위를 직접 정함, 요구보다 더 오래·더 여러 번, 그 방식을 위해 따로 알아보기·도구 마련). 그 일을 하기로 한 것 자체와 마감·평가 때문에 어쩔 수 없이 한 것은 제외. 오래 했다는 사실은 요구보다 더 한 것일 때만"),
+    satisfaction: WeightSignal.describe("만족: 좋았던 이유가 '내가 하려던 게 됐다'거나 '하는 동안 재미있었다'이고 어느 순간 무엇이 좋았는지 짚었다(상대가 괜찮아진 것처럼 사람의 변화가 하려던 결과인 경우 포함). 남의 평가가 같이 있어도 된다. 남의 평가뿐이거나 끝난 후련함뿐이거나 무엇인지 짚지 못하면 제외"),
+    repeated: WeightSignal.describe("반복: 이번 방식이 다른 때에, 그 방식을 시키지 않았는데 다시 나왔다. 일 자체는 시켰어도 된다. 대상은 같아도(다른 자소서) 비슷해도(보고서) 멀어도(영상) 된다. 해야 해서 다시 한 것과 하고 싶다는 의향은 제외"),
   }),
   // 확정 신호가 아닌 기록(스펙). 비교 선호는 직업 추천에서, 다른 대상 표시는 직업 추천의 확인된 대상 칸에 쓴다(코어 문장은 대상 이름 없이 쓴다).
   comparison_preference: z.object({
@@ -171,7 +165,7 @@ export const ExperienceFieldsSchema = z.object({
     evidence: z.string().describe("사용자 표현 인용. 없으면 빈 문자열"),
   }),
   other_object: z.object({
-    present: z.boolean().describe("② 방식의 반복이 나왔다(② 근거가 곧 다른 대상이다)"),
+    present: z.boolean().describe("반복이 나왔다(반복의 근거가 곧 다른 대상이다)"),
     objects: z.string().describe("그 다른 대상(사용자 표현)과 이번 대상과 비슷한지·거리가 먼지. 없으면 빈 문자열"),
     evidence: z.string().describe("사용자 표현 인용. 없으면 빈 문자열"),
   }),
@@ -219,10 +213,10 @@ export const FinalJudgmentSchema = z.object({
       scope_note: z.string().describe("어디까지 확인됐고 어디부터 추정인지"),
       behavior: BehaviorSchema,
       objects: z.object({
-        experience: z.string().describe("이 코어가 실제로 나온 대상(사용자 표현). ②로 확인된 다른 대상도 함께"),
+        experience: z.string().describe("이 코어가 실제로 나온 대상(사용자 표현). 반복으로 확인된 다른 대상도 함께"),
         confirmed: z
           .array(z.enum(SEARCH_OBJECTS))
-          .describe("확인된 대상: 경험의 대상 + ② 방식의 반복으로 확인된 다른 대상을 검색용 대상 19개로 옮긴 것(중복 없이)"),
+          .describe("확인된 대상: 경험의 대상 + 반복으로 확인된 다른 대상을 검색용 대상 19개로 옮긴 것(중복 없이)"),
       }),
     }),
   ),
@@ -419,7 +413,7 @@ export interface Session {
   jobWork?: JobWork;
   jobLists?: CoreJobs[];
   report?: Report;
-  // 코어별 신뢰도(report.cores와 같은 순서). 무게 신호 개수로 코드가 정한다: 2개 = 중, 3개 = 상, 4개 = 최상
+  // 코어별 신뢰도(report.cores와 같은 순서). 무게 신호 개수로 코드가 정한다: 2개 = 중, 3개 = 상(v0.34). "최상"은 신호가 네 개였던 예전 세션에만 있다
   reliability?: { grade: "중" | "상" | "최상"; met: string[]; quotes?: string[] }[];
   celebDraft?: CelebDraft;
   // 운영자가 검토를 마치고 결과지를 공개했는지, 그리고 출처를 확인해 승인한 인물 사례(candidates 순번)

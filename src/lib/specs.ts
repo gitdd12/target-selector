@@ -68,62 +68,23 @@ export function specVersions() {
   return { interview: q.version, result: r.version };
 }
 
-// "적응형 질문 운영 규칙" 섹션 안에서 기록 필드 표 부분만 따로 떼어낸다.
-function splitAdaptive(body: string): { rules: string; recordFields: string } {
-  const start = body.indexOf("기록 필드 —");
-  if (start < 0) throw new Error('스펙에서 "기록 필드" 부분을 찾을 수 없음');
-  return { rules: body.slice(0, start).trim(), recordFields: body.slice(start).trim() };
-}
-
 const join = (...parts: string[]) => anonymize(parts.join("\n\n---\n\n"));
 
 // ── 역할별 조립 ──────────────────────────────────────────────
 
-// 문단(빈 줄로 구분) 단위로, 지정한 글자로 시작하는 문단을 뺀다. 표는 줄이 이어져 있어 그대로 남는다.
-function dropParas(text: string, starts: string[]): string {
-  return text
-    .split(/\n{2,}/)
-    .filter((p) => !starts.some((s) => p.trimStart().startsWith(s)))
-    .join("\n\n");
-}
-
-/** 인터뷰어. 경험 창(exp1/exp2/exp3)과 가치관 창(hardship/advice)에 넣는 규칙이 다르다. */
-export function interviewerSpec(kind: WindowKind): string {
-  const { q } = load();
-  const adaptive = splitAdaptive(section(q, "적응형 질문 운영 규칙")).rules;
-  const common = [
-    section(q, "목표와 설계 원칙"),
-    // 개발용 설명(index.html 재사용 범위)은 인터뷰어가 쓸 일이 없어서 뺀다
-    dropParas(section(q, "인터뷰 전체 구조"), ["index.html 재사용 범위는"]),
-    section(q, "표현을 곧이곧대로 받지 않는 원칙"),
-    adaptive,
-    section(q, "결과 확인과 종료"),
-  ];
-  if (isExpWindow(kind)) {
-    // "코어와 혼동하기 쉬운 것"과 "확정의 실제 조건"은 기록 정리·코어 판정용이라 인터뷰어에게는 넣지 않는다.
-    return join(
-      ...common,
-      dropParas(section(q, "필수 질문 흐름"), ["인터뷰 전체는 완전 채팅형이다"]),
-      // "행동 설명을 쓰는 법"은 기록·판정 단계의 내부 기준이라 인터뷰어에게는 넣지 않는다(v0.25부터 인터뷰어는 코어를 가르는 질문을 하지 않는다).
-      // 확정 조건(기본 조건·무게 신호 표·후보 처리)은 판정용이라 인터뷰어에게는 넣지 않는다. 요구 이상의 수고 질문은 위 필수 질문 표에 들어 있다.
-      dropParas(section(q, "두 번째 경험과 비교 질문"), ["확정의 실제 조건.", "(1) 기본 조건", "(2) 무게 조건", "| 무게 신호", "기본 조건은 만족하지만"]),
-    );
-  }
-  // 가치관 창에는 경험 루프 표와 행동 설명 기준을 넣지 않는다(코어를 캐는 방향으로 새는 것을 막음).
-  return join(...common, section(q, "가치관·성향을 파악하는 질문"));
-}
+// 인터뷰어에게는 스펙을 붙이지 않는다(질문흐름 v0.34). 인터뷰어 지시문은 prompts.ts에 있고, 그 이유는 스펙 "받아야 할 정보와 묻는 원칙"에 있다.
 
 /** 기록 정리자. 경험 창은 기록 필드 + 확정 판단 기준, 가치관 창은 기록 필드 + 가치관 섹션. */
 export function recorderSpec(kind: WindowKind): string {
   const { q } = load();
-  const fields = splitAdaptive(section(q, "적응형 질문 운영 규칙")).recordFields;
+  const fields = section(q, "기록 필드");
   if (isExpWindow(kind)) {
     return join(
       fields,
       section(q, "표현을 곧이곧대로 받지 않는 원칙"),
       section(q, "코어와 혼동하기 쉬운 것"),
       section(q, "행동 설명을 쓰는 법"),
-      section(q, "두 번째 경험과 비교 질문"),
+      section(q, "경험 사이의 반복과 확정 조건"),
     );
   }
   return join(fields, section(q, "가치관·성향을 파악하는 질문"));
@@ -133,10 +94,10 @@ export function recorderSpec(kind: WindowKind): string {
 export function judgeSpec(): string {
   const { q, r } = load();
   return join(
-    splitAdaptive(section(q, "적응형 질문 운영 규칙")).recordFields,
+    section(q, "기록 필드"),
     section(q, "코어와 혼동하기 쉬운 것"),
     section(q, "행동 설명을 쓰는 법"),
-    section(q, "두 번째 경험과 비교 질문"),
+    section(q, "경험 사이의 반복과 확정 조건"),
     section(q, "결과 확인과 종료"),
     section(r, "결과지가 반드시 지켜야 할 구조"),
   );

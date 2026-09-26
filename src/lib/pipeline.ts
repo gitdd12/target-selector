@@ -30,14 +30,12 @@ import {
 
 const now = () => new Date().toISOString();
 
-// 스펙의 확정 조건: 기본 조건(구체 행동 + 본인이 정한 부분)을 못 넘으면 근거 부족, 넘었어도 무게 신호가 하나도 없으면 후보, 하나 이상이면 확정(단일 경험).
-// AI가 적은 근거(self_chosen_evidence, weight_signals)로 코드가 status를 다시 계산한다.
-// 무게 신호 네 가지(①~③ weight_signals + ④ 본인이 정한 부분) 중 두 개 이상이면 확정(스펙 v0.28).
+// 스펙의 확정 조건: 구체 행동이 없으면 근거 부족, 있으면 무게 신호 세 가지(보탬·만족·반복) 중 두 개 이상일 때 확정(단일 경험), 아니면 후보.
+// AI가 적은 근거(weight_signals)로 코드가 status를 다시 계산한다(스펙 v0.34).
 export const MIN_WEIGHT_SIGNALS = 2;
 export function deriveStatus(f: ExperienceFields): ExperienceFields["status"] {
   if (f.concrete_action_confirmed === false) return "근거 부족";
-  const n =
-    Object.values(f.weight_signals).filter((x) => x.present).length + (f.self_chosen_evidence.result === "확인됨" ? 1 : 0);
+  const n = Object.values(f.weight_signals).filter((x) => x.present).length;
   return n >= MIN_WEIGHT_SIGNALS ? "확정(단일 경험)" : "후보";
 }
 export const logEvent = (s: Session, event: string, detail?: string) => s.log.push({ at: now(), event, detail });

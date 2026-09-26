@@ -7,12 +7,21 @@ import { jobWorkSummary } from "@/lib/jobfinder";
 import { estimateCost, reportToText } from "@/lib/reviewText";
 import { headers } from "next/headers";
 import { getStore, isValidId } from "@/lib/store";
-import { COVERAGE_KEYS, COVERAGE_LABEL, WINDOW_LABEL, WINDOW_ORDER, isExpWindow } from "@/lib/types";
+import { COVERAGE_LABEL, LEGACY_COVERAGE_LABEL, WINDOW_LABEL, WINDOW_ORDER, isExpWindow, type CoverageKey, type ExperienceFields } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
 const box = { background: "var(--card)", borderRadius: 16, padding: "18px 20px", marginTop: 14 } as const;
 const h2 = { fontFamily: "var(--font-serif)", fontSize: 17, margin: "28px 0 4px" } as const;
+
+// 무게 신호 요약. v0.34부터 세 가지(보탬·만족·반복), 예전 세션은 네 가지(수고·반복·만족 + 본인 선택)를 그대로 보여준다.
+function signalSummary(rec: ExperienceFields | undefined): string {
+  const w = (rec?.weight_signals ?? {}) as Record<string, { present?: boolean } | undefined>;
+  const mark = (key: string) => (w[key]?.present ? "○" : "×");
+  if ("added" in w) return `보탬 ${mark("added")} · 만족 ${mark("satisfaction")} · 반복 ${mark("repeated")}`;
+  const legacy = rec as unknown as { self_chosen_evidence?: { result?: string } } | undefined;
+  return `본인 선택 ${legacy?.self_chosen_evidence?.result ?? "-"} · 요구 이상의 수고 ${mark("extra_effort")} · 방식의 반복 ${mark("repeated")} · 과정·결과물 자체의 만족 ${mark("fulfillment_on_action")}`;
+}
 
 export default async function ReviewDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -273,21 +282,14 @@ export default async function ReviewDetail({ params }: { params: Promise<{ id: s
             {w.coverage && (
               <div className="q-note" style={{ marginTop: 10 }}>
                 <b>확보 현황(마지막 턴 기준)</b>{" "}
-                {COVERAGE_KEYS.map((k) => `${COVERAGE_LABEL[k]}: ${w.coverage?.[k] ?? "-"}`).join(" · ")}
+                {Object.entries(w.coverage)
+                  .map(([ck, v]) => `${COVERAGE_LABEL[ck as CoverageKey] ?? LEGACY_COVERAGE_LABEL[ck] ?? ck}: ${v ?? "-"}`)
+                  .join(" · ")}
               </div>
             )}
             {isExpWindow(k) && s.records[k]?.weight_signals && (
               <div className="q-note" style={{ marginTop: 10 }}>
-                <b>기록 판정</b> {s.records[k]?.status} · 본인 선택 {s.records[k]?.self_chosen_evidence.result} · 무게 신호{" "}
-                {(
-                  [
-                    ["요구 이상의 수고", "extra_effort"],
-                    ["방식의 반복", "repeated"],
-                    ["과정·결과물 자체의 만족", "fulfillment_on_action"],
-                  ] as const
-                )
-                  .map(([label, key]) => `${label} ${s.records[k]?.weight_signals[key]?.present ? "○" : "×"}`)
-                  .join(" · ")}
+                <b>기록 판정</b> {s.records[k]?.status} · 무게 신호 {signalSummary(s.records[k])}
                 {s.records[k]?.other_object && (
                   <>
                     <br />
