@@ -48,7 +48,7 @@ const JUDGE_RULES = `당신은 "코어 찾기"의 업무 문장 판정 담당입
   - and로 묶인 서로 다른 행동은 몫을 나눕니다. "insert music, arrange films into sequences, and correct errors" → 1/3(0.33)
   - or로 묶인 대안은 나누지 않습니다. 하나라도 맞으면 몫 전체(1)입니다. 동사의 or든 대상의 or든 같습니다. 예 "edit books, lesson plans, or tests"
   - to부정사·~ing·관계절로 붙은 목적이나 방법도 행동이 들어 있으면 의미로 판단합니다(예: "…, organizing material accordingly"). 문장을 문법 규칙으로 기계적으로 쪼개지 않고, "행동에 해당하는 부분은 어디고 그게 얼마나 큰 몫인가"를 의미로 판단합니다.
-- 인용(quote): 업무 문장에서 이 행동에 해당하는 구절을 **원문 그대로**(대소문자·철자·구두점까지) 옮깁니다. 바꾸거나 줄이거나 이어 붙이지 않습니다. 한 덩어리로 이어진 구절 하나만 씁니다.
+- 인용(quote): 업무 문장에서 이 행동에 해당하는 구절을 **원문 그대로**(대소문자·철자·구두점까지) 옮깁니다. 바꾸거나 줄이거나 이어 붙이지 않습니다. 한 덩어리로 이어진 구절 하나만 씁니다. 결과지에서 이 구절만 굵게 보이므로, 문장 전체가 아니라 행동에 해당하는 가장 짧은 부분(동사와 그 목적어 정도)만 씁니다. 예: "Cut and edit film or tape to integrate component parts into desired sequences." → "integrate component parts into desired sequences"
 - 대상(object): 이 업무가 다루는 대상을 다음 중 하나로 표시합니다: ${OBJECT_LIST}. 여러 개면 이 행동이 향하는 대상을 고릅니다.
 - 종교 의식·장례 절차가 업무의 중심인 문장은 맥락이 달라 0점입니다.
 - 비슷한 문장이 여럿이어도 각각 따로 판정합니다. 점수를 후하게도 박하게도 주지 말고 기준대로만 줍니다.
