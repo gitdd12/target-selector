@@ -75,12 +75,14 @@ export default function LandingV2() {
           {
             key: "no1",
             w: [0.12, 0.22, 0.3, 0.38],
+            floor: 0.3,
             className: styles.beatLead,
             node: "특별히 잘하는 일이나 오래 꿈꿔온 일을 쫓지 않습니다.",
           },
           {
             key: "no2",
             w: [0.27, 0.37, 0.5, 0.58],
+            floor: 0.3,
             right: true,
             className: styles.beatLead,
             node: "현재 유망한 직업이나 분야를 무작정 고르지 않습니다.",
@@ -88,6 +90,7 @@ export default function LandingV2() {
           {
             key: "yes",
             w: [0.44, 0.54, 0.66, 0.74],
+            floor: 0.3,
             className: styles.beatLead,
             node: (
               <>
@@ -112,7 +115,7 @@ export default function LandingV2() {
       <LandingV2Beat
         ariaLabel="코어와 가치관, 대상, 그리고 공식"
         theme="light"
-        trackVh={2.7}
+        trackVh={3.1}
         title={
           <>
             코어는 혼자
@@ -124,8 +127,9 @@ export default function LandingV2() {
         lines={[
           {
             key: "values",
-            w: [0.1, 0.18, 0.32, 0.4],
-            className: styles.beatLead,
+            w: [0.09, 0.16, 0.28, 0.35],
+            floor: 0.3,
+            className: styles.beatLeadLg,
             node: (
               <>
                 무엇이 중요하고 무엇이 답답한지가 <b className={styles.mark}>가치관</b>에 드러납니다.
@@ -134,8 +138,9 @@ export default function LandingV2() {
           },
           {
             key: "object",
-            w: [0.26, 0.34, 0.48, 0.56],
-            className: styles.beatLead,
+            w: [0.24, 0.31, 0.43, 0.5],
+            floor: 0.3,
+            className: styles.beatLeadLg,
             node: (
               <>
                 그 가치관 속에서 당신의 코어로 다루는 것을 <b className={styles.mark}>대상</b>이라고 합니다.
@@ -144,7 +149,7 @@ export default function LandingV2() {
           },
           {
             key: "formula",
-            w: [0.52, 0.64],
+            w: [0.46, 0.58],
             className: styles.beatFormula,
             node: (
               <>
@@ -152,15 +157,20 @@ export default function LandingV2() {
               </>
             ),
           },
+          {
+            key: "formulaSub",
+            w: [0.64, 0.76],
+            className: styles.beatFormulaSub,
+            node: "이 세 가지가 모여 당신의 진로가 됩니다.",
+          },
         ]}
       />
 
-      <section className={styles.section} aria-label="코어는 여러 직업에서 나타날 수 있습니다">
-        <p className={styles.eyebrow}>예시</p>
+      <section className={styles.section} aria-label="코어는 여러 직업에서 나타납니다">
         <h2 className={styles.h2} data-reveal>
           발견한 코어는
           <br />
-          여러 직업에서 나타날 수 있습니다.
+          여러 직업에서 나타납니다.
         </h2>
         <p className={styles.lead} data-reveal>
           직업은 단순한 행동의 묶음입니다. 전혀 달라 보이는 두 개의 직업이더라도 내 코어와 그 직무가 일치할 수 있습니다.

@@ -23,7 +23,7 @@
 .root[data-motion] [data-reveal]{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
 .root[data-motion] [data-reveal][data-shown]{opacity:1;transform:none}
 
-.mark{font-weight:750;color:var(--ink);box-shadow:inset 0 -.42em 0 var(--paper)}
+.mark{font-weight:750;color:var(--ink);box-shadow:inset 0 -.42em 0 rgba(13,12,20,.14)}
 
 /* 2번(사진 교차)·3번(문구 등장)은 LandingV2Era.module.css / LandingV2Pressure.module.css에 있다. */
 
@@ -35,9 +35,13 @@
 .beatDefine{margin:0;font-size:21px;font-weight:700;letter-spacing:-.035em;line-height:1.55}
 .beatMark{font-weight:780;font-size:1.15em;box-shadow:inset 0 -.42em 0 rgba(247,245,240,.22)}
 
+/* 6번 본문은 흰 바탕이라 한 단계 더 크게 둔다 */
+.beatLeadLg{margin:0;max-width:20em;font-size:21px;line-height:1.7;letter-spacing:-.02em}
+
 /* 7번(가치관 × 코어 × 대상)은 이제 6번과 한 씬 안에 있다. 원 없이 글자만 크게 둔다. */
 .beatFormula{margin:0;text-align:center;font-size:clamp(28px,8.6vw,52px);font-weight:780;letter-spacing:-.05em}
 .beatTimes{color:var(--dim);font-weight:500}
+.beatFormulaSub{margin:0;text-align:center;font-size:19px;font-weight:700;letter-spacing:-.03em;line-height:1.6;color:var(--soft)}
 
 /* 9번: 줄 세우기. 위(흰 결과지 섹션)·아래(흰 시작 섹션)와 자연스럽게 이어지도록 위아래 끝을 흰색으로 푼다. */
 .claim{--rise:0;background:linear-gradient(to bottom, #fff 0, var(--ink) 150px, var(--ink) calc(100% - 150px), #fff 100%);color:#fff;padding:170px 20px}
