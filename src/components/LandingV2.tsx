@@ -149,19 +149,16 @@ export default function LandingV2() {
           },
           {
             key: "formula",
-            w: [0.46, 0.58],
-            className: styles.beatFormula,
+            w: [0.46, 0.6],
+            className: styles.beatFormulaBlock,
             node: (
               <>
-                가치관 <span className={styles.beatTimes}>×</span> 코어 <span className={styles.beatTimes}>×</span> 대상
+                <span className={styles.beatFormulaRow}>
+                  가치관 <span className={styles.beatTimes}>×</span> 코어 <span className={styles.beatTimes}>×</span> 대상
+                </span>
+                <span className={styles.beatFormulaSub}>이 세 가지가 모여 당신의 진로가 됩니다.</span>
               </>
             ),
-          },
-          {
-            key: "formulaSub",
-            w: [0.64, 0.76],
-            className: styles.beatFormulaSub,
-            node: "이 세 가지가 모여 당신의 진로가 됩니다.",
           },
         ]}
       />
