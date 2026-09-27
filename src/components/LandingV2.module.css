@@ -35,14 +35,12 @@
 .beatDefine{margin:0;font-size:21px;font-weight:700;letter-spacing:-.035em;line-height:1.55}
 .beatMark{font-weight:780;font-size:1.15em;box-shadow:inset 0 -.42em 0 rgba(247,245,240,.22)}
 
-/* 6번 본문은 흰 바탕이라 한 단계 더 크게 둔다 */
-.beatLeadLg{margin:0;max-width:20em;font-size:21px;line-height:1.7;letter-spacing:-.02em}
-.beatCenter{align-self:center;text-align:center}
-
-/* 7번(가치관 × 코어 × 대상)은 이제 6번 맨 앞에서, 배경·구분선 없이 큰 글자로만 선언하고
-   그 아래에서 가치관·대상을 하나씩 풀어 설명한다. */
-.beatFormula{align-self:center;margin:0 0 8px;font-size:clamp(26px,8vw,48px);font-weight:780;letter-spacing:-.05em;white-space:nowrap}
+/* 공식(가치관 × 코어 × 대상)이 이 씬을 열고, 그 아래에서 가치관·대상을 하나씩 풀어 설명한다.
+   설명 글은 공식보다 눈에 띄게 작게 둔다. */
+.beatFormula{align-self:center;margin:0 0 16px;font-size:clamp(38px,13vw,72px);font-weight:780;letter-spacing:-.05em;white-space:nowrap}
 .beatTimes{color:var(--dim);font-weight:500}
+.beatLeadSm{margin:0;max-width:20em;font-size:16px;line-height:1.65;letter-spacing:-.02em}
+.beatCenter{align-self:center;text-align:center}
 
 /* 9번: 줄 세우기. 위(흰 결과지 섹션)·아래(흰 시작 섹션)와 자연스럽게 이어지도록 위아래 끝을 흰색으로 푼다. */
 .claim{--rise:0;background:linear-gradient(to bottom, #fff 0, var(--ink) 150px, var(--ink) calc(100% - 150px), #fff 100%);color:#fff;padding:170px 20px}

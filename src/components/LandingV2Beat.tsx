@@ -38,8 +38,9 @@ export default function LandingV2Beat({
   fadeBottomToWhite,
 }: {
   ariaLabel: string;
-  title: ReactNode;
-  titleClassName: string;
+  /** 없으면 제목 없이 lines부터 바로 시작한다(예: 공식을 첫 줄로 여는 씬). */
+  title?: ReactNode;
+  titleClassName?: string;
   lines: BeatLine[];
   theme: "dark" | "light";
   trackVh?: number;
@@ -63,7 +64,7 @@ export default function LandingV2Beat({
       const p = clamp(-rect.top / Math.max(1, rect.height - vh));
       // 화면에 다가오는 정도(0~1): 씬이 아직 완전히 고정되기 전부터 제목이 조금씩 드러나기 시작한다
       const approach = clamp((vh - rect.top) / vh);
-      if (titleRef.current) {
+      if (title && titleRef.current) {
         const o = Math.max(inAt(p, 0.02, 0.1), inAt(approach, 0.95, 1.3));
         titleRef.current.style.setProperty("--o", String(o));
         titleRef.current.style.setProperty("--y", `${(1 - o) * 14}px`);
@@ -92,7 +93,7 @@ export default function LandingV2Beat({
       removeEventListener("resize", schedule);
       if (frame) cancelAnimationFrame(frame);
     };
-  }, [lines, fadeBottomToWhite]);
+  }, [lines, fadeBottomToWhite, title]);
 
   return (
     <div
@@ -105,9 +106,11 @@ export default function LandingV2Beat({
         {grain && <div className={styles.grain} aria-hidden="true" />}
         {fadeBottomToWhite && <div className={styles.exitCurtain} aria-hidden="true" />}
         <div className={styles.col}>
-          <h2 ref={titleRef} className={`${styles.reveal} ${titleClassName}`}>
-            {title}
-          </h2>
+          {title && (
+            <h2 ref={titleRef} className={`${styles.reveal} ${titleClassName ?? ""}`}>
+              {title}
+            </h2>
+          )}
           {lines.map((l, i) => (
             <p
               key={l.key}
