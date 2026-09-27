@@ -115,7 +115,7 @@ export default function LandingV2() {
       <LandingV2Beat
         ariaLabel="코어와 가치관, 대상, 그리고 공식"
         theme="light"
-        trackVh={3.1}
+        trackVh={2.6}
         title={
           <>
             코어는 혼자
@@ -126,10 +126,20 @@ export default function LandingV2() {
         titleClassName={styles.beatBig}
         lines={[
           {
+            key: "formula",
+            w: [0.1, 0.2],
+            className: styles.beatFormula,
+            node: (
+              <>
+                가치관 <span className={styles.beatTimes}>×</span> 코어 <span className={styles.beatTimes}>×</span> 대상
+              </>
+            ),
+          },
+          {
             key: "values",
-            w: [0.09, 0.16, 0.28, 0.35],
+            w: [0.26, 0.34, 0.46, 0.53],
             floor: 0.3,
-            className: styles.beatLeadLg,
+            className: `${styles.beatLeadLg} ${styles.beatCenter}`,
             node: (
               <>
                 무엇이 중요하고 무엇이 답답한지가 <b className={styles.mark}>가치관</b>에 드러납니다.
@@ -138,25 +148,11 @@ export default function LandingV2() {
           },
           {
             key: "object",
-            w: [0.24, 0.31, 0.43, 0.5],
-            floor: 0.3,
-            className: styles.beatLeadLg,
+            w: [0.42, 0.5],
+            className: `${styles.beatLeadLg} ${styles.beatCenter}`,
             node: (
               <>
                 그 가치관 속에서 당신의 코어로 다루는 것을 <b className={styles.mark}>대상</b>이라고 합니다.
-              </>
-            ),
-          },
-          {
-            key: "formula",
-            w: [0.46, 0.6],
-            className: styles.beatFormulaBlock,
-            node: (
-              <>
-                <span className={styles.beatFormulaRow}>
-                  가치관 <span className={styles.beatTimes}>×</span> 코어 <span className={styles.beatTimes}>×</span> 대상
-                </span>
-                <span className={styles.beatFormulaSub}>이 세 가지가 모여 당신의 진로가 됩니다.</span>
               </>
             ),
           },
