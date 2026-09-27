@@ -1,0 +1,24 @@
+/* 씬 2 전용. --vh-px는 useVhPx가 설정한다. */
+.track{position:relative;height:calc(var(--vh-px, 100vh) * 2.6)}
+.stage{position:sticky;top:0;height:var(--vh-px, 100vh);overflow:hidden;background:#08070f;color:#f7f5f0}
+.visuals,.photo,.shade{position:absolute;inset:0}
+.photo{background-size:cover;background-repeat:no-repeat;background-position:50% center;transform:scale(1.15) translateY(var(--photo-y, 0px));will-change:opacity,transform;filter:grayscale(1) contrast(1.05)}
+.horse{background-image:url('/landing-story/horse-1880s.jpg');opacity:var(--horse, 1)}
+.factory{background-image:url('/landing-story/factory-19c.jpg');background-position:48% center;opacity:var(--factory, 0)}
+.modern{background-image:url('/landing-story/modern-work-new.jpg');opacity:var(--modern, 0)}
+.shade{background:linear-gradient(to bottom, rgba(6,5,14,.78) 0%, rgba(6,5,14,.4) 38%, rgba(6,5,14,.24) 60%, rgba(6,5,14,.82) 100%)}
+
+.copy{position:absolute;inset:0;z-index:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:0 28px;gap:26px}
+.title{margin:0;max-width:15em;opacity:var(--line1, 0);transform:translateY(var(--line1-y, 18px));font-size:clamp(30px,8.6vw,54px);font-weight:750;letter-spacing:-.05em;line-height:1.32;word-break:keep-all}
+.lead{margin:0;max-width:19em;opacity:var(--line2, 0);transform:translateY(var(--line2-y, 18px));font-size:clamp(16px,4.3vw,21px);font-weight:450;line-height:1.7;letter-spacing:-.02em;color:rgba(247,245,240,.86);word-break:keep-all}
+.turn{position:absolute;inset:0;z-index:1;display:flex;align-items:center;justify-content:center;margin:0 auto;padding:0 28px;max-width:20em;opacity:var(--line3, 0);transform:translateY(var(--line3-y, 18px));font-size:clamp(21px,5.8vw,34px);font-weight:650;line-height:1.5;letter-spacing:-.04em;text-align:center;word-break:keep-all}
+
+@media (prefers-reduced-motion: reduce) {
+  .track{height:auto}
+  .stage{position:relative;height:auto;padding:72px 0;display:flex;flex-direction:column;align-items:center;gap:26px}
+  .photo{display:none}
+  .factory{display:block;opacity:.35 !important}
+  .copy{position:relative;inset:auto;padding:0 28px;gap:26px}
+  .title,.lead{opacity:1 !important;transform:none !important}
+  .turn{position:relative;inset:auto;padding:0 28px;opacity:1 !important;transform:none !important}
+}

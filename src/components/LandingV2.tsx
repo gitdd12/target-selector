@@ -1,26 +1,12 @@
 import Link from "next/link";
+import LandingV2Era from "./LandingV2Era";
 import LandingV2Motion from "./LandingV2Motion";
+import LandingV2Pressure from "./LandingV2Pressure";
 import styles from "./LandingV2.module.css";
 
 // 새 랜딩(/v2). 카피와 근거는 docs/랜딩_기획_2_구조와카피.md.
 // 2~4, 6~7, 9번 섹션의 문구는 원래 랜딩(LandingStory, LandingFrame)의 원문 그대로다.
-
-// 2번: 시대별 사진(원래 랜딩에서 쓰던 흑백 사진)
-const ERAS = [
-  { src: "/landing-story/horse-1880s.jpg", label: "1880년대", alt: "말이 끄는 전차와 마부" },
-  { src: "/landing-story/factory-19c.jpg", label: "19세기 말", alt: "선반 기계가 늘어선 공장" },
-  { src: "/landing-story/modern-work-new.jpg", label: "지금", alt: "노트북 자판 위의 손" },
-];
-
-// 3번: 진로를 둘러싼 말들(원문)
-const PRESSURE = [
-  "좋아하는 일을 찾아야 돼",
-  "잘하는 일을 찾아야지",
-  "돈 많이 벌어야 돼",
-  "특별히 좋아하는 일 없는데..",
-  "이 분야로 가야 취업 잘 된대",
-  "내가 남들보다 잘하는게 뭐지..?",
-];
+// 2번(LandingV2Era)과 3번(LandingV2Pressure)은 원래 랜딩의 스크롤 연동 연출도 그대로 가져왔다.
 
 // 5번 예시: 샘플 세션을 지금 공식으로 다시 돌렸을 때 실제로 나온 두 직업과 근거 업무.
 const BRANCHES = [
@@ -67,38 +53,9 @@ export default function LandingV2() {
         <p className={styles.heroScroll}>Scroll ↓</p>
       </section>
 
-      <section className={styles.section} aria-label="직업의 이름은 시대와 함께 바뀝니다">
-        <h2 className={styles.h2} data-reveal>
-          직업의 이름은
-          <br />
-          시대와 함께 바뀝니다.
-        </h2>
-        <ul className={styles.eras} data-reveal>
-          {ERAS.map((e) => (
-            <li key={e.src}>
-              {/* eslint-disable-next-line @next/next/no-img-element -- 원래 랜딩의 정적 사진 */}
-              <img src={e.src} alt={e.alt} loading="lazy" className={styles.eraImg} />
-              <span className={styles.eraLabel}>{e.label}</span>
-            </li>
-          ))}
-        </ul>
-        <p className={styles.lead} data-reveal>
-          단순한 직업명만으로 내가 앞으로 어떻게 살아가야 할지 알 수 없습니다.
-        </p>
-        <p className={styles.turnLine} data-reveal>
-          그런데 막상 진로를 정하려 하면, 우리는 다시 유망한 직업과 분야의 이름부터 찾게 됩니다.
-        </p>
-      </section>
+      <LandingV2Era />
 
-      <section className={styles.pressure} aria-label="진로를 둘러싼 말들">
-        <ul className={styles.pressureList}>
-          {PRESSURE.map((t) => (
-            <li key={t} data-reveal>
-              {t}
-            </li>
-          ))}
-        </ul>
-      </section>
+      <LandingV2Pressure />
 
       <section className={styles.section} aria-label="이제는 새로운 방식으로 봐야 합니다">
         <h2 className={styles.h2} data-reveal>
