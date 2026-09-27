@@ -5,15 +5,6 @@ import styles from "./LandingV2.module.css";
 // 새 랜딩(/v2). 카피와 근거는 docs/랜딩_기획_2_구조와카피.md.
 // 2~4, 6~7, 9번 섹션의 문구는 원래 랜딩(LandingStory, LandingFrame)의 원문 그대로다.
 
-// 첫 화면 그림: 직업 하나를 실제 업무 문장으로 풀어 보인다(O*NET 31.0, 영상 편집자 27-4032.00의 핵심 업무).
-// 굵게 한 줄은 5번 예시에서 다시 나오는 업무다.
-const BUNDLE = [
-  { t: "촬영본을 장면별로 먼저 훑어본다" },
-  { t: "원본 영상을 정리해 하나로 잇는다", key: true },
-  { t: "장면마다 가장 좋은 컷을 골라 이야기로 엮는다" },
-  { t: "이어 붙인 영상을 다시 보며 고칠 곳을 찾는다" },
-];
-
 // 2번: 시대별 사진(원래 랜딩에서 쓰던 흑백 사진)
 const ERAS = [
   { src: "/landing-story/horse-1880s.jpg", label: "1880년대", alt: "말이 끄는 전차와 마부" },
@@ -68,40 +59,12 @@ const SHOTS = [
 export default function LandingV2() {
   return (
     <div className={styles.root} data-landing-v2>
-      <header className={styles.bar}>
-        <span className={styles.logo}>코어 찾기</span>
-        <span className={styles.beta}>베타</span>
-      </header>
-
       <section className={styles.hero} aria-label="첫 화면">
-        <div className={styles.heroCopy}>
-          <h1 className={styles.heroTitle}>
-            직업은
-            <br />
-            행동의 묶음입니다.
-          </h1>
-          <p className={styles.heroSub}>
-            같은 일을 해도 사람마다 하는 방식이 다릅니다.
-            <br />
-            일상에서 되풀이되는 당신의 방식, 코어를 인터뷰로 찾고 그 방식이 쓰이는 직업을 보여 드립니다.
-          </p>
-          <Link href="/#start" className={styles.button}>
-            코어 찾기 시작
-          </Link>
+        <div className={styles.heroMain}>
+          <h1 className={styles.heroTitle}>Who am I</h1>
+          <p className={styles.heroSub}>일상의 경험에서 당신의 진로까지.</p>
         </div>
-        <figure className={styles.bundle} aria-label="영상 편집자의 업무 예시">
-          <figcaption className={styles.bundleName}>
-            예를 들어, <strong>영상 편집자</strong>는 이런 행동들의 묶음입니다
-          </figcaption>
-          <ul className={styles.bundleList}>
-            {BUNDLE.map((b) => (
-              <li key={b.t} className={b.key ? styles.bundleKey : undefined}>
-                {b.t}
-              </li>
-            ))}
-          </ul>
-          <p className={styles.source}>업무 문장: O*NET 31.0</p>
-        </figure>
+        <p className={styles.heroScroll}>Scroll ↓</p>
       </section>
 
       <section className={styles.section} aria-label="직업의 이름은 시대와 함께 바뀝니다">
