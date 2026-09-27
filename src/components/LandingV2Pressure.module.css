@@ -1,7 +1,7 @@
 /* 씬 3 전용. --vh-px는 useVhPx가 설정한다. 씬 2와 이어지도록 같은 검정 배경을 쓴다. */
 .track{position:relative;height:calc(var(--vh-px, 100vh) * 2.2);background:#08070f}
 .stage{position:sticky;top:0;height:var(--vh-px, 100vh);overflow:hidden;background:#08070f}
-.line{position:absolute;margin:0;max-width:calc(100% - 40px);letter-spacing:-.045em;line-height:1.4;color:#f7f5f0;white-space:nowrap;opacity:var(--opacity, 0);transform:translateX(calc(var(--entry, 1) * 16px)) rotate(var(--rot, 0deg));will-change:opacity,transform}
+.line{position:absolute;margin:0;max-width:calc(100% - 40px);font-weight:620;letter-spacing:-.045em;line-height:1.4;color:#f7f5f0;white-space:nowrap;opacity:var(--opacity, 0);transform:translateX(calc(var(--entry, 1) * 16px)) rotate(var(--rot, 0deg));will-change:opacity,transform}
 
 @media (prefers-reduced-motion: reduce) {
   .track{height:auto}

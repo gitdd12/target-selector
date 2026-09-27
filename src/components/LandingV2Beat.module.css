@@ -2,7 +2,7 @@
 .track{position:relative}
 .track[data-theme="dark"]{background:#08070f}
 .track[data-theme="light"]{background:#fff}
-.stage{position:sticky;top:0;height:var(--vh-px, 100vh);overflow:hidden}
+.stage{position:sticky;top:0;height:var(--vh-px, 100vh);overflow:hidden;display:flex;align-items:center;justify-content:center}
 .stage[data-theme="dark"]{background:#08070f;color:#f7f5f0}
 .stage[data-theme="light"]{background:#fff;color:#0D0C14}
 
@@ -14,11 +14,10 @@
 /* 다음 씬(흰 배경)과 이어지도록, 끝에서 흰 커튼이 덮이며 끝난다 */
 .exitCurtain{position:absolute;inset:0;z-index:1;background:#fff;opacity:var(--exit, 0);pointer-events:none}
 
-.col{position:absolute;z-index:2;top:clamp(96px,16svh,160px);left:28px;right:28px;max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:clamp(20px,3.6svh,38px)}
+/* 내용이 짧든(공식 세 줄) 길든(제목+네 줄) 화면 세로 가운데를 기준으로 균형 잡히게 둔다. */
+.col{position:relative;z-index:2;width:100%;max-width:720px;margin:0 auto;padding:0 28px;display:flex;flex-direction:column;gap:clamp(20px,3.6svh,38px)}
 .reveal{opacity:var(--o, 0);transform:translateY(var(--y, 18px));filter:blur(var(--blur, 0px));will-change:opacity,transform}
 .right{align-self:flex-end;text-align:right}
-
-@media (min-width:700px){.col{top:17svh}}
 
 @media (prefers-reduced-motion: reduce) {
   .track{height:auto !important}
