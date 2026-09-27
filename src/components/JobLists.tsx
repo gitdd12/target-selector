@@ -1,5 +1,4 @@
 import { JOB_TEXT } from "@/lib/frame";
-import { JOBS } from "@/lib/config";
 import { overlapLine } from "@/lib/result";
 import type { CoreJobs, JobEntry } from "@/lib/types";
 import styles from "./ResultView.module.css";
@@ -31,8 +30,9 @@ function Job({ j }: { j: JobEntry }) {
 }
 
 export default function JobLists({ jobs, first }: { jobs: CoreJobs; first: boolean }) {
-  // 예전 세션(v0.28 전)은 20 미만 직업도 저장돼 있어서 화면에서도 거른다
-  const keep = (l: JobEntry[]) => l.filter((j) => j.match >= JOBS.minMatch);
+  // 예전 세션(v0.28 전, 옛 일치도 식)은 20 미만 직업도 저장돼 있어서 화면에서도 거른다.
+  // 새 세션은 만들 때 이미 JOBS.minMatch로 걸러지므로, 옛 숫자 기준(20)으로만 거른다.
+  const keep = (l: JobEntry[]) => l.filter((j) => j.match >= 20);
   const groups: [string, JobEntry[]][] = [
     [JOB_TEXT.confirmed, keep(jobs.confirmed)],
     [JOB_TEXT.other, keep(jobs.other)],
