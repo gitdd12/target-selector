@@ -118,14 +118,14 @@ interface OccScore {
 
 /** 직업 점수 = Σ(중요도 × 판정 점수) ÷ 그 직업 전체 업무의 중요도 합. onlyObjects를 주면 그 대상의 업무만 센다(A 목록). */
 function occScores(w: JobWork["cores"][number], onlyObjects?: Set<string>): OccScore[] {
-  const { byText, imTotal, excluded } = onet();
+  const { byText, wTotal, excluded } = onet();
   const sum = new Map<string, number>();
   const byObj = new Map<string, Map<string, number>>();
   for (const [k, j] of Object.entries(w.judged)) {
     if (onlyObjects && !onlyObjects.has(j.o)) continue;
     for (const t of byText.get(textOf(Number(k))) ?? []) {
       if (excluded.has(t.soc)) continue;
-      const c = t.im * value(j);
+      const c = t.w * value(j);
       if (c <= 0) continue;
       sum.set(t.soc, (sum.get(t.soc) ?? 0) + c);
       const m = byObj.get(t.soc) ?? byObj.set(t.soc, new Map()).get(t.soc)!;
@@ -135,7 +135,7 @@ function occScores(w: JobWork["cores"][number], onlyObjects?: Set<string>): OccS
   return [...sum.entries()]
     .map(([soc, v]) => {
       const objs = [...byObj.get(soc)!.entries()].sort((a, b) => b[1] - a[1]);
-      return { soc, score: v / (imTotal.get(soc) || 1), object: objs[0][0] };
+      return { soc, score: v / (wTotal.get(soc) || 1), object: objs[0][0] };
     })
     .sort((a, b) => b.score - a.score);
 }
@@ -267,8 +267,8 @@ function evidenceCandidates(w: JobWork["cores"][number], soc: string, confirmed:
     const j = w.judged[i];
     if (!j || value(j) < JOBS.citeMin) continue;
     if (inA && !confirmed.has(j.o)) continue;
-    const im = byText.get(text)?.find((t) => t.soc === soc)?.im ?? 0;
-    rows.push({ i, fit: inA || !confirmed.has(j.o) ? 1 : 0, c: im * value(j) });
+    const tw = byText.get(text)?.find((t) => t.soc === soc)?.w ?? 0;
+    rows.push({ i, fit: inA || !confirmed.has(j.o) ? 1 : 0, c: tw * value(j) });
   }
   return rows.sort((a, b) => b.fit - a.fit || b.c - a.c).slice(0, JOBS.evidenceTries).map((r) => r.i);
 }
