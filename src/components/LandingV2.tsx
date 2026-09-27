@@ -1,7 +1,6 @@
 import Link from "next/link";
 import LandingV2Beat from "./LandingV2Beat";
 import LandingV2Era from "./LandingV2Era";
-import LandingV2Formula from "./LandingV2Formula";
 import LandingV2Motion from "./LandingV2Motion";
 import LandingV2Pressure from "./LandingV2Pressure";
 import styles from "./LandingV2.module.css";
@@ -76,22 +75,19 @@ export default function LandingV2() {
           {
             key: "no1",
             w: [0.12, 0.22, 0.3, 0.38],
-            floor: 0.3,
-            className: `${styles.beatLead} ${styles.beatDim}`,
+            className: styles.beatLead,
             node: "특별히 잘하는 일이나 오래 꿈꿔온 일을 쫓지 않습니다.",
           },
           {
             key: "no2",
             w: [0.27, 0.37, 0.5, 0.58],
-            floor: 0.3,
             right: true,
-            className: `${styles.beatLead} ${styles.beatDim}`,
+            className: styles.beatLead,
             node: "현재 유망한 직업이나 분야를 무작정 고르지 않습니다.",
           },
           {
             key: "yes",
             w: [0.44, 0.54, 0.66, 0.74],
-            floor: 0.3,
             className: styles.beatLead,
             node: (
               <>
@@ -113,17 +109,61 @@ export default function LandingV2() {
         ]}
       />
 
-      <section className={styles.section} aria-label="코어 하나, 다른 직업">
+      <LandingV2Beat
+        ariaLabel="코어와 가치관, 대상, 그리고 공식"
+        theme="light"
+        trackVh={2.7}
+        title={
+          <>
+            코어는 혼자
+            <br />
+            작동하지 않습니다.
+          </>
+        }
+        titleClassName={styles.beatBig}
+        lines={[
+          {
+            key: "values",
+            w: [0.1, 0.18, 0.32, 0.4],
+            className: styles.beatLead,
+            node: (
+              <>
+                무엇이 중요하고 무엇이 답답한지가 <b className={styles.mark}>가치관</b>에 드러납니다.
+              </>
+            ),
+          },
+          {
+            key: "object",
+            w: [0.26, 0.34, 0.48, 0.56],
+            className: styles.beatLead,
+            node: (
+              <>
+                그 가치관 속에서 당신의 코어로 다루는 것을 <b className={styles.mark}>대상</b>이라고 합니다.
+              </>
+            ),
+          },
+          {
+            key: "formula",
+            w: [0.52, 0.64],
+            className: styles.beatFormula,
+            node: (
+              <>
+                가치관 <span className={styles.beatTimes}>×</span> 코어 <span className={styles.beatTimes}>×</span> 대상
+              </>
+            ),
+          },
+        ]}
+      />
+
+      <section className={styles.section} aria-label="코어는 여러 직업에서 나타날 수 있습니다">
         <p className={styles.eyebrow}>예시</p>
-        <h2 className={styles.h2}>
-          같은 코어가
+        <h2 className={styles.h2} data-reveal>
+          발견한 코어는
           <br />
-          다른 직업에서도 쓰입니다.
+          여러 직업에서 나타날 수 있습니다.
         </h2>
-        <p className={styles.lead}>
-          예를 들어, 친구 자소서를 봐 줄 때
-          <br />
-          내용은 그대로 두고 문단 순서와 문장 연결만 바꿨다면,
+        <p className={styles.lead} data-reveal>
+          직업은 단순한 행동의 묶음입니다. 전혀 달라 보이는 두 개의 직업이더라도 내 코어와 그 직무가 일치할 수 있습니다.
         </p>
         <div className={styles.tree} data-reveal>
           <div className={styles.core}>
@@ -140,47 +180,8 @@ export default function LandingV2() {
             ))}
           </ul>
         </div>
-        <p className={styles.close} data-reveal>직업의 이름은 달라도, 그 한가운데에서는 같은 행동이 쓰입니다.</p>
         <p className={styles.source}>업무 문장: O*NET 31.0, 미국 노동부 직업 데이터</p>
       </section>
-
-      <LandingV2Beat
-        ariaLabel="코어와 가치관, 대상"
-        theme="light"
-        title={
-          <>
-            코어는 혼자
-            <br />
-            작동하지 않습니다.
-          </>
-        }
-        titleClassName={styles.beatBig}
-        lines={[
-          {
-            key: "values",
-            w: [0.14, 0.26, 0.44, 0.52],
-            floor: 0.3,
-            className: styles.beatLead,
-            node: (
-              <>
-                무엇이 중요하고 무엇이 답답한지가 <b className={styles.mark}>가치관</b>에 드러납니다.
-              </>
-            ),
-          },
-          {
-            key: "object",
-            w: [0.44, 0.56],
-            className: styles.beatLead,
-            node: (
-              <>
-                그 가치관 속에서 당신의 코어로 다루는 것을 <b className={styles.mark}>대상</b>이라고 합니다.
-              </>
-            ),
-          },
-        ]}
-      />
-
-      <LandingV2Formula />
 
       <section className={styles.section} aria-label="결과지 미리보기">
         <p className={styles.eyebrow}>결과지</p>
