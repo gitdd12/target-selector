@@ -7,11 +7,11 @@ import { SITUATION_SHORT, type CoreJobs, type JobEntry, type Session } from "./t
 function jobsText(c: CoreJobs, first: boolean): string {
   const row = (j: JobEntry) => {
     const o = overlapLine(j.evidence[0]);
-    return `- ${j.name} (${JOB_TEXT.match} ${j.match})${j.both ? ` · ${JOB_TEXT.both}` : ""}\n  ${j.desc}${o ? `\n  ${JOB_TEXT.overlap} · ${o}` : ""}`;
+    return `- ${j.name} (${JOB_TEXT.match} ${j.match}%)${j.both ? ` · ${JOB_TEXT.both}` : ""}\n  ${j.desc}${o ? `\n  ${JOB_TEXT.overlap} · ${o}` : ""}`;
   };
   const keep = (l: JobEntry[]) => l.filter((j) => j.match >= JOBS.minMatch);
   const group = (title: string, list: JobEntry[]) => `${title}\n${keep(list).length ? keep(list).map(row).join("\n") : JOB_TEXT.empty}`;
-  const notes = first ? `\n${JOB_TEXT.objectNote}\n${JOB_TEXT.matchNote}\n${JOB_TEXT.overlapNote}` : "";
+  const notes = first ? `\n${JOB_TEXT.objectNote}` : "";
   return `[이 행동이 쓰이는 일]${notes}\n${group(JOB_TEXT.confirmed, c.confirmed)}\n${group(JOB_TEXT.other, c.other)}`;
 }
 
