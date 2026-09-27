@@ -22,7 +22,8 @@ import {
 } from "./types";
 
 const ALL_OBJECTS = [...SEARCH_OBJECTS, NO_OBJECT] as [string, ...string[]];
-const STRENGTHS = [0.3, 0.5, 0.7, 1];
+// 업무 판정 강도(2026-09-27부터 세 단계: 1 = 동작이 같은 뜻으로 적혀 있음, 0.5 = 하다 보면 하게 됨). 0은 items에 넣지 않는다
+const STRENGTHS = [0.5, 1];
 // 한 번의 서버 호출에서 새 판정 묶음을 시작하는 마지막 시점(서버 제한 300초 안에서 여유를 둔다)
 const STEP_BUDGET_MS = 170_000;
 
@@ -36,7 +37,7 @@ const JudgeSchema = z.object({
     z.object({
       n: z.number().int().describe("업무 문장 번호"),
       quote: z.string().describe("행동에 해당하는 구절(원문 그대로)"),
-      strength: z.number().describe("0.3 / 0.5 / 0.7 / 1 중 하나"),
+      strength: z.number().describe("0.5 / 1 중 하나"),
       share: z.number().describe("몫(0보다 크고 1 이하)"),
       object: z.enum(ALL_OBJECTS),
     }),
