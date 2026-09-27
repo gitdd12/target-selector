@@ -38,8 +38,9 @@
 /* 6번 본문은 흰 바탕이라 한 단계 더 크게 둔다 */
 .beatLeadLg{margin:0;max-width:20em;font-size:21px;line-height:1.7;letter-spacing:-.02em}
 
-/* 7번(가치관 × 코어 × 대상)은 이제 6번과 한 씬 안에 있다. 원 없이 글자만 크게 둔다. */
-.beatFormula{margin:0;text-align:center;font-size:clamp(28px,8.6vw,52px);font-weight:780;letter-spacing:-.05em}
+/* 7번(가치관 × 코어 × 대상)은 이제 6번과 한 씬 안에 있다. 원 없이, 카드 하나로 묶어 둔다
+   (직업 목록·코어 상자와 같은 회색 상자 언어를 재사용해 브랜드 표식을 반복한다). */
+.beatFormula{align-self:center;margin:0;padding:22px clamp(20px,7vw,40px);border-radius:20px;background:var(--paper);text-align:center;font-size:clamp(24px,7.6vw,44px);font-weight:780;letter-spacing:-.05em;white-space:nowrap}
 .beatTimes{color:var(--dim);font-weight:500}
 .beatFormulaSub{margin:0;text-align:center;font-size:19px;font-weight:700;letter-spacing:-.03em;line-height:1.6;color:var(--soft)}
 
