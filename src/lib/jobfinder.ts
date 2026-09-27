@@ -140,7 +140,9 @@ function occScores(w: JobWork["cores"][number], onlyObjects?: Set<string>): OccS
     .sort((a, b) => b.score - a.score);
 }
 
-const matchOf = (score: number) => Math.min(100, Math.round((score / JOBS.matchBase) * 100));
+// 일치도(결과지 v0.28): √(직업 점수 ÷ 기준) × 100, 최대 95. 제곱근으로 높은 값끼리의 차이는 줄이고 낮은 값은 끌어올린다.
+// 100%는 "완벽히 맞는다"로 읽혀 과장이 되므로 상한을 둔다.
+const matchOf = (score: number) => Math.min(JOBS.matchMax, Math.round(Math.sqrt(Math.max(0, score) / JOBS.matchBase) * 100));
 
 /** 대상마다 1등 직업(점수순). */
 function topPerObject(list: OccScore[]): OccScore[] {
