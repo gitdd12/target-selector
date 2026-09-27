@@ -27,29 +27,16 @@
 
 /* 2번(사진 교차)·3번(문구 등장)은 LandingV2Era.module.css / LandingV2Pressure.module.css에 있다. */
 
-/* 4번: 이제는 새로운 방식으로 — 검정 배경. 글만 있으면 밋밋해서 결을 넣고,
-   바닥에서 흰 배경(5번)으로 자연스럽게 이어지도록 아래쪽을 흰색으로 풀어 준다. */
-.turnSection{position:relative;background:linear-gradient(to bottom, #08070f 0%, #08070f calc(100% - 200px), #fff 100%);padding:112px 0 260px;overflow:hidden;color:#f7f5f0}
-.turnGrain{position:absolute;inset:0;opacity:.5;pointer-events:none;
-  background-image:radial-gradient(ellipse 65% 50% at 50% 30%, rgba(255,255,255,.06), transparent 62%),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size:cover, 140px 140px}
-.turnInner{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:0 20px}
-.turnH2{margin:0;font-size:clamp(32px,8.4vw,56px);font-weight:750;letter-spacing:-.05em;line-height:1.15;color:#fff}
-.turnList{margin-top:36px;display:flex;flex-direction:column;gap:18px}
-.turnNo{margin:0;font-size:17px;line-height:1.65;color:rgba(247,245,240,.5)}
-.turnYes{margin:0;font-size:17px;line-height:1.65;color:#fff}
-.turnYes b{font-weight:750}
-.turnDefine{margin:14px 0 0;padding-top:24px;border-top:1px solid rgba(247,245,240,.28);font-size:21px;font-weight:700;letter-spacing:-.035em;line-height:1.55;color:#fff}
-.turnMark{font-weight:750;color:#fff;box-shadow:inset 0 -.42em 0 rgba(247,245,240,.22)}
+/* 4번(검정)·6번(흰색) — LandingV2Beat(한 걸음씩 짚어 읽는 장면)에 넣는 콘텐츠 타이포그래피.
+   위치·순서·색 전환은 LandingV2Beat.module.css가 맡고, 여기서는 글자 스타일만 정한다. */
+.beatBig{margin:0;font-size:clamp(32px,8.4vw,56px);font-weight:750;letter-spacing:-.05em;line-height:1.15}
+.beatLead{margin:0;max-width:20em;font-size:17px;line-height:1.7;letter-spacing:-.02em}
+.beatLead b{font-weight:750}
+.beatDim{color:rgba(247,245,240,.5)}
+.beatDefine{margin:0;padding-top:20px;border-top:1px solid rgba(247,245,240,.28);font-size:21px;font-weight:700;letter-spacing:-.035em;line-height:1.55}
+.beatMark{font-weight:780;font-size:1.15em;box-shadow:inset 0 -.42em 0 rgba(247,245,240,.22)}
 
-/* 7번: 가치관 × 코어 × 대상 */
-.formula{max-width:720px;margin:0 auto;padding:40px 20px 110px}
-.formulaRow{display:flex;flex-direction:column;align-items:stretch;gap:10px}
-.slot{padding:20px 22px;border-radius:18px;background:var(--paper);font-size:24px;font-weight:750;letter-spacing:-.04em}
-.slotDark{background:var(--ink);color:#fff}
-.times{align-self:center;font-size:18px;color:var(--dim);line-height:1}
-.formulaSub{margin:32px 0 0;font-size:19px;font-weight:700;letter-spacing:-.03em;line-height:1.6}
+/* 7번(가치관 × 코어 × 대상)은 LandingV2Formula.module.css에 있다. */
 
 /* 9번: 줄 세우기. 위(흰 결과지 섹션)·아래(흰 시작 섹션)와 자연스럽게 이어지도록 위아래 끝을 흰색으로 푼다. */
 .claim{--rise:0;background:linear-gradient(to bottom, #fff 0, var(--ink) 150px, var(--ink) calc(100% - 150px), #fff 100%);color:#fff;padding:170px 20px}
@@ -98,7 +85,4 @@
   .shotCopy{flex:1;position:sticky;top:96px}
   .frame{flex:none;width:360px}
   .section{max-width:880px}
-  .formula{max-width:880px}
-  .formulaRow{flex-direction:row;align-items:center}
-  .slot{flex:1;text-align:center}
 }
