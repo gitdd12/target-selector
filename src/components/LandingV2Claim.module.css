@@ -1,0 +1,24 @@
+/* 줄 세우기 씬. 원래 랜딩(LandingFrame)의 연출을 그대로 가져왔다. */
+.track{position:relative}
+.stage{position:sticky;top:0;height:var(--vh-px, 100vh);overflow:hidden;background:#fff;display:flex;align-items:center;justify-content:center}
+
+.claimCol{position:relative;z-index:1;padding:0 28px;max-width:720px;margin:0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(24px,4.6svh,42px);text-align:center;color:#0D0C14}
+.claimBig{margin:0;font-size:clamp(23px,6.4vw,44px);font-weight:760;line-height:1.42;letter-spacing:-.055em;word-break:keep-all;text-wrap:balance;opacity:var(--o, 0);transform:translateY(var(--y, 18px));will-change:opacity,transform}
+.claimMid{margin:0;font-size:clamp(16px,4.5vw,24px);font-weight:500;line-height:1.65;letter-spacing:-.035em;color:#55514a;word-break:keep-all;text-wrap:balance;opacity:var(--o, 0);transform:translateY(var(--y, 18px));will-change:opacity,transform}
+.claimEnd{margin:0;font-size:clamp(14px,5.6vw,34px);font-weight:500;line-height:1.6;letter-spacing:-.06em;color:#0D0C14;opacity:var(--o, 0);transform:translateY(var(--y, 18px));will-change:opacity,transform}
+.claimEnd span{display:block;white-space:nowrap}
+.claimEnd b{font-weight:820}
+
+.dots{display:flex;justify-content:center;gap:clamp(9px,3.4vw,16px);height:16px;align-items:center}
+.dot2{position:relative;flex:none;width:clamp(9px,3vw,13px);height:clamp(9px,3vw,13px);border-radius:50%;background:#d6d2ca;opacity:calc(var(--o, 0) * (1 - var(--rise, 0) * .55));transform:translateY(0)}
+.me{background:#a29e96;opacity:var(--o, 0);transform:translateY(calc(var(--rise, 0) * -24px)) scale(calc(1 + var(--rise, 0) * .5));will-change:transform}
+.me::before{content:"";position:absolute;inset:0;border-radius:50%;background:#0d0c14;opacity:var(--rise, 0)}
+.me em{position:absolute;top:calc(100% + 7px);left:50%;transform:translateX(-50%);font-style:normal;font-size:12px;font-weight:600;color:#8a8598;opacity:calc(1 - var(--rise, 0))}
+
+@media (prefers-reduced-motion: reduce) {
+  .track{height:auto}
+  .stage{position:relative;height:auto;min-height:100svh;padding:90px 28px}
+  .claimCol{padding:0}
+  .claimBig,.claimMid,.claimEnd{opacity:1 !important;transform:none !important}
+  .dot2{opacity:1 !important}
+}

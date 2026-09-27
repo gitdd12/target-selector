@@ -1,6 +1,8 @@
 import Link from "next/link";
 import LandingV2Beat from "./LandingV2Beat";
+import LandingV2Claim from "./LandingV2Claim";
 import LandingV2Era from "./LandingV2Era";
+import LandingV2Formula from "./LandingV2Formula";
 import LandingV2Motion from "./LandingV2Motion";
 import LandingV2Pressure from "./LandingV2Pressure";
 import styles from "./LandingV2.module.css";
@@ -112,45 +114,6 @@ export default function LandingV2() {
         ]}
       />
 
-      <LandingV2Beat
-        ariaLabel="가치관, 코어, 대상"
-        theme="light"
-        trackVh={2.4}
-        lines={[
-          {
-            key: "formula",
-            w: [0.04, 0.16],
-            className: styles.beatFormula,
-            node: (
-              <>
-                가치관 <span className={styles.beatTimes}>×</span> 코어 <span className={styles.beatTimes}>×</span> 대상
-              </>
-            ),
-          },
-          {
-            key: "values",
-            w: [0.2, 0.28, 0.4, 0.47],
-            floor: 0.3,
-            className: `${styles.beatLeadSm} ${styles.beatCenter}`,
-            node: (
-              <>
-                무엇이 중요하고 무엇이 답답한지가 <b className={styles.mark}>가치관</b>에 드러납니다.
-              </>
-            ),
-          },
-          {
-            key: "object",
-            w: [0.36, 0.44],
-            className: `${styles.beatLeadSm} ${styles.beatCenter}`,
-            node: (
-              <>
-                그 가치관 속에서 당신의 코어로 다루는 것을 <b className={styles.mark}>대상</b>이라고 합니다.
-              </>
-            ),
-          },
-        ]}
-      />
-
       <section className={styles.section} aria-label="코어는 여러 직업에서 나타납니다">
         <h2 className={styles.h2} data-reveal>
           발견한 코어는
@@ -203,24 +166,9 @@ export default function LandingV2() {
         <p className={styles.note}>결과지는 인터뷰가 끝난 뒤 3일 안에 이메일로 보내 드립니다.</p>
       </section>
 
-      <section className={styles.claim} aria-label="나를 아는 사람의 방향" data-rise>
-        <div className={styles.claimInner}>
-          <p className={styles.claimBig}>남들이 하는 직업, 유망하다는 분야에 더 이상 나를 맞추지 마세요.</p>
-          <div className={styles.dots} aria-hidden="true">
-            {Array.from({ length: 9 }, (_, i) => (
-              <span key={i} className={`${styles.dot} ${i === 4 ? styles.me : ""}`}>
-                {i === 4 && <em>나</em>}
-              </span>
-            ))}
-          </div>
-          <p className={styles.claimMid}>무턱대고 그 줄에 나를 세우면, 그중 한 명이 될 뿐입니다.</p>
-          <p className={styles.claimEnd}>
-            나를 제대로 알고 방향을 정한 사람만이,
-            <br />
-            <b>진짜 경쟁력</b>을 갖습니다.
-          </p>
-        </div>
-      </section>
+      <LandingV2Claim />
+
+      <LandingV2Formula />
 
       <section className={styles.cta} aria-label="시작">
         <h2 className={styles.h2}>당신의 코어를 찾으세요.</h2>

@@ -23,8 +23,6 @@
 .root[data-motion] [data-reveal]{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
 .root[data-motion] [data-reveal][data-shown]{opacity:1;transform:none}
 
-.mark{font-weight:750;color:var(--ink);box-shadow:inset 0 -.42em 0 rgba(13,12,20,.14)}
-
 /* 2번(사진 교차)·3번(문구 등장)은 LandingV2Era.module.css / LandingV2Pressure.module.css에 있다. */
 
 /* 4번(검정)·6번(흰색) — LandingV2Beat(한 걸음씩 짚어 읽는 장면)에 넣는 콘텐츠 타이포그래피.
@@ -34,26 +32,6 @@
 .beatLead b{font-weight:750}
 .beatDefine{margin:0;font-size:21px;font-weight:700;letter-spacing:-.035em;line-height:1.55}
 .beatMark{font-weight:780;font-size:1.15em;box-shadow:inset 0 -.42em 0 rgba(247,245,240,.22)}
-
-/* 공식(가치관 × 코어 × 대상)이 이 씬을 열고, 그 아래에서 가치관·대상을 하나씩 풀어 설명한다.
-   설명 글은 공식보다 눈에 띄게 작게 둔다. */
-.beatFormula{align-self:center;margin:0 0 16px;font-size:clamp(38px,13vw,72px);font-weight:780;letter-spacing:-.05em;white-space:nowrap}
-.beatTimes{color:var(--dim);font-weight:500}
-.beatLeadSm{margin:0;max-width:20em;font-size:16px;line-height:1.65;letter-spacing:-.02em}
-.beatCenter{align-self:center;text-align:center}
-
-/* 9번: 줄 세우기. 위(흰 결과지 섹션)·아래(흰 시작 섹션)와 자연스럽게 이어지도록 위아래 끝을 흰색으로 푼다. */
-.claim{--rise:0;background:linear-gradient(to bottom, #fff 0, var(--ink) 150px, var(--ink) calc(100% - 150px), #fff 100%);color:#fff;padding:170px 20px}
-.claimInner{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:44px}
-.claimBig{margin:0;font-size:clamp(26px,6.6vw,44px);font-weight:750;letter-spacing:-.045em;line-height:1.3}
-.dots{display:flex;justify-content:center;align-items:center;gap:clamp(12px,4vw,22px);height:64px;padding-top:28px}
-.dot{position:relative;flex:none;width:12px;height:12px;border-radius:50%;background:#4a4956;opacity:calc(1 - var(--rise)*.45)}
-.me{background:#8e8d98;opacity:1;transform:translateY(calc(var(--rise)*-30px)) scale(calc(1 + var(--rise)*.6));will-change:transform}
-.me::before{content:"";position:absolute;inset:0;border-radius:50%;background:#fff;opacity:var(--rise)}
-.me em{position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%) scale(calc(1 / (1 + var(--rise)*.6)));font-style:normal;font-size:12px;font-weight:700;color:#fff;white-space:nowrap}
-.claimMid{margin:0;font-size:17px;line-height:1.7;color:rgba(255,255,255,.66)}
-.claimEnd{margin:0;font-size:clamp(22px,5.6vw,34px);font-weight:700;letter-spacing:-.04em;line-height:1.45}
-.claimEnd b{font-weight:800;box-shadow:inset 0 -.36em 0 rgba(255,255,255,.18)}
 
 /* 5번: 코어 하나 → 두 직업 */
 .tree{margin-top:36px}
