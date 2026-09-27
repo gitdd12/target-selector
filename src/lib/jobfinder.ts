@@ -301,6 +301,8 @@ async function evidenceStage(s: Session) {
         while (done + open.length < size && queues[list].length) {
           const soc = queues[list].shift()!;
           if (used.has(soc)) continue;
+          const sc = (inA ? scoreA : scoreB).get(soc);
+          if (!sc || matchOf(sc.score) < JOBS.minMatch) continue; // 코어 쓰임이 너무 낮은 직업은 올리지 않는다
           const tries = evidenceCandidates(w, soc, confirmed, inA);
           if (!tries.length) continue; // 인용할 근거(0.5 이상)가 없으면 올리지 않는다
           used.add(soc);
@@ -311,7 +313,7 @@ async function evidenceStage(s: Session) {
         for (const p of open) active.push({ list, p });
       }
       if (!active.length) break;
-      // 직업마다 다음 근거 두 개씩(보여줄 근거 수만큼) 재확인
+      // 직업마다 다음 근거를 보여줄 수만큼 재확인
       const need = new Set<number>();
       for (const { p } of active) for (const i of p.tries.slice(p.next, p.next + JOBS.evidenceShown)) if (!(i in recheck)) need.add(i);
       const idxs = [...need];

@@ -34,6 +34,18 @@ export function splitBold(text: string): { text: string; bold: boolean }[] {
   ].filter((p) => p.text);
 }
 
+/**
+ * 직업 한 줄의 "내 코어와 겹치는 업무"(결과지 v0.28). 근거 업무 번역문에서 [[ ]]로 표시된 구절을 쓰고,
+ * 구절이 "~다"로 끝나지 않으면(끊긴 말) 업무 문장 전체를 쓴다. 번역이 없으면 원문(영어)을 쓴다.
+ */
+export function overlapLine(e: { text: string; ko?: string } | undefined): string {
+  if (!e) return "";
+  if (!e.ko) return e.text;
+  const bold = splitBold(e.ko).find((p) => p.bold)?.text.trim() ?? "";
+  if (bold && /다[.!]?$/.test(bold)) return bold.replace(/[.!]$/, "");
+  return e.ko.replace(/\[\[|\]\]/g, "").trim().replace(/[.!]$/, "");
+}
+
 // 코어 행동 문장. 예전 세션에는 behavior가 없고 이름 문구(pattern_phrase)만 있어서 그것으로 대신한다.
 export function coreBehavior(c: Report["cores"][number]): string {
   return c.behavior || (c as unknown as { pattern_phrase?: string }).pattern_phrase || "";

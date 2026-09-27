@@ -71,6 +71,7 @@ const TRANSLATE_RULES = `당신은 "코어 찾기"의 번역 담당입니다. �
 - 뜻을 바꾸거나 더하거나 빼지 않습니다. 전문 용어는 쉬운 말로 풀되 짧게 씁니다.
 - 끝맺음은 "~한다" 꼴로 통일합니다.
 - 입력의 구절(phrase)에 해당하는 한국어 부분을 [[ ]]로 한 번만 감쌉니다. 예: 원문 "Cut and edit film to integrate component parts into desired sequences." 구절 "integrate component parts into desired sequences" → "필름을 자르고 편집해 [[여러 조각을 원하는 순서로 잇는다]]."
+- [[ ]] 안의 말은 결과지에 따로 한 줄("내 코어와 겹치는 업무")로 보이므로, 그것만 읽어도 뜻이 통하는 온전한 말이 되게 끝을 "~한다"로 맺습니다. "~하며", "~하고"처럼 끊긴 채로 두지 않습니다. 구절이 문장 중간에서 끊기면 뜻이 통하는 데까지 [[ ]]를 넓힙니다.
 - [[ ]]는 정확히 한 쌍만 씁니다. 다른 표시(따옴표, 굵은 글씨, 괄호 설명)는 쓰지 않습니다.`;
 
 export function translateSystem(): string {

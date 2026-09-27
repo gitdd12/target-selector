@@ -1,15 +1,18 @@
-import { approvedPeople, coreBehavior, getObject, getScenes, getValues, legacyCommonWhy, legacyCore, objectNoteParts, splitBold, toLines } from "./result";
+import { approvedPeople, coreBehavior, getObject, getScenes, getValues, legacyCommonWhy, legacyCore, objectNoteParts, overlapLine, toLines } from "./result";
+import { JOBS } from "./config";
 import { CANDIDATE_TEXT, ENDING, EXPLORE_COMMON_WHY, EXPLORE_GROUPS, FIXED_ACTIONS, JOB_TEXT, OBSERVE } from "./frame";
 import { candidateSeen, shownCandidates } from "./explore";
 import { SITUATION_SHORT, type CoreJobs, type JobEntry, type Session } from "./types";
 
-const plainKo = (ko: string) => splitBold(ko).map((p) => p.text).join("");
-
 function jobsText(c: CoreJobs, first: boolean): string {
-  const row = (j: JobEntry) =>
-    `- ${j.name} (${JOB_TEXT.match} ${j.match})${j.both ? ` · ${JOB_TEXT.both}` : ""}\n  ${j.desc}${j.evidence.map((e) => `\n  · ${e.ko ? plainKo(e.ko) : e.text}`).join("")}`;
-  const group = (title: string, list: JobEntry[]) => `${title}\n${list.length ? list.map(row).join("\n") : JOB_TEXT.empty}`;
-  return `[이 행동이 쓰이는 일]${first ? `\n${JOB_TEXT.objectNote}` : ""}\n${group(JOB_TEXT.confirmed, c.confirmed)}\n${group(JOB_TEXT.other, c.other)}`;
+  const row = (j: JobEntry) => {
+    const o = overlapLine(j.evidence[0]);
+    return `- ${j.name} (${JOB_TEXT.match} ${j.match})${j.both ? ` · ${JOB_TEXT.both}` : ""}\n  ${j.desc}${o ? `\n  ${JOB_TEXT.overlap} · ${o}` : ""}`;
+  };
+  const keep = (l: JobEntry[]) => l.filter((j) => j.match >= JOBS.minMatch);
+  const group = (title: string, list: JobEntry[]) => `${title}\n${keep(list).length ? keep(list).map(row).join("\n") : JOB_TEXT.empty}`;
+  const notes = first ? `\n${JOB_TEXT.objectNote}\n${JOB_TEXT.matchNote}\n${JOB_TEXT.overlapNote}` : "";
+  return `[이 행동이 쓰이는 일]${notes}\n${group(JOB_TEXT.confirmed, c.confirmed)}\n${group(JOB_TEXT.other, c.other)}`;
 }
 
 // 이메일 본문에 붙여넣기 좋은 결과지 글(참가자에게 갈 내용만). 링크가 있으면 맨 위에 둔다.
