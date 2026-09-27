@@ -7,11 +7,14 @@
 .factory{background-image:url('/landing-story/factory-19c.jpg');background-position:48% center;opacity:var(--factory, 0)}
 .modern{background-image:url('/landing-story/modern-work-new.jpg');opacity:var(--modern, 0)}
 .shade{background:linear-gradient(to bottom, rgba(6,5,14,.78) 0%, rgba(6,5,14,.4) 38%, rgba(6,5,14,.24) 60%, rgba(6,5,14,.82) 100%)}
+/* 앞: 첫 화면(흰 바탕)과 이어지도록 흰 커튼이 걷히며 시작한다. 뒤: 다음 씬(검정)과 이어지도록 순수 검정으로 덮으며 끝난다. */
+.enterCurtain{position:absolute;inset:0;z-index:2;background:#fff;opacity:var(--enter, 1);pointer-events:none}
+.exitCurtain{position:absolute;inset:0;z-index:2;background:#08070f;opacity:var(--exit, 0);pointer-events:none}
 
-.copy{position:absolute;inset:0;z-index:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:0 28px;gap:26px}
+.copy{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:0 28px;gap:26px}
 .title{margin:0;max-width:15em;opacity:var(--line1, 0);transform:translateY(var(--line1-y, 18px));font-size:clamp(30px,8.6vw,54px);font-weight:750;letter-spacing:-.05em;line-height:1.32;word-break:keep-all}
 .lead{margin:0;max-width:19em;opacity:var(--line2, 0);transform:translateY(var(--line2-y, 18px));font-size:clamp(16px,4.3vw,21px);font-weight:450;line-height:1.7;letter-spacing:-.02em;color:rgba(247,245,240,.86);word-break:keep-all}
-.turn{position:absolute;inset:0;z-index:1;display:flex;align-items:center;justify-content:center;margin:0 auto;padding:0 28px;max-width:20em;opacity:var(--line3, 0);transform:translateY(var(--line3-y, 18px));font-size:clamp(21px,5.8vw,34px);font-weight:650;line-height:1.5;letter-spacing:-.04em;text-align:center;word-break:keep-all}
+.turn{position:absolute;inset:0;z-index:3;display:flex;align-items:center;justify-content:center;margin:0 auto;padding:0 28px;max-width:20em;opacity:var(--line3, 0);transform:translateY(var(--line3-y, 18px));font-size:clamp(21px,5.8vw,34px);font-weight:650;line-height:1.5;letter-spacing:-.04em;text-align:center;word-break:keep-all}
 
 @media (prefers-reduced-motion: reduce) {
   .track{height:auto}
@@ -20,5 +23,6 @@
   .factory{display:block;opacity:.35 !important}
   .copy{position:relative;inset:auto;padding:0 28px;gap:26px}
   .title,.lead{opacity:1 !important;transform:none !important}
+  .enterCurtain,.exitCurtain{display:none}
   .turn{position:relative;inset:auto;padding:0 28px;opacity:1 !important;transform:none !important}
 }

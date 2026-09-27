@@ -57,25 +57,28 @@ export default function LandingV2() {
 
       <LandingV2Pressure />
 
-      <section className={styles.section} aria-label="이제는 새로운 방식으로 봐야 합니다">
-        <h2 className={styles.h2} data-reveal>
-          이제는 새로운 방식으로
-          <br />
-          봐야 합니다.
-        </h2>
-        <div className={styles.turnList}>
-          <p className={styles.no} data-reveal>
-            특별히 잘하는 일이나 오래 꿈꿔온 일을 쫓지 않습니다.
-          </p>
-          <p className={styles.no} data-reveal>
-            현재 유망한 직업이나 분야를 무작정 고르지 않습니다.
-          </p>
-          <p className={styles.yes} data-reveal>
-            대신 사소한 일상의 경험에서, <b>무엇을 했는지</b> 묻습니다.
-          </p>
-          <p className={styles.define} data-reveal>
-            그 장면들에 드러나는 당신만의 행동 방식을 우리는 <b className={styles.mark}>코어</b>라고 부릅니다.
-          </p>
+      <section className={styles.turnSection} aria-label="이제는 새로운 방식으로 봐야 합니다">
+        <div className={styles.turnGrain} aria-hidden="true" />
+        <div className={styles.turnInner}>
+          <h2 className={styles.turnH2} data-reveal>
+            이제는 새로운 방식으로
+            <br />
+            봐야 합니다.
+          </h2>
+          <div className={styles.turnList}>
+            <p className={styles.turnNo} data-reveal>
+              특별히 잘하는 일이나 오래 꿈꿔온 일을 쫓지 않습니다.
+            </p>
+            <p className={styles.turnNo} data-reveal>
+              현재 유망한 직업이나 분야를 무작정 고르지 않습니다.
+            </p>
+            <p className={styles.turnYes} data-reveal>
+              대신 사소한 일상의 경험에서, <b>무엇을 했는지</b> 묻습니다.
+            </p>
+            <p className={styles.turnDefine} data-reveal>
+              그 장면들에 드러나는 당신만의 행동 방식을 우리는 <b className={styles.turnMark}>코어</b>라고 부릅니다.
+            </p>
+          </div>
         </div>
       </section>
 

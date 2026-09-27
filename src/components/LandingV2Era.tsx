@@ -41,6 +41,9 @@ export default function LandingV2Era() {
       track.style.setProperty("--factory", String(windowAt(p, 0.3, 0.44, 0.48, 0.66)));
       track.style.setProperty("--modern", String(inAt(p, 0.56, 0.74)));
       track.style.setProperty("--photo-y", `${(p - 0.5) * 90}px`);
+      // 앞: 흰 커튼이 걷히며 검정으로 이어진다(첫 화면과 이어지는 자리). 뒤: 사진이 다시 순수 검정으로 덮인다(다음 씬과 이어지는 자리).
+      track.style.setProperty("--enter", String(outAt(p, 0, 0.1)));
+      track.style.setProperty("--exit", String(inAt(p, 0.9, 1)));
       const reveals: [string, number][] = [
         ["line1", inAt(p, 0.06, 0.16) * outAt(p, 0.5, 0.62)],
         ["line2", windowAt(p, 0.15, 0.27, 0.52, 0.64)],
@@ -73,6 +76,8 @@ export default function LandingV2Era() {
           <div className={`${styles.photo} ${styles.modern}`} />
           <div className={styles.shade} />
         </div>
+        <div className={styles.enterCurtain} aria-hidden="true" />
+        <div className={styles.exitCurtain} aria-hidden="true" />
         <div className={styles.copy}>
           <h2 className={styles.title}>
             직업의 이름은
