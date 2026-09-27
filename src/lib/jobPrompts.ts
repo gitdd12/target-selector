@@ -7,9 +7,8 @@ const OBJECT_LIST = [...SEARCH_OBJECTS, NO_OBJECT].join(" / ");
 
 export function behaviorBlock(b: Behavior): string {
   return `## 행동 설명(판정 기준)
-- ① 동작: ${b.action}
-- ② 다루는 것의 모양: ${b.shape}
-- ③ 기준: ${b.criterion || "(기록에 없음)"}
+- 동작: ${b.action}
+- 다루는 것의 모양: ${b.shape}
 - 영어로: ${b.en}`;
 }
 
@@ -21,7 +20,7 @@ const QUERY_RULES = `당신은 "코어 찾기"의 직업 목록 담당입니다.
 - 대상마다 두 말투로 씁니다.
   - daily: 그 대상에서 이 행동을 하는 모습을 일상 말투로 쓴 영어 한 문장.
   - onet: O*NET 업무 문장 말투(동사로 시작 + 대상 + 목적)로 쓴 영어 한 문장.
-- **바꾸는 건 대상뿐입니다.** 동작(①)·다루는 것의 모양(②)·기준(③)은 그대로 남깁니다. 좋음: "Arrange video scenes into a sequence so the story flows." 나쁨: "Edit video."(방식이 빠져 영상 편집 전반이 끌려온다)
+- **바꾸는 건 대상뿐입니다.** 동작과 다루는 것의 모양은 그대로 남깁니다. 좋음: "Arrange video scenes into a sequence so the story flows." 나쁨: "Edit video."(방식이 빠져 영상 편집 전반이 끌려온다)
 - 문장이 매끄러울 필요는 없습니다. 의미만 통하면 됩니다.
 - 대상과 행동이 도무지 어울리지 않으면 applicable을 false로 하고 두 문장은 빈 문자열로 둡니다(예: 수식의 순서를 매끄럽게). 조금이라도 말이 되면 true로 씁니다.
 - "${NO_OBJECT}"은 대상을 넣지 않고 행동만 쓴 문장입니다. 항상 applicable true로 씁니다.`;
@@ -38,12 +37,12 @@ export function queryUser(b: Behavior): string {
 const JUDGE_RULES = `당신은 "코어 찾기"의 업무 문장 판정 담당입니다. 한 사람의 행동 설명을 기준으로, O*NET 업무 문장(영어)마다 그 업무에 이 행동이 들어 있는지와 얼마나 큰 몫인지 판정합니다. 이 판정으로 직업 점수가 계산되고, 결과지에 근거로 인용됩니다.
 
 ## 판정 기준
-- 기준은 행동 설명의 ① 동작, ② 다루는 것의 모양, ③ 기준입니다. **업무의 대상 종류(글인지 영상인지 사람인지)는 강도에 영향을 주지 않습니다.** 같은 동작이 다른 대상에서 쓰이면 그대로 점수를 줍니다.
-- 강도(strength)는 아래 값 중 하나만 씁니다.
-  - 1: ①②③ 모두 맞음. 예(행동: 이미 있는 조각의 순서를 바꿔 전체가 매끄럽게 이어질 때까지 맞춘다) "integrate component parts into desired sequences"
-  - 0.7: ①② 맞고 ③이 안 적혀 있음. 예 "rearrange schedules"
-  - 0.5 또는 0.3: 일부만 맞음. 예 "edit video"(순서 얘기 없음), "create storyboards"(새로 만듦)
-  - 0: 동작이 다름 → items에 넣지 않습니다.
+- 기준은 행동 설명의 동작(과 동작 문장에 들어 있는 다루는 것·끝나는 모습)입니다. **업무의 대상 종류(글인지 영상인지 사람인지)는 강도에 영향을 주지 않습니다.** 같은 동작이 다른 대상에서 쓰이면 그대로 점수를 줍니다(대상은 직업 목록을 나누는 데만 씁니다).
+- 강도(strength)는 1, 0.5, 0 중 하나만 씁니다. 아래 확인 질문에 예/아니요로 답해 정합니다.
+  - 1: 업무 문장 안에 이 행동의 동작이 **적혀 있나?** 같은 단어가 아니라 같은 뜻이면 됩니다(다른 말로 바꿔 쓴 것). 예(행동: 내용은 새로 쓰지 않고 이미 있는 조각의 순서와 이어짐을 조정한다) "integrate component parts into desired sequences", "Organize and string together raw footage into a continuous whole", "reassemble segments in sequences that present stories with maximum effect", "Select and combine the most effective shots of each scene to form a logical and smoothly running story", "coordinate smooth transition of acts during events"(대상은 달라도 동작이 같음)
+  - 0.5: 동작이 적혀 있지는 않지만, **이 업무를 하다 보면 이 행동의 동작을 하게 되나?** 예 "Edit manuscripts", "Edit or rewrite existing written material", "make changes to material prepared by other writers", "Edit video for broadcast productions"
+  - 0: 둘 다 아님 → items에 넣지 않습니다. 예 "create storyboards"(새로 만듦 — 이웃한 다른 동작), 말만 같고 뜻이 다른 것("Arrange music"은 편곡이지 순서 배열이 아님, "adjust different parts to properly fit them together"는 기계 부품 맞춤)
+- 끝나는 기준(언제 멈추는지)은 업무 문장에 적혀 있는지 따지지 않습니다. 업무 문장은 대부분 목적을 적지 않아서, 적혀 있지 않다고 깎으면 맞는 업무를 놓칩니다.
 - 몫(share, 0보다 크고 1 이하): 그 업무 문장 안에서 이 행동이 차지하는 비중입니다.
   - and로 묶인 서로 다른 행동은 몫을 나눕니다. "insert music, arrange films into sequences, and correct errors" → 1/3(0.33)
   - or로 묶인 대안은 나누지 않습니다. 하나라도 맞으면 몫 전체(1)입니다. 동사의 or든 대상의 or든 같습니다. 예 "edit books, lesson plans, or tests"
@@ -54,7 +53,7 @@ const JUDGE_RULES = `당신은 "코어 찾기"의 업무 문장 판정 담당입
 - 비슷한 문장이 여럿이어도 각각 따로 판정합니다. 점수를 후하게도 박하게도 주지 말고 기준대로만 줍니다.
 
 ## 출력
-- 점수가 있는 문장(강도 0.3 이상)만 items에 넣습니다. n은 목록의 번호입니다. 0점인 문장은 넣지 않습니다.`;
+- 점수가 있는 문장(강도 0.5 이상)만 items에 넣습니다. n은 목록의 번호입니다. 0점인 문장은 넣지 않습니다.`;
 
 export function judgeTaskSystem(): string {
   return `${JUDGE_RULES}\n\n# [스펙: 직업 목록 만들기]\n\n${jobsSpec()}`;

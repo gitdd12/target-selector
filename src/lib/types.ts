@@ -189,12 +189,13 @@ const CoreSignal = z.object({
 // 코어 이름(여섯 단어)은 쓰지 않는다(v0.31). 코어는 행동 설명(동작·다루는 것의 모양·기준)으로 적고,
 // 이 행동 설명이 직업 목록의 검색·판정 기준이 된다(docs/직업추천_재설계 0단계).
 export const BehaviorSchema = z.object({
-  action: z.string().describe("① 동작(한국어, 짧게). 예: 순서·배치를 바꾼다"),
+  action: z.string().describe("동작(한국어, 짧게). 끝나는 모습이 이 사람의 방식을 가르면 여기에 넣는다. 예: 흐름이 이어지게 순서·배치를 바꾼다 / 원리가 이해될 때까지 파고든다"),
   shape: z.string().describe("② 다루는 것의 모양(대상 이름 없이). 예: 이미 있는 여러 조각 / 힘들어하는 사람의 상태"),
-  criterion: z.string().describe("③ 기준: 언제까지·무엇이 되면 멈추는지. 예: 전체가 매끄럽게 이어질 때까지. 기록에 없으면 빈 문자열"),
+  // v0.35부터 쓰지 않는다(예전 세션 호환용으로 칸만 남김). 끝나는 모습이 이 사람의 방식을 가르는 경우에만 동작 문장 안에 넣는다.
+  criterion: z.string().describe("항상 빈 문자열. 끝나는 모습이 중요하면 action 문장 안에 넣는다(예: 원리가 이해될 때까지 파고든다)"),
   en: z
     .string()
-    .describe("①②③을 합친 영어 한 문장. 대상 자리는 일반화(existing parts, a person 등)하고 방식과 기준은 구체적으로 남긴다. 업무 문장 판정의 기준이 된다"),
+    .describe("동작과 다루는 것의 모양을 합친 영어 한 문장. 대상 자리는 일반화(existing parts, a person 등)하고 방식은 구체적으로 남긴다. 업무 문장 판정의 기준이 된다"),
 });
 export type Behavior = z.infer<typeof BehaviorSchema>;
 
