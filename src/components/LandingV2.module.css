@@ -1,0 +1,72 @@
+/* 새 랜딩 샘플(/v2). 흑백, Pretendard 하나, 결과지와 같은 잉크색. */
+.root{--ink:#0D0C14;--soft:#42414B;--dim:#84838D;--line:#E6E6E3;--paper:#F6F6F5;--bg:#FFFFFF;width:100vw;margin-left:calc(50% - 50vw);background:var(--bg);color:var(--ink);font-family:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;word-break:keep-all;overflow-wrap:break-word}
+.root *{box-sizing:border-box}
+
+.bar{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;max-width:1080px;margin:0 auto;padding:18px 20px;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px)}
+.logo{font-size:16px;font-weight:800;letter-spacing:-.03em}
+.beta{font-size:12px;font-weight:600;color:var(--dim);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+
+/* 첫 화면 */
+.hero{min-height:calc(100svh - 62px);max-width:1080px;margin:0 auto;padding:12vh 20px 32px;display:flex;flex-direction:column;justify-content:space-between;gap:56px}
+.heroTitle{margin:0;font-size:clamp(44px,12vw,96px);font-weight:750;letter-spacing:-.055em;line-height:1.08}
+.heroSub{margin:24px 0 0;max-width:30em;font-size:17px;line-height:1.7;color:var(--soft)}
+.button{display:inline-flex;align-items:center;justify-content:center;margin-top:32px;min-height:54px;padding:0 28px;border-radius:999px;background:var(--ink);color:#fff;font-size:16px;font-weight:700;letter-spacing:-.02em;text-decoration:none}
+.button:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+
+.bundle{margin:0;padding-top:18px;border-top:1px solid var(--ink);max-width:420px}
+.bundleName{font-size:14px;line-height:1.5;color:var(--soft)}
+.bundleName strong{color:var(--ink);font-weight:750}
+.bundleList{margin:12px 0 0;padding:0;list-style:none;display:flex;flex-direction:column}
+.bundleList li{padding:9px 0;border-bottom:1px solid var(--line);font-size:14.5px;line-height:1.5;color:var(--soft)}
+.bundleList li::before{content:"· ";color:var(--dim)}
+.bundleList .bundleKey{color:var(--ink);font-weight:700}
+.source{margin:10px 0 0;font-size:12px;color:var(--dim)}
+
+/* 샘플에서 빠진 섹션 자리 표시(검토용) */
+.gap{max-width:1080px;margin:0 auto;padding:22px 20px;border-top:1px dashed var(--line);border-bottom:1px dashed var(--line);font-size:12.5px;line-height:1.6;color:var(--dim);text-align:center}
+
+/* 공통 섹션 */
+.section{max-width:720px;margin:0 auto;padding:96px 20px}
+.eyebrow{margin:0 0 14px;font-size:13px;font-weight:700;color:var(--dim)}
+.h2{margin:0;font-size:clamp(32px,8.4vw,56px);font-weight:750;letter-spacing:-.05em;line-height:1.15}
+.lead{margin:22px 0 0;font-size:17px;line-height:1.75;color:var(--soft)}
+
+/* 5번: 코어 하나 → 두 직업 */
+.tree{margin-top:36px}
+.core{padding:22px 22px 24px;border-radius:20px;background:var(--ink);color:#fff}
+.coreLabel{font-size:13px;font-weight:700;color:rgba(255,255,255,.62)}
+.coreText{margin:8px 0 0;font-size:20px;font-weight:700;letter-spacing:-.035em;line-height:1.45}
+.branches{margin:0;padding:0 0 0 22px;list-style:none;border-left:1px solid var(--ink);margin-left:22px;display:flex;flex-direction:column;gap:14px;padding-top:22px}
+.branch{position:relative;display:flex;flex-direction:column;gap:4px;padding:18px 20px 20px;border-radius:18px;background:var(--paper)}
+.branch::before{content:"";position:absolute;left:-22px;top:32px;width:22px;border-top:1px solid var(--ink)}
+/* 세로선이 마지막 칸의 가지 아래로 내려가지 않게 가린다 */
+.branch:last-child::after{content:"";position:absolute;left:-24px;top:33px;bottom:0;width:3px;background:var(--bg)}
+.branchObject{font-size:13px;font-weight:600;color:var(--dim)}
+.branchJob{font-size:19px;font-weight:750;letter-spacing:-.03em}
+.branchTask{margin-top:4px;font-size:15px;line-height:1.6;color:var(--soft);quotes:"“" "”"}
+.close{margin:36px 0 0;font-size:19px;font-weight:700;letter-spacing:-.03em;line-height:1.55}
+
+/* 8번: 결과지 미리보기 */
+.shots{margin:44px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:56px}
+.shot{display:flex;flex-direction:column;gap:18px}
+.shotNo{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;border:1px solid var(--ink);font-size:13px;font-weight:700}
+.shotTitle{margin:12px 0 0;font-size:21px;font-weight:750;letter-spacing:-.035em;line-height:1.35}
+.shotText{margin:8px 0 0;font-size:15.5px;line-height:1.7;color:var(--soft)}
+.frame{max-width:390px;border:1px solid var(--line);border-radius:22px;overflow:hidden;background:#fff;box-shadow:0 1px 2px rgba(13,12,20,.04),0 12px 32px -12px rgba(13,12,20,.12)}
+.img{display:block;width:100%;height:auto}
+.note{margin:48px 0 0;font-size:14px;line-height:1.7;color:var(--dim)}
+
+/* 시작 */
+.cta{max-width:720px;margin:0 auto;padding:112px 20px 64px}
+.legal{margin:72px 0 0;padding-top:20px;border-top:1px solid var(--line);font-size:12px;line-height:1.7;color:var(--dim)}
+
+@media (min-width:860px){
+  .hero{flex-direction:row;align-items:flex-end;padding-top:18vh}
+  .heroCopy{flex:1}
+  .heroTitle{font-size:76px}
+  .bundle{flex:none;width:320px;margin-bottom:8px}
+  .shot{flex-direction:row;align-items:flex-start;gap:48px}
+  .shotCopy{flex:1;position:sticky;top:96px}
+  .frame{flex:none;width:360px}
+  .section{max-width:880px}
+}
