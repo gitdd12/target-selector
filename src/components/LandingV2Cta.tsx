@@ -2,7 +2,6 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useSyncExternalStore } from "react";
-import PrivacyNotice from "./PrivacyNotice";
 import styles from "./LandingV2.module.css";
 
 const STORAGE_KEY = "coreFinder.session";
@@ -18,7 +17,7 @@ function readResumeId(): string | null {
 const noSubscribe = () => () => {};
 
 // /v2의 "시작하기" 버튼. 원래 랜딩(Landing.tsx)과 같은 로직(실제 세션 시작, 이어서 하기, 개인정보 안내)을 쓴다.
-export default function LandingV2Cta({ needsCode, contact, full }: { needsCode: boolean; contact: string; full: boolean }) {
+export default function LandingV2Cta({ needsCode, full }: { needsCode: boolean; full: boolean }) {
   const router = useRouter();
   const [code, setCode] = useState("");
   const [busy, setBusy] = useState(false);
@@ -96,7 +95,6 @@ export default function LandingV2Cta({ needsCode, contact, full }: { needsCode: 
           )}
         </div>
       )}
-      <PrivacyNotice contact={contact} className={styles.notice} listClassName={styles.noticeList} />
     </>
   );
 }

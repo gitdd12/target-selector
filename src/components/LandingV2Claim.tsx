@@ -70,7 +70,7 @@ export default function LandingV2Claim() {
       <section ref={stageRef} className={styles.stage} aria-label="나를 아는 사람의 방향">
         <div className={styles.claimCol}>
           <p ref={bigRef} className={styles.claimBig}>
-            남들이 하는 직업, 유망하다는 분야에 더 이상 나를 맞추지 마세요.
+            남들이 하는 직업, 유망하다는 분야에 더 이상 나를 맞추지 마세요
           </p>
           <div className={styles.dots} aria-hidden="true">
             {Array.from({ length: 9 }, (_, i) => (

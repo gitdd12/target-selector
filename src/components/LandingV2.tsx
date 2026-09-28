@@ -2,8 +2,8 @@ import LandingV2Beat from "./LandingV2Beat";
 import LandingV2Claim from "./LandingV2Claim";
 import LandingV2Cta from "./LandingV2Cta";
 import LandingV2Era from "./LandingV2Era";
-import LandingV2Formula from "./LandingV2Formula";
 import LandingV2Motion from "./LandingV2Motion";
+import PrivacyNotice from "./PrivacyNotice";
 import styles from "./LandingV2.module.css";
 
 // 새 랜딩(/v2). 카피와 근거는 docs/랜딩_기획_2_구조와카피.md.
@@ -24,7 +24,7 @@ const SHOTS = [
     w: 780,
     h: 840,
     title: "가치관 × 코어 × 대상",
-    text: "가치관은 당신이 어떤 환경에서 일을 해야 하는지 나타냅니다. 대상은 당신의 코어로 무엇을 다뤄야 하는지 나타냅니다.",
+    text: <b>가치관은 당신이 어떤 환경에서 일을 해야 하는지 나타냅니다. 대상은 당신의 코어로 무엇을 다뤄야 하는지 나타냅니다.</b>,
     alt: "결과지 맨 위. 가치관 '애매함 없이 분명하게 가는 일', 코어 '앞뒤가 막힘없이 이어질 때까지 조각의 순서를 맞춰요', 고른 대상 '글, 문서'.",
   },
   {
@@ -32,7 +32,12 @@ const SHOTS = [
     w: 780,
     h: 806,
     title: "당신이 한 말이 근거가 됩니다",
-    text: "코어는 단순히 반복되는 행동이라고 확정하지 않습니다. 두 가지 이상의 신호가 동시에 보일 때만 코어로 판정하고, 그 근거가 된 사용자의 말을 함께 보여드립니다.",
+    text: (
+      <>
+        코어는 단순히 반복되는 행동이라고 확정하지 않습니다. <b>두 가지 이상의 신호가</b> 동시에 보일 때만 코어로 판정하고, 그 근거가 된 사용자의
+        말을 함께 보여드립니다.
+      </>
+    ),
     alt: "결과지의 코어 칸. 신뢰도 상, 그리고 스스로 보탠 부분·만족·되풀이 세 근거마다 인터뷰에서 한 말이 인용되어 있다.",
   },
   {
@@ -40,7 +45,11 @@ const SHOTS = [
     w: 780,
     h: 768,
     title: "직업은 실제 업무로 보여 드립니다",
-    text: "직업마다 당신의 코어와 겹치는 업무를 적고, 해당 직업에서 당신의 코어가 차지하는 비중을 알려드립니다.",
+    text: (
+      <>
+        직업마다 당신의 코어와 겹치는 업무를 적고, 해당 직업에서 당신의 <b>코어가 차지하는 비중</b>을 알려드립니다.
+      </>
+    ),
     alt: "결과지의 직업 목록. 직업마다 이름 옆에 코어 비중 %가 붙고, 그 아래에 내 코어와 겹치는 업무가 한 줄로 적혀 있다.",
   },
 ];
@@ -88,19 +97,24 @@ export default function LandingV2({ needsCode, contact, full }: { needsCode: boo
             node: "현재 유망한 직업이나 분야를 무작정 고르지 않습니다.",
           },
           {
-            key: "core",
-            w: [0.56, 0.68],
+            key: "core1",
+            w: [0.56, 0.66],
             className: styles.beatCore,
             node: (
               <>
                 대신 삶 속에서 드러나는
                 <br />
                 당신의 행동 패턴을 봅니다
-                <br />
-                <br />
-                <span className={styles.beatCoreLine}>
-                  우리는 이걸 <b className={styles.beatMark}>코어</b>라고 부릅니다.
-                </span>
+              </>
+            ),
+          },
+          {
+            key: "core2",
+            w: [0.68, 0.78],
+            className: `${styles.beatCore} ${styles.beatCoreLine}`,
+            node: (
+              <>
+                우리는 이걸 <b className={styles.beatMark}>코어</b>라고 부릅니다.
               </>
             ),
           },
@@ -157,17 +171,18 @@ export default function LandingV2({ needsCode, contact, full }: { needsCode: boo
 
       <LandingV2Claim />
 
-      <LandingV2Formula />
-
       <section className={styles.cta} aria-label="시작">
         <div className={styles.ctaMain}>
           <h2 className={styles.ctaTitle}>당신이 누구인지 찾으세요.</h2>
           <p className={styles.ctaSub}>그 시작은 일상의 작은 경험입니다.</p>
-          <LandingV2Cta needsCode={needsCode} contact={contact} full={full} />
+          <LandingV2Cta needsCode={needsCode} full={full} />
         </div>
-        <p className={styles.legal}>
-          직업·업무 정보는 미국 노동부 O*NET 31.0(CC BY 4.0)을 바탕으로 합니다. 미국 노동부가 이 서비스를 승인한 것은 아닙니다.
-        </p>
+        <div className={styles.ctaFooter}>
+          <p className={styles.legal}>
+            직업·업무 정보는 미국 노동부 O*NET 31.0(CC BY 4.0)을 바탕으로 합니다. 미국 노동부가 이 서비스를 승인한 것은 아닙니다.
+          </p>
+          <PrivacyNotice contact={contact} className={styles.notice} listClassName={styles.noticeList} />
+        </div>
       </section>
       <LandingV2Motion />
     </div>
