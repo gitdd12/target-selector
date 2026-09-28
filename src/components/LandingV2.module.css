@@ -13,11 +13,11 @@
 .button:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 .source{margin:22px 0 0;font-size:12px;color:var(--dim);text-align:right}
 
-/* 시작: 원래 랜딩(LandingFrame)처럼 화면 가운데(살짝 위)에 제목·부제·버튼을 한 리듬(20px 간격)으로 모아 두고,
-   회색 글씨(O*NET 안내·개인정보 안내)는 화면 맨 아래에 따로 둔다. */
-.cta{position:relative;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:96px 28px 140px}
-.ctaMain{display:flex;flex-direction:column;align-items:center;text-align:center;gap:20px;width:100%;max-width:480px;transform:translateY(-8vh)}
-.ctaTitle{margin:0;font-size:clamp(20px,7.6vw,60px);font-weight:760;line-height:1.35;letter-spacing:-.055em;white-space:nowrap}
+/* 시작: 제목은 화면 위쪽에, 부제·버튼은 화면 4분의 3 지점에 따로 두어 둘 사이를 넓게 벌린다.
+   회색 글씨(O*NET 안내·개인정보 안내)는 화면 맨 아래에 또 따로 둔다. */
+.cta{position:relative;min-height:100svh}
+.ctaTitle{position:absolute;top:34%;left:0;right:0;transform:translateY(-50%);margin:0;padding:0 28px;text-align:center;font-size:clamp(20px,7.6vw,60px);font-weight:760;line-height:1.35;letter-spacing:-.055em;white-space:nowrap}
+.ctaBottom{position:absolute;top:75%;left:0;right:0;transform:translateY(-50%);padding:0 28px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:20px}
 .ctaSub{margin:0;font-size:clamp(17px,4.6vw,23px);font-weight:500;line-height:1.7;letter-spacing:-.03em;color:var(--soft)}
 
 /* 시작 버튼 아래: 이어서 하기·오류·참여 코드. 원래 랜딩(Landing.tsx)과 같은 동작. */

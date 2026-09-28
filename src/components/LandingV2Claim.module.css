@@ -12,9 +12,14 @@
 .claimFormula{margin:0;display:flex;flex-direction:column;align-items:center;gap:14px;opacity:var(--o, 0);transform:translateY(var(--y, 18px));will-change:opacity,transform}
 .claimVennWrap{position:relative;width:min(78vw,300px);display:flex;align-items:center;justify-content:center}
 .claimVenn{width:100%;height:auto;overflow:visible}
-.claimVennCircle{fill:rgba(13,12,20,.05);stroke:#0D0C14;stroke-width:1.2}
-.claimFormulaRow{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;margin:0;font-size:clamp(19px,5.6vw,28px);font-weight:760;letter-spacing:-.03em;color:#0D0C14;white-space:nowrap}
-.claimTimes{color:#84838D;font-weight:500}
+.claimVennCircle{stroke-width:1.2}
+/* 원래 랜딩(LandingFrame)의 공식 씬 배색(원마다 다른 옅은 색) 그대로 */
+.claimCircleCore{fill:rgba(184,150,90,.2);stroke:#b8965a}
+.claimCircleValues{fill:rgba(30,27,46,.07);stroke:#1e1b2e}
+.claimCircleObject{fill:rgba(184,150,90,.1);stroke:#b8965a}
+/* 원래 랜딩에서 공식 글자와 원 너비의 비율(약 10.6%)을 그대로 적용 */
+.claimFormulaRow{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;margin:0;font-size:clamp(22px,7.6vw,32px);font-weight:760;letter-spacing:-.03em;color:#0D0C14;white-space:nowrap}
+.claimTimes{color:#b8965a;font-weight:500}
 .claimFormulaCaption{margin:0;font-size:clamp(15px,4.2vw,19px);font-weight:500;color:#55514a;letter-spacing:-.03em;line-height:1.5}
 
 .dots{display:flex;justify-content:center;gap:clamp(9px,3.4vw,16px);height:16px;align-items:center}

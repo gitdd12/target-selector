@@ -91,9 +91,9 @@ export default function LandingV2Claim() {
           <div ref={formulaRef} className={styles.claimFormula}>
             <div className={styles.claimVennWrap}>
               <svg className={styles.claimVenn} viewBox="0 0 320 300" aria-hidden="true">
-                <circle className={styles.claimVennCircle} cx="160" cy="196" r="84" />
-                <circle className={styles.claimVennCircle} cx="110" cy="112" r="84" />
-                <circle className={styles.claimVennCircle} cx="210" cy="112" r="84" />
+                <circle className={`${styles.claimVennCircle} ${styles.claimCircleCore}`} cx="160" cy="196" r="84" />
+                <circle className={`${styles.claimVennCircle} ${styles.claimCircleValues}`} cx="110" cy="112" r="84" />
+                <circle className={`${styles.claimVennCircle} ${styles.claimCircleObject}`} cx="210" cy="112" r="84" />
               </svg>
               <p className={styles.claimFormulaRow}>
                 가치관 <span className={styles.claimTimes}>×</span> 코어 <span className={styles.claimTimes}>×</span> 대상

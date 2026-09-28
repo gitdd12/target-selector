@@ -172,8 +172,8 @@ export default function LandingV2({ needsCode, contact, full }: { needsCode: boo
       <LandingV2Claim />
 
       <section className={styles.cta} aria-label="시작">
-        <div className={styles.ctaMain}>
-          <h2 className={styles.ctaTitle}>당신이 누구인지 찾으세요.</h2>
+        <h2 className={styles.ctaTitle}>당신이 누구인지 찾으세요.</h2>
+        <div className={styles.ctaBottom}>
           <p className={styles.ctaSub}>그 시작은 일상의 작은 경험입니다.</p>
           <LandingV2Cta needsCode={needsCode} full={full} />
         </div>
