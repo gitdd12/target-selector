@@ -128,18 +128,15 @@ export default function LandingV2() {
       </section>
 
       <section className={styles.section} aria-label="결과지 미리보기">
-        <p className={styles.eyebrow}>결과지</p>
-        <h2 className={styles.h2}>
-          결과지는
-          <br />
-          이렇게 나옵니다.
-        </h2>
+        <h2 className={styles.h2}>결과지</h2>
         <ol className={styles.shots}>
           {SHOTS.map((s, i) => (
             <li key={s.src} className={styles.shot} data-reveal>
               <div className={styles.shotCopy}>
-                <span className={styles.shotNo}>{i + 1}</span>
-                <h3 className={styles.shotTitle}>{s.title}</h3>
+                <div className={styles.shotHead}>
+                  <span className={styles.shotNo}>{i + 1}</span>
+                  <h3 className={styles.shotTitle}>{s.title}</h3>
+                </div>
                 <p className={styles.shotText}>{s.text}</p>
               </div>
               <div className={styles.frame}>
@@ -149,7 +146,6 @@ export default function LandingV2() {
             </li>
           ))}
         </ol>
-        <p className={styles.note}>결과지는 인터뷰가 끝난 뒤 3일 안에 이메일로 보내 드립니다.</p>
       </section>
 
       <LandingV2Claim />
