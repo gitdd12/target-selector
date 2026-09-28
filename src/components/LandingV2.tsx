@@ -93,7 +93,9 @@ export default function LandingV2({ needsCode, contact, full }: { needsCode: boo
             className: styles.beatCore,
             node: (
               <>
-                대신 삶 속에서 드러나는 당신의 행동 패턴을 봅니다.
+                대신 삶 속에서 드러나는
+                <br />
+                당신의 행동 패턴을 봅니다
                 <br />
                 <br />
                 <span className={styles.beatCoreLine}>
@@ -158,9 +160,11 @@ export default function LandingV2({ needsCode, contact, full }: { needsCode: boo
       <LandingV2Formula />
 
       <section className={styles.cta} aria-label="시작">
-        <h2 className={styles.h2}>당신이 누구인지 찾으세요.</h2>
-        <p className={styles.lead}>그 시작은 일상의 작은 경험입니다.</p>
-        <LandingV2Cta needsCode={needsCode} contact={contact} full={full} />
+        <div className={styles.ctaMain}>
+          <h2 className={styles.ctaTitle}>당신이 누구인지 찾으세요.</h2>
+          <p className={styles.ctaSub}>그 시작은 일상의 작은 경험입니다.</p>
+          <LandingV2Cta needsCode={needsCode} contact={contact} full={full} />
+        </div>
         <p className={styles.legal}>
           직업·업무 정보는 미국 노동부 O*NET 31.0(CC BY 4.0)을 바탕으로 합니다. 미국 노동부가 이 서비스를 승인한 것은 아닙니다.
         </p>

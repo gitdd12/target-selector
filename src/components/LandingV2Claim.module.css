@@ -7,11 +7,13 @@
 .claimBig{margin:0;font-size:clamp(23px,6.4vw,44px);font-weight:760;line-height:1.42;letter-spacing:-.055em;word-break:keep-all;text-wrap:balance;opacity:var(--o, 0);transform:translateY(var(--y, 18px));will-change:opacity,transform}
 .claimMid{margin:0;font-size:clamp(16px,4.5vw,24px);font-weight:500;line-height:1.65;letter-spacing:-.035em;color:#55514a;word-break:keep-all;text-wrap:balance;opacity:var(--o, 0);transform:translateY(var(--y, 18px));will-change:opacity,transform}
 
-/* 마지막 줄: 공식 씬의 원 세 개 + 가치관×코어×대상을 작게. 이 씬 안에서는 장식으로만 쓰고, 애니메이션 없이 이미 모인 모양으로 둔다 */
-.claimFormula{margin:0;display:flex;flex-direction:column;align-items:center;gap:12px;opacity:var(--o, 0);transform:translateY(var(--y, 18px));will-change:opacity,transform}
-.claimVenn{width:min(42vw,160px);height:auto;overflow:visible}
+/* 마지막 줄: 공식 씬의 원 세 개 + 가치관×코어×대상을 작게, 공식은 원 위에 겹쳐서. 이 씬 안에서는 장식으로만 쓰고,
+   애니메이션 없이 이미 모인 모양으로 둔다(공식 씬처럼 원과 글자가 따로 놀지 않고 한 덩어리로 보이게). */
+.claimFormula{margin:0;display:flex;flex-direction:column;align-items:center;gap:14px;opacity:var(--o, 0);transform:translateY(var(--y, 18px));will-change:opacity,transform}
+.claimVennWrap{position:relative;width:min(56vw,220px);display:flex;align-items:center;justify-content:center}
+.claimVenn{width:100%;height:auto;overflow:visible}
 .claimVennCircle{fill:rgba(13,12,20,.05);stroke:#0D0C14;stroke-width:1.2}
-.claimFormulaRow{margin:0;font-size:clamp(21px,5.8vw,32px);font-weight:760;letter-spacing:-.045em}
+.claimFormulaRow{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;margin:0;font-size:clamp(14px,4vw,19px);font-weight:760;letter-spacing:-.03em;color:#0D0C14;white-space:nowrap}
 .claimTimes{color:#84838D;font-weight:500}
 .claimFormulaCaption{margin:0;font-size:clamp(15px,4.2vw,19px);font-weight:500;color:#55514a;letter-spacing:-.03em;line-height:1.5}
 

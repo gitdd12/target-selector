@@ -74,26 +74,28 @@ export default function LandingV2Cta({ needsCode, contact, full }: { needsCode: 
 
   return (
     <>
-      <div className={styles.ctaActions}>
-        <button className={styles.button} onClick={start} disabled={busy || (needsCode && !code.trim())}>
-          {busy ? "준비 중…" : "시작하기"}
-        </button>
-        {error && <p className={styles.ctaError}>{error}</p>}
-        {resumeId && resumable && (
-          <button className={styles.ctaResume} onClick={() => router.push(`/s/${resumeId}`)}>
-            하던 인터뷰 이어서 하기
-          </button>
-        )}
-        {needsCode && (
-          <input
-            className={styles.ctaCode}
-            placeholder="참여 코드"
-            value={code}
-            onChange={(e) => setCode(e.target.value)}
-            autoComplete="off"
-          />
-        )}
-      </div>
+      <button className={styles.button} onClick={start} disabled={busy || (needsCode && !code.trim())}>
+        {busy ? "준비 중…" : "시작하기"}
+      </button>
+      {(error || (resumeId && resumable) || needsCode) && (
+        <div className={styles.ctaExtra}>
+          {error && <p className={styles.ctaError}>{error}</p>}
+          {resumeId && resumable && (
+            <button className={styles.ctaResume} onClick={() => router.push(`/s/${resumeId}`)}>
+              하던 인터뷰 이어서 하기
+            </button>
+          )}
+          {needsCode && (
+            <input
+              className={styles.ctaCode}
+              placeholder="참여 코드"
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
+              autoComplete="off"
+            />
+          )}
+        </div>
+      )}
       <PrivacyNotice contact={contact} className={styles.notice} listClassName={styles.noticeList} />
     </>
   );

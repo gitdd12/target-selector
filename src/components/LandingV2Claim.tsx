@@ -89,14 +89,16 @@ export default function LandingV2Claim() {
             무턱대고 그 줄에 나를 세우면, 그중 한 명이 될 뿐입니다.
           </p>
           <div ref={formulaRef} className={styles.claimFormula}>
-            <svg className={styles.claimVenn} viewBox="0 0 320 300" aria-hidden="true">
-              <circle className={styles.claimVennCircle} cx="160" cy="196" r="84" />
-              <circle className={styles.claimVennCircle} cx="110" cy="112" r="84" />
-              <circle className={styles.claimVennCircle} cx="210" cy="112" r="84" />
-            </svg>
-            <p className={styles.claimFormulaRow}>
-              가치관 <span className={styles.claimTimes}>×</span> 코어 <span className={styles.claimTimes}>×</span> 대상
-            </p>
+            <div className={styles.claimVennWrap}>
+              <svg className={styles.claimVenn} viewBox="0 0 320 300" aria-hidden="true">
+                <circle className={styles.claimVennCircle} cx="160" cy="196" r="84" />
+                <circle className={styles.claimVennCircle} cx="110" cy="112" r="84" />
+                <circle className={styles.claimVennCircle} cx="210" cy="112" r="84" />
+              </svg>
+              <p className={styles.claimFormulaRow}>
+                가치관 <span className={styles.claimTimes}>×</span> 코어 <span className={styles.claimTimes}>×</span> 대상
+              </p>
+            </div>
             <p className={styles.claimFormulaCaption}>세 가지가 만날 때, 삶의 방향이 정해집니다.</p>
           </div>
         </div>
