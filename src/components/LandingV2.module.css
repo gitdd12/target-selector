@@ -10,7 +10,7 @@
 .heroScroll{margin:0 0 16vh;font-size:12.5px;color:var(--dim);letter-spacing:.04em}
 .button{display:inline-flex;align-items:center;justify-content:center;margin-top:32px;min-height:54px;padding:0 28px;border-radius:999px;background:var(--ink);color:#fff;font-size:16px;font-weight:700;letter-spacing:-.02em;text-decoration:none}
 .button:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
-.source{margin:10px 0 0;font-size:12px;color:var(--dim)}
+.source{margin:22px 0 0;font-size:12px;color:var(--dim);text-align:right}
 
 
 /* 공통 섹션 */
@@ -18,19 +18,21 @@
 .eyebrow{margin:0 0 14px;font-size:13px;font-weight:700;color:var(--dim)}
 .h2{margin:0;font-size:clamp(32px,8.4vw,56px);font-weight:750;letter-spacing:-.05em;line-height:1.15}
 .lead{margin:22px 0 0;font-size:17px;line-height:1.75;color:var(--soft)}
+.leadEmph{color:var(--ink);text-decoration:underline;text-underline-offset:.15em}
 
 /* 떠오르기(스크립트가 켜졌을 때만 숨겼다가 보인다) */
 .root[data-motion] [data-reveal]{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
 .root[data-motion] [data-reveal][data-shown]{opacity:1;transform:none}
 
-/* 2번(사진 교차)·3번(문구 등장)은 LandingV2Era.module.css / LandingV2Pressure.module.css에 있다. */
+/* 2번(사진 교차)은 LandingV2Era.module.css에 있다. */
 
 /* 4번(검정)·6번(흰색) — LandingV2Beat(한 걸음씩 짚어 읽는 장면)에 넣는 콘텐츠 타이포그래피.
    위치·순서·색 전환은 LandingV2Beat.module.css가 맡고, 여기서는 글자 스타일만 정한다. */
 .beatBig{margin:0;font-size:clamp(32px,8.4vw,56px);font-weight:750;letter-spacing:-.05em;line-height:1.15}
 .beatLead{margin:0;max-width:20em;font-size:19px;line-height:1.7;letter-spacing:-.02em}
 .beatLead b{font-weight:750}
-.beatDefine{margin:0;font-size:21px;font-weight:700;letter-spacing:-.035em;line-height:1.55}
+/* 이 씬을 맺는 마지막 한 줄. 앞의 부정문 두 줄보다 눈에 띄게 크고, 가운데 정렬로 둔다. */
+.beatCore{margin:0;max-width:15em;align-self:center;text-align:center;text-wrap:balance;font-size:clamp(25px,6.8vw,40px);font-weight:740;letter-spacing:-.04em;line-height:1.5}
 .beatMark{font-weight:780;font-size:1.15em;box-shadow:inset 0 -.42em 0 rgba(247,245,240,.22)}
 
 /* 5번: 코어 하나 → 두 직업 */

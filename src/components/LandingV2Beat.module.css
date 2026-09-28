@@ -11,8 +11,9 @@
   background-image:radial-gradient(ellipse 65% 50% at 50% 30%, rgba(255,255,255,.06), transparent 62%),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size:cover, 140px 140px}
-/* 다음 씬(흰 배경)과 이어지도록, 끝에서 흰 커튼이 덮이며 끝난다 */
-.exitCurtain{position:absolute;inset:0;z-index:1;background:#fff;opacity:var(--exit, 0);pointer-events:none}
+/* 다음 씬(흰 배경)과 이어지도록, 끝에서 흰 커튼이 덮이며 끝난다.
+   col(z-index:2)보다 위에 있어야 글줄이 옅게 남은 채로 덮이지 않고 완전히 가려진다. */
+.exitCurtain{position:absolute;inset:0;z-index:3;background:#fff;opacity:var(--exit, 0);pointer-events:none}
 
 /* 내용이 짧든(공식 세 줄) 길든(제목+네 줄) 화면 세로 가운데를 기준으로 균형 잡히게 둔다. */
 .col{position:relative;z-index:2;width:100%;max-width:720px;margin:0 auto;padding:0 28px;display:flex;flex-direction:column;gap:clamp(20px,3.6svh,38px)}

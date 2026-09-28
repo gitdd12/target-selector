@@ -4,16 +4,16 @@ import LandingV2Claim from "./LandingV2Claim";
 import LandingV2Era from "./LandingV2Era";
 import LandingV2Formula from "./LandingV2Formula";
 import LandingV2Motion from "./LandingV2Motion";
-import LandingV2Pressure from "./LandingV2Pressure";
 import styles from "./LandingV2.module.css";
 
 // 새 랜딩(/v2). 카피와 근거는 docs/랜딩_기획_2_구조와카피.md.
 // 2~4, 6~7, 9번 섹션의 문구는 원래 랜딩(LandingStory, LandingFrame)의 원문 그대로다.
-// 2번(LandingV2Era)과 3번(LandingV2Pressure)은 원래 랜딩의 스크롤 연동 연출도 그대로 가져왔다.
+// 2번(LandingV2Era)은 원래 랜딩의 스크롤 연동 연출도 그대로 가져왔다.
 
-// 5번 예시: 샘플 세션을 지금 공식으로 다시 돌렸을 때 실제로 나온 두 직업과 근거 업무.
+// 5번 예시: 서로 다른 영역(영상 편집 ↔ 배관)이지만 같은 코어("흐름이 이어지도록 순서와 연결을 맞춘다")가
+// 쓰인다는 걸 극적으로 보여주려는 예시.
 const BRANCHES = [
-  { object: "글을 다루면", job: "테크니컬 라이터", task: "다른 작가나 내부 직원이 준비한 자료를 편집하거나, 형식을 통일하거나, 고친다" },
+  { object: "배관을 다루면", job: "배관공", task: "도면에 따라 배관 부품과 이음쇠를 순서대로 연결해, 물이나 가스가 끊기지 않고 흐르게 한다" },
   { object: "영상을 다루면", job: "영상 편집자", task: "촬영한 원본 영상을 정리해 하나로 매끄럽게 잇는다" },
 ];
 
@@ -58,8 +58,6 @@ export default function LandingV2() {
 
       <LandingV2Era />
 
-      <LandingV2Pressure />
-
       <LandingV2Beat
         ariaLabel="이제는 새로운 방식으로 봐야 합니다"
         theme="dark"
@@ -90,24 +88,12 @@ export default function LandingV2() {
             node: "현재 유망한 직업이나 분야를 무작정 고르지 않습니다.",
           },
           {
-            key: "yes",
-            w: [0.44, 0.54, 0.66, 0.74],
-            floor: 0.3,
-            className: styles.beatLead,
+            key: "core",
+            w: [0.56, 0.68],
+            className: styles.beatCore,
             node: (
               <>
-                대신 사소한 일상의 경험에서, <b>무엇을 했는지</b> 묻습니다.
-              </>
-            ),
-          },
-          {
-            key: "define",
-            w: [0.66, 0.82],
-            right: true,
-            className: styles.beatDefine,
-            node: (
-              <>
-                그 장면들에 드러나는 당신만의 행동 방식을 우리는 <b className={styles.beatMark}>코어</b>라고 부릅니다.
+                삶 속에서 드러나는 당신의 행동 패턴을 보고, 우리는 이걸 <b className={styles.beatMark}>코어</b>라고 부릅니다.
               </>
             ),
           },
@@ -121,12 +107,12 @@ export default function LandingV2() {
           여러 직업에서 나타납니다.
         </h2>
         <p className={styles.lead} data-reveal>
-          직업은 단순한 행동의 묶음입니다. 전혀 달라 보이는 두 개의 직업이더라도 내 코어와 그 직무가 일치할 수 있습니다.
+          <b className={styles.leadEmph}>직업은 단순히 행동의 묶음일뿐입니다.</b> 전혀 달라 보이는 두 개의 직업이더라도 내 코어는 두 직업과 일치할 수 있습니다.
         </p>
         <div className={styles.tree} data-reveal>
           <div className={styles.core}>
             <span className={styles.coreLabel}>코어</span>
-            <p className={styles.coreText}>내용은 새로 쓰지 않고, 흐름이 이어지도록 순서와 연결을 맞춘다</p>
+            <p className={styles.coreText}>흐름이 이어지도록 순서와 연결을 맞춘다</p>
           </div>
           <ul className={styles.branches}>
             {BRANCHES.map((b) => (
@@ -138,7 +124,7 @@ export default function LandingV2() {
             ))}
           </ul>
         </div>
-        <p className={styles.source}>업무 문장: O*NET 31.0, 미국 노동부 직업 데이터</p>
+        <p className={styles.source}>직무 정보: O*NET 31.0, 미국 노동부 직업 데이터</p>
       </section>
 
       <section className={styles.section} aria-label="결과지 미리보기">
