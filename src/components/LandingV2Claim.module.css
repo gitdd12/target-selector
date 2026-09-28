@@ -2,12 +2,18 @@
 .track{position:relative}
 .stage{position:sticky;top:0;height:var(--vh-px, 100vh);overflow:hidden;background:#fff;display:flex;align-items:center;justify-content:center}
 
-.claimCol{position:relative;z-index:1;padding:0 28px;max-width:720px;margin:0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(24px,4.6svh,42px);text-align:center;color:#0D0C14}
+/* 화면 세로 가운데보다 살짝 위로 둔다 */
+.claimCol{position:relative;z-index:1;padding:0 28px;max-width:720px;margin:0 auto;transform:translateY(-6vh);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(24px,4.6svh,42px);text-align:center;color:#0D0C14}
 .claimBig{margin:0;font-size:clamp(23px,6.4vw,44px);font-weight:760;line-height:1.42;letter-spacing:-.055em;word-break:keep-all;text-wrap:balance;opacity:var(--o, 0);transform:translateY(var(--y, 18px));will-change:opacity,transform}
 .claimMid{margin:0;font-size:clamp(16px,4.5vw,24px);font-weight:500;line-height:1.65;letter-spacing:-.035em;color:#55514a;word-break:keep-all;text-wrap:balance;opacity:var(--o, 0);transform:translateY(var(--y, 18px));will-change:opacity,transform}
-.claimEnd{margin:0;font-size:clamp(14px,5.6vw,34px);font-weight:500;line-height:1.6;letter-spacing:-.06em;color:#0D0C14;opacity:var(--o, 0);transform:translateY(var(--y, 18px));will-change:opacity,transform}
-.claimEnd span{display:block;white-space:nowrap}
-.claimEnd b{font-weight:820}
+
+/* 마지막 줄: 공식 씬의 원 세 개 + 가치관×코어×대상을 작게. 이 씬 안에서는 장식으로만 쓰고, 애니메이션 없이 이미 모인 모양으로 둔다 */
+.claimFormula{margin:0;display:flex;flex-direction:column;align-items:center;gap:12px;opacity:var(--o, 0);transform:translateY(var(--y, 18px));will-change:opacity,transform}
+.claimVenn{width:min(42vw,160px);height:auto;overflow:visible}
+.claimVennCircle{fill:rgba(13,12,20,.05);stroke:#0D0C14;stroke-width:1.2}
+.claimFormulaRow{margin:0;font-size:clamp(21px,5.8vw,32px);font-weight:760;letter-spacing:-.045em}
+.claimTimes{color:#84838D;font-weight:500}
+.claimFormulaCaption{margin:0;font-size:clamp(15px,4.2vw,19px);font-weight:500;color:#55514a;letter-spacing:-.03em;line-height:1.5}
 
 .dots{display:flex;justify-content:center;gap:clamp(9px,3.4vw,16px);height:16px;align-items:center}
 .dot2{position:relative;flex:none;width:clamp(9px,3vw,13px);height:clamp(9px,3vw,13px);border-radius:50%;background:#d6d2ca;opacity:calc(var(--o, 0) * (1 - var(--rise, 0) * .55));transform:translateY(0)}
@@ -18,7 +24,7 @@
 @media (prefers-reduced-motion: reduce) {
   .track{height:auto}
   .stage{position:relative;height:auto;min-height:100svh;padding:90px 28px}
-  .claimCol{padding:0}
-  .claimBig,.claimMid,.claimEnd{opacity:1 !important;transform:none !important}
+  .claimCol{padding:0;transform:none}
+  .claimBig,.claimMid,.claimFormula{opacity:1 !important;transform:none !important}
   .dot2{opacity:1 !important}
 }

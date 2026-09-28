@@ -4,8 +4,10 @@ import { useEffect, useRef } from "react";
 import { useVhPx } from "./useVhPx";
 import styles from "./LandingV2Claim.module.css";
 
-// 원래 랜딩(LandingFrame)의 "줄 세우기" 씬을 그대로 옮겨 온 것.
+// 원래 랜딩(LandingFrame)의 "줄 세우기" 씬을 옮겨 온 것.
 // 같은 줄에 놓인 점 아홉 개 중 가운데 "나"만 스크롤에 따라 줄 밖으로 올라온다.
+// 마지막 줄은 원래 랜딩의 "나를 제대로 알고..." 문장 대신, 공식 씬의 원 세 개 + 가치관×코어×대상을
+// 작게 가져와 이 씬을 맺는다(공식 씬은 바로 아래에서 다시 크게 펼쳐진다).
 
 const clamp = (n: number) => Math.max(0, Math.min(1, n));
 const ease = (n: number) => {
@@ -29,7 +31,7 @@ export default function LandingV2Claim() {
   const stageRef = useRef<HTMLElement>(null);
   const bigRef = useRef<HTMLParagraphElement>(null);
   const midRef = useRef<HTMLParagraphElement>(null);
-  const endRef = useRef<HTMLParagraphElement>(null);
+  const formulaRef = useRef<HTMLDivElement>(null);
   const dotRefs = useRef<(HTMLSpanElement | null)[]>([]);
 
   useEffect(() => {
@@ -44,7 +46,7 @@ export default function LandingV2Claim() {
       const pc = clamp(-rect.top / Math.max(1, rect.height - vh));
       reveal(bigRef.current, [0.04, 0.11, 0.33, 0.4], 0.5, pc);
       reveal(midRef.current, [0.24, 0.32, 0.5, 0.57], 0.5, pc);
-      reveal(endRef.current, [0.55, 0.66], 0, pc);
+      reveal(formulaRef.current, [0.55, 0.66], 0, pc);
       stageRef.current?.style.setProperty("--rise", String(inAt(pc, 0.54, 0.66)));
       dotRefs.current.forEach((d, i) => {
         d?.style.setProperty("--o", String(inAt(pc, 0.17 + i * 0.01, 0.25 + i * 0.01)));
@@ -86,12 +88,17 @@ export default function LandingV2Claim() {
           <p ref={midRef} className={styles.claimMid}>
             무턱대고 그 줄에 나를 세우면, 그중 한 명이 될 뿐입니다.
           </p>
-          <p ref={endRef} className={styles.claimEnd}>
-            <span>나를 제대로 알고 방향을 정한 사람만이,</span>
-            <span>
-              <b>진짜 경쟁력</b>을 갖습니다.
-            </span>
-          </p>
+          <div ref={formulaRef} className={styles.claimFormula}>
+            <svg className={styles.claimVenn} viewBox="0 0 320 300" aria-hidden="true">
+              <circle className={styles.claimVennCircle} cx="160" cy="196" r="84" />
+              <circle className={styles.claimVennCircle} cx="110" cy="112" r="84" />
+              <circle className={styles.claimVennCircle} cx="210" cy="112" r="84" />
+            </svg>
+            <p className={styles.claimFormulaRow}>
+              가치관 <span className={styles.claimTimes}>×</span> 코어 <span className={styles.claimTimes}>×</span> 대상
+            </p>
+            <p className={styles.claimFormulaCaption}>세 가지가 만날 때, 삶의 방향이 정해집니다.</p>
+          </div>
         </div>
       </section>
     </div>

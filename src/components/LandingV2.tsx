@@ -1,6 +1,6 @@
-import Link from "next/link";
 import LandingV2Beat from "./LandingV2Beat";
 import LandingV2Claim from "./LandingV2Claim";
+import LandingV2Cta from "./LandingV2Cta";
 import LandingV2Era from "./LandingV2Era";
 import LandingV2Formula from "./LandingV2Formula";
 import LandingV2Motion from "./LandingV2Motion";
@@ -32,7 +32,7 @@ const SHOTS = [
     w: 780,
     h: 806,
     title: "당신이 한 말이 근거가 됩니다",
-    text: "근거가 두 가지 이상일 때만 코어로 적고, 신뢰도와 함께 당신이 한 말을 그대로 보여 드립니다.",
+    text: "코어는 단순히 반복되는 행동이라고 확정하지 않습니다. 두 가지 이상의 신호가 동시에 보일 때만 코어로 판정하고, 그 근거가 된 사용자의 말을 함께 보여드립니다.",
     alt: "결과지의 코어 칸. 신뢰도 상, 그리고 스스로 보탠 부분·만족·되풀이 세 근거마다 인터뷰에서 한 말이 인용되어 있다.",
   },
   {
@@ -45,7 +45,7 @@ const SHOTS = [
   },
 ];
 
-export default function LandingV2() {
+export default function LandingV2({ needsCode, contact, full }: { needsCode: boolean; contact: string; full: boolean }) {
   return (
     <div className={styles.root} data-landing-v2>
       <section className={styles.hero} aria-label="첫 화면">
@@ -93,7 +93,12 @@ export default function LandingV2() {
             className: styles.beatCore,
             node: (
               <>
-                삶 속에서 드러나는 당신의 행동 패턴을 보고, 우리는 이걸 <b className={styles.beatMark}>코어</b>라고 부릅니다.
+                대신 삶 속에서 드러나는 당신의 행동 패턴을 봅니다.
+                <br />
+                <br />
+                <span className={styles.beatCoreLine}>
+                  우리는 이걸 <b className={styles.beatMark}>코어</b>라고 부릅니다.
+                </span>
               </>
             ),
           },
@@ -153,11 +158,9 @@ export default function LandingV2() {
       <LandingV2Formula />
 
       <section className={styles.cta} aria-label="시작">
-        <h2 className={styles.h2}>당신의 코어를 찾으세요.</h2>
+        <h2 className={styles.h2}>당신이 누구인지 찾으세요.</h2>
         <p className={styles.lead}>그 시작은 일상의 작은 경험입니다.</p>
-        <Link href="/#start" className={styles.button}>
-          시작하기
-        </Link>
+        <LandingV2Cta needsCode={needsCode} contact={contact} full={full} />
         <p className={styles.legal}>
           직업·업무 정보는 미국 노동부 O*NET 31.0(CC BY 4.0)을 바탕으로 합니다. 미국 노동부가 이 서비스를 승인한 것은 아닙니다.
         </p>

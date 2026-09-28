@@ -2,9 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useSyncExternalStore } from "react";
-import LandingFrame from "./LandingFrame";
-import LandingStory from "./LandingStory";
 import PrivacyNotice from "./PrivacyNotice";
+import styles from "./LandingV2.module.css";
 
 const STORAGE_KEY = "coreFinder.session";
 
@@ -18,27 +17,17 @@ function readResumeId(): string | null {
 }
 const noSubscribe = () => () => {};
 
-export default function Landing({
-  needsCode,
-  contact,
-  full,
-  demo = false,
-}: {
-  needsCode: boolean;
-  contact: string;
-  full: boolean;
-  demo?: boolean; // 개발용 미리보기(/dev)에서는 실제 인터뷰를 시작하지 않는다
-}) {
+// /v2의 "시작하기" 버튼. 원래 랜딩(Landing.tsx)과 같은 로직(실제 세션 시작, 이어서 하기, 개인정보 안내)을 쓴다.
+export default function LandingV2Cta({ needsCode, contact, full }: { needsCode: boolean; contact: string; full: boolean }) {
   const router = useRouter();
   const [code, setCode] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const resumeId = useSyncExternalStore(noSubscribe, readResumeId, () => null);
   // 저장된 번호가 있어도, 서버에서 확인해 "아직 이어서 할 게 있는 인터뷰"일 때만 버튼을 보여준다
-  // (기록이 없어졌거나, 이미 끝나고 이메일까지 남겼으면 숨기고 저장된 번호도 지운다)
   const [resumable, setResumable] = useState(false);
   useEffect(() => {
-    if (!resumeId || demo) return;
+    if (!resumeId) return;
     let cancelled = false;
     const forget = () => {
       try {
@@ -56,13 +45,9 @@ export default function Landing({
     return () => {
       cancelled = true;
     };
-  }, [resumeId, demo]);
+  }, [resumeId]);
 
   async function start() {
-    if (demo) {
-      setError("미리보기 화면이라 실제로 시작되지는 않아요.");
-      return;
-    }
     setBusy(true);
     setError("");
     try {
@@ -83,44 +68,33 @@ export default function Landing({
     }
   }
 
-  const notice = (
-    <div className="site-foot">
-      <PrivacyNotice contact={contact} className="more" />
-    </div>
-  );
+  if (full) {
+    return <p className={styles.ctaFull}>이번 베타는 참여 인원이 모두 찼어요. 관심 가져줘서 고마워요.</p>;
+  }
 
   return (
     <>
-      <LandingStory />
-      <LandingFrame footer={notice}>
-        {full ? (
-          <p style={{ fontSize: 15, color: "#cfc9e6" }}>이번 베타는 참여 인원이 모두 찼어요. 관심 가져줘서 고마워요.</p>
-        ) : (
-          <div className="on-dark">
-            <button className="cta-start" onClick={start} disabled={busy || (needsCode && !code.trim())}>
-              {busy ? "준비 중…" : "시작하기"}
-            </button>
-            {error && <div className="cta-error">{error}</div>}
-            {resumeId && resumable && (
-              <button className="cta-link" onClick={() => router.push(`/s/${resumeId}`)}>
-                하던 인터뷰 이어서 하기
-              </button>
-            )}
-
-            {needsCode && (
-              <input
-                className="text-input"
-                placeholder="참여 코드"
-                value={code}
-                onChange={(e) => setCode(e.target.value)}
-                autoComplete="off"
-                style={{ marginTop: 14 }}
-              />
-            )}
-          </div>
+      <div className={styles.ctaActions}>
+        <button className={styles.button} onClick={start} disabled={busy || (needsCode && !code.trim())}>
+          {busy ? "준비 중…" : "시작하기"}
+        </button>
+        {error && <p className={styles.ctaError}>{error}</p>}
+        {resumeId && resumable && (
+          <button className={styles.ctaResume} onClick={() => router.push(`/s/${resumeId}`)}>
+            하던 인터뷰 이어서 하기
+          </button>
         )}
-      </LandingFrame>
-
+        {needsCode && (
+          <input
+            className={styles.ctaCode}
+            placeholder="참여 코드"
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            autoComplete="off"
+          />
+        )}
+      </div>
+      <PrivacyNotice contact={contact} className={styles.notice} listClassName={styles.noticeList} />
     </>
   );
 }

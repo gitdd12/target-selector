@@ -8,9 +8,25 @@
 .heroTitle{margin:0;font-size:clamp(48px,14vw,88px);font-weight:750;letter-spacing:-.045em;line-height:1}
 .heroSub{margin:0;font-size:16px;color:var(--dim);letter-spacing:-.01em}
 .heroScroll{margin:0 0 16vh;font-size:12.5px;color:var(--dim);letter-spacing:.04em}
-.button{display:inline-flex;align-items:center;justify-content:center;margin-top:32px;min-height:54px;padding:0 28px;border-radius:999px;background:var(--ink);color:#fff;font-size:16px;font-weight:700;letter-spacing:-.02em;text-decoration:none}
+.button{display:inline-flex;align-items:center;justify-content:center;min-height:54px;padding:0 28px;border:0;border-radius:999px;background:var(--ink);color:#fff;font-size:16px;font-weight:700;letter-spacing:-.02em;text-decoration:none;cursor:pointer}
+.button:disabled{opacity:.55;cursor:default}
 .button:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 .source{margin:22px 0 0;font-size:12px;color:var(--dim);text-align:right}
+
+/* 시작 버튼 아래: 이어서 하기·오류·참여 코드, 그리고 개인정보 안내. 원래 랜딩(Landing.tsx)과 같은 동작. */
+.ctaActions{margin-top:32px;display:flex;flex-direction:column;align-items:center;gap:12px}
+.ctaFull{margin-top:32px;font-size:15px;color:var(--soft)}
+.ctaError{margin:0;font-size:14px;color:#b2543f}
+.ctaResume{margin:0;padding:0;border:0;background:none;color:var(--soft);font-size:14.5px;font-weight:500;text-decoration:underline;cursor:pointer}
+.ctaCode{margin-top:6px;width:100%;max-width:280px;height:48px;padding:0 16px;border:1px solid var(--line);border-radius:12px;font-size:15px;color:var(--ink);background:#fff}
+.ctaCode:focus-visible{outline:2px solid var(--ink);outline-offset:1px}
+
+.notice{margin:28px auto 0;max-width:420px;font-size:13px;color:var(--dim);line-height:1.7;text-align:center}
+.notice summary{cursor:pointer;color:var(--soft);text-decoration:underline;list-style:none}
+.notice summary::-webkit-details-marker{display:none}
+.noticeList{margin-top:10px;text-align:left}
+.noticeList dt{font-weight:600;color:var(--soft);margin-top:8px}
+.noticeList dd{margin:0}
 
 
 /* 공통 섹션 */
@@ -30,8 +46,10 @@
 .beatBig{margin:0;font-size:clamp(32px,8.4vw,56px);font-weight:750;letter-spacing:-.05em;line-height:1.15}
 .beatLead{margin:0;max-width:20em;font-size:19px;line-height:1.7;letter-spacing:-.02em}
 .beatLead b{font-weight:750}
-/* 이 씬을 맺는 마지막 한 줄. 앞의 부정문 두 줄보다 눈에 띄게 크고, 가운데 정렬로 둔다. */
-.beatCore{margin:0;max-width:15em;align-self:center;text-align:center;text-wrap:balance;font-size:clamp(25px,6.8vw,40px);font-weight:740;letter-spacing:-.04em;line-height:1.5}
+/* 이 씬을 맺는 마지막 두 문장. 앞의 부정문 두 줄보다 눈에 띄게 크고, 가운데 정렬로 둔다.
+   두 문장 사이는 줄바꿈 두 번으로 한 줄 띄우고, "우리는 이걸 코어라고 부릅니다."는 줄바꿈 없이 한 줄로 둔다. */
+.beatCore{margin:12px 0 0 0;max-width:15em;align-self:center;text-align:center;font-size:clamp(22px,6vw,36px);font-weight:740;letter-spacing:-.04em;line-height:1.55}
+.beatCoreLine{display:inline-block;white-space:nowrap}
 .beatMark{font-weight:780;font-size:1.15em;box-shadow:inset 0 -.42em 0 rgba(247,245,240,.22)}
 
 /* 5번: 코어 하나 → 두 직업 */
