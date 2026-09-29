@@ -240,6 +240,33 @@ export async function finalizeStep(s: Session) {
   }
 }
 
+/** 현재 상태를 고른 뒤(situation 라우트가 응답을 보낸 뒤) 결과지 초안이 끝까지 자동으로 이어지게 한다.
+ * 예전에는 참가자 화면(탭)이 열려 있는 동안만 한 걸음씩 진행됐는데, 탭을 닫으면(특히 이메일만 입력하고 나가면)
+ * 거기서 멈춰서 운영자가 npm run review로 직접 마무리해야 했다. 단계마다 세션을 다시 읽고 바로 저장해서,
+ * 도중에 서버가 멈추거나 운영자가 review 스크립트로 동시에 손대도 이미 끝난 단계는 남는다.
+ */
+export async function runFinalize(sessionId: string) {
+  for (let i = 0; i < 40; i++) {
+    let s: Session | null;
+    try {
+      s = await getStore().get(sessionId);
+    } catch (e) {
+      console.error("[runFinalize] load", e);
+      return;
+    }
+    if (!s || s.phase !== "finalizing") return;
+    try {
+      await finalizeStep(s);
+    } catch (e) {
+      console.error("[runFinalize] step", s.finalizeStep, e);
+      return; // 여기서 멈춰도 방금까지 성공한 단계는 이미 저장돼 있다. npm run review로 이어서 마무리할 수 있다.
+    }
+    await save(s);
+    if (s.phase !== "finalizing") return;
+  }
+  console.error("[runFinalize] 40번을 넘겨 멈춤:", sessionId);
+}
+
 const MORE_REPLY = "네, 더 들려주세요. 다르게 이해한 부분이 있으면 그것도 편하게 말해주세요.";
 
 /**

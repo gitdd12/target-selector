@@ -25,7 +25,6 @@ export default function SessionApp({ id }: { id: string }) {
   const [busy, setBusy] = useState(false);
   const [retry, setRetry] = useState(0);
   const running = useRef(false);
-  const quietRetries = useRef(0);
 
   const base = `/api/sessions/${id}`;
 
@@ -36,33 +35,24 @@ export default function SessionApp({ id }: { id: string }) {
   }, [base]);
 
   // 창이 끝나면 자동으로: 기록 정리 → 새 창. (앞 창의 대화는 새 창으로 넘어가지 않는다)
-  // 결과지 단계에서는 끝날 때까지 한 걸음씩 자동 진행한다.
+  // 결과지 단계는 situation 라우트가 응답한 뒤 서버가 뒤에서 끝까지 이어간다(runFinalize) —
+  // 참가자 탭이 열려 있는지와 무관하게 끝나도록, 여기서 더 이상 /finalize를 반복 호출하지 않는다.
   useEffect(() => {
     if (!s || running.current) return;
     const advanceNow = s.phase === "interview" && s.awaitingAdvance;
-    // 현재 상태를 고르기 전에는 결과지 초안 만들기를 시작하지 않는다(그 선택이 결과지 내용에 들어간다)
-    const finalizeNow = s.phase === "finalizing" && Boolean(s.situation);
-    if (!advanceNow && !finalizeNow) return;
+    if (!advanceNow) return;
 
     running.current = true;
-    const delay = advanceNow ? 1400 : 0; // 마무리 인사를 읽을 시간
     const t = setTimeout(async () => {
       setError("");
       try {
-        const next = await api(`${base}/${advanceNow ? "advance" : "finalize"}`, { method: "POST" });
-        setS(next);
+        setS(await api(`${base}/advance`, { method: "POST" }));
       } catch (e) {
         setError(e instanceof Error ? e.message : "잠시 문제가 생겼어요.");
-        // 결과지 초안은 참가자에게 안 보이는 뒷단계라, 실패하면 조용히 두 번까지만 다시 시도한다.
-        // (그래도 안 되면 운영자가 review 스크립트로 이어서 마무리한다.)
-        if (finalizeNow && quietRetries.current < 2) {
-          quietRetries.current += 1;
-          setTimeout(() => setRetry((n) => n + 1), 20000);
-        }
       } finally {
         running.current = false;
       }
-    }, delay);
+    }, 1400); // 마무리 인사를 읽을 시간
     return () => {
       clearTimeout(t);
       running.current = false;
