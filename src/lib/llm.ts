@@ -5,13 +5,14 @@ import { EFFORT, MODELS } from "./config";
 import { env } from "./env";
 import type { Session } from "./types";
 
-// 서버에서만 부른다. API 키는 환경변수 ANTHROPIC_API_KEY에서 자동으로 읽는다.
+// 서버에서만 부른다. API 키는 환경변수 LLM_API_KEY(우리 배포 환경의 표준 이름)에서 읽고,
+// 없으면 Anthropic SDK 기본 이름인 ANTHROPIC_API_KEY도 확인한다.
 let client: Anthropic | null = null;
 export function anthropic(): Anthropic {
   if (!client) {
-    const apiKey = env("ANTHROPIC_API_KEY");
+    const apiKey = env("LLM_API_KEY") || env("ANTHROPIC_API_KEY");
     if (!apiKey && !process.env.ANTHROPIC_AUTH_TOKEN) {
-      throw new ConfigError("ANTHROPIC_API_KEY가 설정되지 않았습니다 (.env.local 확인)");
+      throw new ConfigError("LLM_API_KEY(또는 ANTHROPIC_API_KEY)가 설정되지 않았습니다 (.env.local 확인)");
     }
     client = apiKey ? new Anthropic({ apiKey }) : new Anthropic();
   }
