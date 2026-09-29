@@ -9,7 +9,9 @@
 .frame .stage{background:var(--night)}
 .formula{height:240svh;margin-top:-100svh;z-index:3}
 .formula .stage{background:rgba(255,255,255,var(--bgA,1));opacity:var(--in,1)}
-.claim{height:275svh;margin-top:-100lvh;z-index:2}
+/* pointer-events:none: 이 섹션의 실제 높이(275svh)가 아래 겹쳐 쌓인 .cta보다 훨씬 커서,
+   .stage(스크롤 고정된 실제 화면)만 막아서는 이 박스의 남는 빈 공간이 그 아래 시작하기 버튼 클릭을 계속 가로챈다. */
+.claim{height:275svh;margin-top:-100lvh;z-index:2;pointer-events:none}
 .claim .stage{background:var(--paper);opacity:var(--out,1);pointer-events:none}
 
 /* 은하수 사진(Unsplash, Jeremy Thomas)은 검은 바탕에 아주 어둡게 박아 둔다 */
@@ -63,7 +65,7 @@
 .me::before{content:"";position:absolute;inset:0;border-radius:50%;background:#0d0c14;opacity:var(--rise,0)}
 .me em{position:absolute;top:calc(100% + 7px);left:50%;transform:translateX(-50%);font-style:normal;font-size:12px;font-weight:600;color:#8a8598;opacity:calc(1 - var(--rise,0))}
 @media(min-width:700px){.col{top:17svh}}
-@media(prefers-reduced-motion:reduce){.claim{height:auto;margin-top:0}.claim .stage{opacity:1!important;pointer-events:auto}.cta{margin-top:0;height:auto}.ctaStage{position:relative}.claim .stage{position:relative;height:auto;min-height:100svh}.claimCol{position:relative;padding:90px 28px}.dot2{opacity:1!important}.root{margin-top:0}.frame{margin-top:0}.turn,.frame,.formula{height:auto}.stage{position:relative;height:auto;min-height:100svh}.reveal,.word,.times,.formulaSub,.circle{opacity:1!important;transform:none!important}.col{position:relative;top:auto;padding:90px 0}.formulaWrap{position:relative;padding:90px 20px}.dawn{display:none}.formula .stage{background:var(--night)}.frame .sky{opacity:.48}.turn .stage{opacity:1!important}.formula{margin-top:0}.formula .stage{opacity:1}}
+@media(prefers-reduced-motion:reduce){.claim{height:auto;margin-top:0;pointer-events:auto}.claim .stage{opacity:1!important;pointer-events:auto}.cta{margin-top:0;height:auto}.ctaStage{position:relative}.claim .stage{position:relative;height:auto;min-height:100svh}.claimCol{position:relative;padding:90px 28px}.dot2{opacity:1!important}.root{margin-top:0}.frame{margin-top:0}.turn,.frame,.formula{height:auto}.stage{position:relative;height:auto;min-height:100svh}.reveal,.word,.times,.formulaSub,.circle{opacity:1!important;transform:none!important}.col{position:relative;top:auto;padding:90px 0}.formulaWrap{position:relative;padding:90px 20px}.dawn{display:none}.formula .stage{background:var(--night)}.frame .sky{opacity:.48}.turn .stage{opacity:1!important}.formula{margin-top:0}.formula .stage{opacity:1}}
 
 /* 별자리(사진 위) */
 .starmap{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
