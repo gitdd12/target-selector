@@ -1,4 +1,4 @@
-import Landing from "@/components/Landing";
+import LandingV2 from "@/components/LandingV2";
 import { env } from "@/lib/env";
 import { MAX_SESSIONS } from "@/lib/config";
 import { getStore } from "@/lib/store";
@@ -13,5 +13,5 @@ export default async function Home() {
   } catch {
     // 저장소를 못 읽어도 첫 화면은 보여준다(시작할 때 다시 확인됨)
   }
-  return <Landing needsCode={Boolean(env("BETA_CODE"))} contact={env("CONTACT_EMAIL")} full={full} />;
+  return <LandingV2 needsCode={Boolean(env("BETA_CODE"))} contact={env("CONTACT_EMAIL")} full={full} />;
 }
