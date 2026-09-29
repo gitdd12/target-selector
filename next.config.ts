@@ -11,6 +11,9 @@ const nextConfig: NextConfig = {
       "./node_modules/onnxruntime-node/package.json",
       "./node_modules/onnxruntime-node/dist/**/*",
       "./node_modules/onnxruntime-node/bin/napi-v6/linux/x64/**/*",
+      // onnxruntime-node가 require("onnxruntime-common")으로 부르는데, 이것도 자동 추적에 안 잡혀서 같이 넣는다
+      // (안 넣으면 배포에선 "Cannot find module .../onnxruntime-common/..."으로 jobs 단계가 조용히 죽는다).
+      "./node_modules/onnxruntime-common/**/*",
     ],
   },
   outputFileTracingExcludes: {
