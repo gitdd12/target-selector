@@ -1,4 +1,4 @@
-import { approvedPeople, coreBehavior, getObject, getScenes, getValues, legacyCommonWhy, legacyCore, objectNoteParts, overlapLine, toLines } from "./result";
+import { approvedPeople, confirmedObjectNames, coreBehavior, getObject, getScenes, getValues, legacyCommonWhy, legacyCore, objectNoteParts, overlapLine, toLines } from "./result";
 import { CANDIDATE_TEXT, ENDING, EXPLORE_COMMON_WHY, EXPLORE_GROUPS, FIXED_ACTIONS, JOB_TEXT, OBSERVE } from "./frame";
 import { candidateSeen, shownCandidates } from "./explore";
 import { SITUATION_SHORT, type CoreJobs, type JobEntry, type Session } from "./types";
@@ -24,7 +24,9 @@ export function reportToText(s: Session, link?: string): string {
   if (link) parts.push(`결과지는 여기에서 볼 수 있어요\n${link}`);
   if (r.hold_note) parts.push(r.hold_note);
   if (r.cores.length > 0) {
-    parts.push(`가치관 × 코어 × 대상\n${[v.short || v.summary, r.cores.map(coreBehavior).join(" / "), s.targets?.survivors.map((t) => t.name).join(", ") || o?.label].filter(Boolean).join(" × ")}`);
+    // 대상은 경험에서 판정으로 확인된 것을 우선한다(처음 10초 만에 고른 대상은 코어와 안 맞을 수 있다).
+    const object = confirmedObjectNames(s).join(", ") || o?.label || s.targets?.survivors.map((t) => t.name).join(", ");
+    parts.push(`가치관 × 코어 × 대상\n${[v.short || v.summary, r.cores.map(coreBehavior).join(" / "), object].filter(Boolean).join(" × ")}`);
   }
   r.cores.forEach((c, i) => {
     const rel = s.reliability?.[i];

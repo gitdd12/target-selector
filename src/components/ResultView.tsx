@@ -1,4 +1,4 @@
-import { approvedPeople, coreBehavior, getObject, getScenes, getValues, legacyCore, objectNoteParts, splitTarget, toLines } from "@/lib/result";
+import { approvedPeople, confirmedObjectNames, coreBehavior, getObject, getScenes, getValues, legacyCore, objectNoteParts, splitTarget, toLines } from "@/lib/result";
 import { ENDING } from "@/lib/frame";
 import type { Session } from "@/lib/types";
 import JobLists from "./JobLists";
@@ -29,6 +29,9 @@ export default function ResultView({ session, contact, preview = false }: { sess
   const listFor = (i: number) => jobLists.find((x) => x.core === i);
   const nextQ = session.jobPick?.next_question;
   const targetNames = session.targets?.survivors.map((x) => x.name) ?? [];
+  // 공식 줄 맨 끝 대상: 경험에서 판정으로 확인된 대상을 우선한다. 처음 10초 만에 고른 대상(targetNames)은
+  // 경험을 떠올리는 입구일 뿐이라 실제 코어와 전혀 다른 대상일 수 있어, 확인된 게 없을 때만 보여준다.
+  const confirmedObjects = confirmedObjectNames(session);
   const objNote = objectNoteParts(session);
 
   const valuesCards: [string, string, string][] = [
@@ -88,8 +91,18 @@ export default function ResultView({ session, contact, preview = false }: { sess
               </div>
               <span className={styles.times}>×</span>
               <div className={`${styles.slot} ${styles.slotObject}`}>
-                <span className={styles.slotLabel}>고른 대상</span>
-                {targetNames.length > 0 ? (
+                <span className={styles.slotLabel}>{confirmedObjects.length > 0 || object?.label ? "확인된 대상" : "고른 대상"}</span>
+                {confirmedObjects.length > 0 ? (
+                  <ul className={`${styles.targetList} ${confirmedObjects.length > 1 ? styles.bulletSlot : ""}`} data-n={Math.min(confirmedObjects.length, 4)}>
+                    {confirmedObjects.map((n) => (
+                      <li key={n}>
+                        <span>{n}</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : object?.label ? (
+                  <span className={styles.slotValue}>{object.label}</span>
+                ) : targetNames.length > 0 ? (
                   <ul className={`${styles.targetList} ${targetNames.length > 1 ? styles.bulletSlot : ""}`} data-n={Math.min(targetNames.length, 4)}>
                     {targetNames.map((n) => {
                       const [main, sub] = splitTarget(n);
@@ -102,7 +115,7 @@ export default function ResultView({ session, contact, preview = false }: { sess
                     })}
                   </ul>
                 ) : (
-                  <span className={styles.slotValue}>{object?.label || "지금은 정하지 않아요"}</span>
+                  <span className={styles.slotValue}>지금은 정하지 않아요</span>
                 )}
               </div>
             </div>

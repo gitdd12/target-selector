@@ -9,6 +9,12 @@ export function getValues(r: Report): Report["values"] {
   return { short: "", summary: "", important: "", hard: "", alive: old, stuck: "" };
 }
 
+// 결과지 맨 위 공식 줄에 쓸 대상: 경험에서 판정으로 확인된 대상(코어마다 objects.confirmed)을 우선한다.
+// 참가자가 인터뷰 시작 전 10초 만에 고른 대상(s.targets)은 경험을 떠올리는 입구일 뿐이라 코어와 안 맞을 수 있다.
+export function confirmedObjectNames(s: Session): string[] {
+  return [...new Set((s.final?.cores ?? []).flatMap((c) => c.objects.confirmed))];
+}
+
 // 예전 결과지(v0.26까지)의 "대상" 칸. 새 결과지에는 없다(대상 안내는 직업 목록 맨 위 한 줄로 옮겼다).
 export function getObject(r: Report): { label: string; note: string } | null {
   const l = r as unknown as LegacyReport & Legacy;
