@@ -1,13 +1,15 @@
 # Vercel 배포에 올리지 않는 것: 로컬 시험 데이터, 비밀 키, 운영 문서와 스크립트
+# 앞에 /를 붙여 저장소 최상위 폴더만 가리킨다(안 붙이면 같은 이름이면 어디에 있든 다 제외되는데,
+# 그래서 실제로 src/app/review, src/app/api/review까지 같이 빠져서 배포에서 /review가 404였다).
 .data
 .env*
 *.pem
 .next
 node_modules
-review
-legacy
-docs
-scripts
-supabase
+/review
+/legacy
+/docs
+/scripts
+/supabase
 tsconfig.tsbuildinfo
 !.env.example
