@@ -2,6 +2,7 @@ import { cached, callJson } from "./llm";
 import { jobsStep, jobWorkSummary } from "./jobfinder";
 import { computeReliability } from "./reliability";
 import { explorePlan, shownCandidates } from "./explore";
+import { getStore, save } from "./store";
 import type { TurnResult } from "./interview";
 import {
   celebSystem,
@@ -24,6 +25,7 @@ import {
   WINDOW_ORDER,
   EXP_WINDOWS,
   isExpWindow,
+  type ChatMessage,
   type ExperienceFields,
   type Session,
   type WindowKind,
@@ -70,61 +72,93 @@ export function chooseExtra(s: Session, choice: "yes" | "no") {
   }
 }
 
-/** 창 하나가 끝난 뒤: 기록 정리(분석)를 하고 다음 창을 연다. 마지막 창이면 결과지 초안 단계로 넘어간다. */
-export async function advance(s: Session) {
+/** 기록 정리(분석) 하나: 판정 기록 AI 호출 결과를 target.records[kind]에 쓰고 로그를 남긴다. */
+async function recordInto(target: Session, kind: WindowKind, messages: ChatMessage[]) {
+  if (isExpWindow(kind)) {
+    const rec = await callJson(
+      "recorder",
+      ExperienceFieldsSchema,
+      [cached(recorderSystem(kind))],
+      recorderUser(kind, messages),
+      target,
+    );
+    rec.status = deriveStatus(rec);
+    target.records[kind] = rec;
+  } else {
+    target.records[kind] = await callJson(
+      "recorder",
+      ValuesFieldsSchema,
+      [cached(recorderSystem(kind))],
+      recorderUser(kind, messages),
+      target,
+    );
+  }
+  logEvent(target, "recorded", kind);
+}
+
+/** 창 하나가 끝난 뒤: 다음 질문으로 이어지는 경우에는 그 창을 먼저 열고, 방금 끝난 창의 기록 정리(AI 호출, 느림)는
+ * 여기서 기다리지 않고 { kind, messages }를 돌려줘서 부른 쪽(advance 라우트)이 응답을 막지 않고 recordWindow로 뒤에서 잇게 한다.
+ * "경험 하나 더" 선택 카드로 멈추거나(같은 창이 그대로라 recorded 값으로 카드가 뜨니 미루면 화면이 멈춰 있다), 인터뷰가
+ * 끝나는 경우(결과지 초안이 이 기록에 바로 의존한다)는 새 질문을 열지 않으니 기다리는 이점이 없어 그 자리에서 끝낸다. */
+export async function advance(s: Session): Promise<{ kind: WindowKind; messages: ChatMessage[] } | null> {
   const kind = s.currentWindow;
   const w = s.windows[kind];
   if (w.status !== "done" && w.status !== "skipped") throw new Error("아직 끝나지 않은 창입니다");
 
-  if (!w.recorded) {
-    const hasUserText = w.messages.some((m) => m.role === "user");
-    // 오용으로 중단된 창은 분석하지 않는다(쓸모없는 입력에 비용을 쓰지 않음)
-    if (w.status === "done" && hasUserText && w.closeReason !== "no_experience" && w.closeReason !== "misuse") {
-      if (isExpWindow(kind)) {
-        const rec = await callJson(
-          "recorder",
-          ExperienceFieldsSchema,
-          [cached(recorderSystem(kind))],
-          recorderUser(kind, w.messages),
-          s,
-        );
-        rec.status = deriveStatus(rec);
-        s.records[kind] = rec;
-      } else {
-        s.records[kind] = await callJson(
-          "recorder",
-          ValuesFieldsSchema,
-          [cached(recorderSystem(kind))],
-          recorderUser(kind, w.messages),
-          s,
-        );
-      }
-      logEvent(s, "recorded", kind);
-    }
+  const hasUserText = w.messages.some((m) => m.role === "user");
+  // 오용으로 중단되거나 아무 말도 안 한 창은 분석하지 않는다(쓸모없는 입력에 비용을 쓰지 않음)
+  const needsRecording =
+    !w.recorded && w.status === "done" && hasUserText && w.closeReason !== "no_experience" && w.closeReason !== "misuse";
+
+  if (kind === "exp2" && !s.flagged && w.status === "done" && w.closeReason !== "no_experience") {
+    if (needsRecording) await recordInto(s, kind, w.messages);
     w.recorded = true;
+    s.extraOffer = "pending";
+    logEvent(s, "extra_offered");
+    return null;
   }
 
   let next = WINDOW_ORDER[WINDOW_ORDER.indexOf(kind) + 1];
   if (kind === "exp2" && !s.flagged) {
-    // 경험 2를 실제로 이야기했으면 "경험 하나 더 이야기하기"를 고를 수 있게 멈춘다(v0.32). 없다고 끝났으면 묻지 않고 건너뛴다.
-    if (w.status === "done" && w.closeReason !== "no_experience") {
-      s.extraOffer = "pending";
-      logEvent(s, "extra_offered");
-      return;
-    }
     skipExtra(s);
     next = "hardship";
   }
+
   if (s.flagged === "misuse") {
     // 오용으로 중단: 결과지 초안을 만들지 않고 종료 화면으로 보낸다
+    if (needsRecording) await recordInto(s, kind, w.messages);
+    w.recorded = true;
     s.phase = "complete";
     s.finalizeStep = "done";
     logEvent(s, "interview_ended_misuse");
-  } else if (next && s.flagged !== "budget") startWindow(s, next);
-  else {
-    s.phase = "finalizing";
-    s.finalizeStep = "judge";
-    logEvent(s, "interview_complete");
+    return null;
+  }
+
+  if (next && s.flagged !== "budget") {
+    if (!needsRecording) w.recorded = true;
+    startWindow(s, next);
+    return needsRecording ? { kind, messages: [...w.messages] } : null;
+  }
+
+  if (needsRecording) await recordInto(s, kind, w.messages);
+  w.recorded = true;
+  s.phase = "finalizing";
+  s.finalizeStep = "judge";
+  logEvent(s, "interview_complete");
+  return null;
+}
+
+/** advance()가 다음 창을 이미 연 뒤, 방금 끝난 창의 대화를 기록 필드로 정리한다(응답을 막지 않고 뒤에서 부른다).
+ * 그 사이 세션이 더 진행됐을 수 있어서 저장 직전에 세션을 다시 읽어와, 이 창의 기록만 그 위에 얹는다. */
+export async function recordWindow(sessionId: string, kind: WindowKind, messages: ChatMessage[]) {
+  try {
+    const fresh = await getStore().get(sessionId);
+    if (!fresh) return;
+    await recordInto(fresh, kind, messages);
+    if (fresh.windows[kind]) fresh.windows[kind].recorded = true;
+    await save(fresh);
+  } catch (e) {
+    console.error("[recordWindow]", kind, e);
   }
 }
 

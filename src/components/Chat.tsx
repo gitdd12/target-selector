@@ -91,8 +91,9 @@ export default function Chat({
   async function submit() {
     const t = text.trim();
     if (!t || sending || closed || pending) return;
+    setText(""); // AI 응답을 기다리지 않고 바로 비워서, 곧장 다음 말을 이어 적을 수 있게 한다
     const ok = await onSend(t);
-    if (ok) setText("");
+    if (!ok) setText(t); // 실패하면 다시 쓰지 않도록 입력창에 되돌려 놓는다
     inputRef.current?.focus(); // 보낸 뒤에도 입력창에 커서를 유지해서 키보드가 내려가지 않게 한다
   }
 
@@ -162,11 +163,11 @@ export default function Chat({
                   <>
                     <div className="restate-hint">다르게 이해한 부분이 있으면 &lsquo;더 할 얘기 있어요&rsquo;로 바로잡아 주세요.</div>
                     <div className="restate-btns">
-                      <button className="btn-primary" disabled={choosing} onClick={() => choose("next")}>
-                        다음 질문으로 넘어갈게요
-                      </button>
-                      <button className="btn-ghost" disabled={choosing} onClick={() => choose("more")}>
+                      <button className="btn-primary" disabled={choosing} onClick={() => choose("more")}>
                         더 할 얘기 있어요
+                      </button>
+                      <button className="btn-ghost" disabled={choosing} onClick={() => choose("next")}>
+                        다음 질문으로 넘어갈게요
                       </button>
                     </div>
                   </>
@@ -183,11 +184,11 @@ export default function Chat({
               <div className="restate-label">경험 하나 더</div>
               <div className="restate-text">더 이야기하고 싶은 경험이 있으면 하나 더 들려주세요. 없으면 다음 질문으로 넘어가도 돼요.</div>
               <div className="restate-btns">
-                <button className="btn-primary" disabled={choosing} onClick={() => chooseExtra("no")}>
-                  다음 질문으로 넘어가기
-                </button>
-                <button className="btn-ghost" disabled={choosing} onClick={() => chooseExtra("yes")}>
+                <button className="btn-primary" disabled={choosing} onClick={() => chooseExtra("yes")}>
                   경험 하나 더 이야기하기
+                </button>
+                <button className="btn-ghost" disabled={choosing} onClick={() => chooseExtra("no")}>
+                  다음 질문으로 넘어가기
                 </button>
               </div>
             </div>
@@ -243,7 +244,6 @@ export default function Chat({
                 onKeyDown={onKeyDown}
                 placeholder="여기에 적어주세요"
                 rows={1}
-                readOnly={sending}
                 enterKeyHint="send"
               />
               <button className="send" onClick={submit} disabled={!text.trim() || sending} aria-label="보내기">
