@@ -6974,6 +6974,12 @@
         "grounded_in": [
           "Negotiate settlements of civil disputes."
         ]
+      },
+      {
+        "text": "법과 규정의 의미를 해석해 개인·기업에게 설명한다",
+        "grounded_in": [
+          "Interpret laws, rulings and regulations for individuals and businesses."
+        ]
       }
     ],
     "confidence": "high"
