@@ -12,6 +12,7 @@ export interface OccupationEssence {
   name: string;
   essences: { text: string; grounded_in: string[] }[];
   confidence: "high" | "medium" | "low";
+  object: string; // 검색용 대상 19개 중 하나(본질 문장 기준으로 한 번만 태깅, §27 설계 로그)
 }
 
 export interface CoreEssenceMatch {
@@ -25,12 +26,24 @@ const BATCH_SIZE = 40;
 const CONCURRENCY = 4;
 
 let essenceData: OccupationEssence[] | null = null;
+let essenceBySoc: Map<string, OccupationEssence> | null = null;
 function loadEssences(): OccupationEssence[] {
   if (!essenceData) {
     const p = path.join(process.cwd(), "data", "onet31", "occupation_essence.json");
     essenceData = JSON.parse(fs.readFileSync(p, "utf8")) as OccupationEssence[];
   }
   return essenceData;
+}
+
+/** soc로 본질 데이터 하나를 찾는다(직업 목록 작성 시 설명·대상 태그를 가져오는 용도). */
+export function getEssence(soc: string): OccupationEssence | undefined {
+  if (!essenceBySoc) essenceBySoc = new Map(loadEssences().map((o) => [o.soc, o]));
+  return essenceBySoc.get(soc);
+}
+
+/** 이 직업의 본질 문장을 사람이 읽을 한 덩어리로("desc"에 쓸 설명). */
+export function essenceDesc(soc: string): string {
+  return getEssence(soc)?.essences.map((e) => e.text).join(" / ") ?? "";
 }
 
 const MatchSchema = z.object({
@@ -140,6 +153,10 @@ async function pool<T>(items: T[], limit: number, fn: (x: T) => Promise<void>) {
 }
 
 /** 코어 하나를 직업 916개 전체의 본질과 비교해 유사도 순으로 정렬한 목록을 돌려준다. */
+export function matchRulesText(): string {
+  return MATCH_RULES;
+}
+
 export async function matchCoreToEssences(behavior: Behavior, s?: Session): Promise<CoreEssenceMatch[]> {
   const all = loadEssences();
   const batches: OccupationEssence[][] = [];

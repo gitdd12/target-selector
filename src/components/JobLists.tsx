@@ -1,15 +1,13 @@
 import { JOB_TEXT } from "@/lib/frame";
-import { overlapLine } from "@/lib/result";
 import type { CoreJobs, JobEntry } from "@/lib/types";
 import styles from "./ResultView.module.css";
 
-// 코어 칸 안의 직업 목록(결과지 v0.28). 직업 한 줄 = 이름 + 일치도 %(이름 바로 옆) / 한 줄 설명 / 내 코어와 겹치는 업무.
-// 겹치는 업무는 그 직업의 실제 업무(O*NET)에서 판정 AI가 짚은 구절을 번역한 것이라 AI가 새로 쓴 문장이 아니다.
-// 일치도는 초록 배경의 진하기로 네 단계를 보여준다(80 이상 / 60 이상 / 40 이상 / 그 아래). 20 미만은 보여주지 않는다.
+// 코어 칸 안의 직업 목록(결과지 v0.28, 본질 유사도 방식으로 교체). 직업 한 줄 = 이름 + 일치도 %(이름 바로 옆) / 이 직업의 본질 업무.
+// 본질 업무는 O*NET 업무를 기반으로 재생성한 문장이라, AI가 그 자리에서 새로 지어낸 설명이 아니다.
+// 일치도는 초록 배경의 진하기로 네 단계를 보여준다(80 이상 / 60 이상 / 40 이상 / 그 아래). 45 미만은 보여주지 않는다.
 const tierOf = (m: number) => (m >= 80 ? 4 : m >= 60 ? 3 : m >= 40 ? 2 : 1);
 
 function Job({ j }: { j: JobEntry }) {
-  const overlap = overlapLine(j.evidence[0]);
   return (
     <div className={styles.jobRow}>
       <div className={styles.jobHead}>
@@ -20,11 +18,6 @@ function Job({ j }: { j: JobEntry }) {
         {j.both && <em className={styles.jobBoth}>{JOB_TEXT.both}</em>}
       </div>
       {j.desc && <p className={styles.jobDesc}>{j.desc}</p>}
-      {overlap && (
-        <p className={styles.jobOverlap}>
-          <span>{JOB_TEXT.overlap}</span> {overlap}
-        </p>
-      )}
     </div>
   );
 }

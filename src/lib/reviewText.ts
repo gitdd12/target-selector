@@ -1,13 +1,10 @@
-import { approvedPeople, confirmedObjectNames, coreBehavior, getObject, getScenes, getValues, legacyCommonWhy, legacyCore, objectNoteParts, overlapLine, toLines } from "./result";
+import { approvedPeople, confirmedObjectNames, coreBehavior, getObject, getScenes, getValues, legacyCommonWhy, legacyCore, objectNoteParts, toLines } from "./result";
 import { CANDIDATE_TEXT, ENDING, EXPLORE_COMMON_WHY, EXPLORE_GROUPS, FIXED_ACTIONS, JOB_TEXT, OBSERVE } from "./frame";
 import { candidateSeen, shownCandidates } from "./explore";
 import { SITUATION_SHORT, type CoreJobs, type JobEntry, type Session } from "./types";
 
 function jobsText(c: CoreJobs, first: boolean): string {
-  const row = (j: JobEntry) => {
-    const o = overlapLine(j.evidence[0]);
-    return `- ${j.name} (${JOB_TEXT.match} ${j.match}%)${j.both ? ` · ${JOB_TEXT.both}` : ""}\n  ${j.desc}${o ? `\n  ${JOB_TEXT.overlap} · ${o}` : ""}`;
-  };
+  const row = (j: JobEntry) => `- ${j.name} (${JOB_TEXT.match} ${j.match}%)${j.both ? ` · ${JOB_TEXT.both}` : ""}\n  ${j.desc}`;
   const keep = (l: JobEntry[]) => l.filter((j) => j.match >= 20); // 옛 세션용(새 세션은 만들 때 걸러짐)
   const group = (title: string, list: JobEntry[]) => `${title}\n${keep(list).length ? keep(list).map(row).join("\n") : JOB_TEXT.empty}`;
   const notes = first ? `\n${JOB_TEXT.objectNote}` : "";

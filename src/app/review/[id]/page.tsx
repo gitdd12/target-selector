@@ -196,7 +196,7 @@ export default async function ReviewDetail({ params }: { params: Promise<{ id: s
                   {jobWorkSummary(s.jobWork)}
                   {s.jobWork.cores.map((w, i) => (
                     <div key={i} style={{ marginTop: 6 }}>
-                      코어 {i + 1} 검색 문장: {(w.queries ?? []).map((q) => `[${q.object}] ${q.text}`).join(" · ")}
+                      코어 {i + 1} 매칭 결과: {(w.matches ?? []).length}개
                     </div>
                   ))}
                 </div>

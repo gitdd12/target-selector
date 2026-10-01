@@ -82,10 +82,10 @@ async function build(id: string) {
         "",
         "### 직업 목록",
         jobWorkSummary(s.jobWork) || "(없음)",
-        ...(s.jobWork?.cores ?? []).map((w, i) => `- 코어 ${i + 1} 검색 문장: ${(w.queries ?? []).map((q) => `[${q.object}] ${q.text}`).join(" · ")}`),
+        ...(s.jobWork?.cores ?? []).map((w, i) => `- 코어 ${i + 1} 매칭: ${(w.matches ?? []).length}개`),
         ...(s.jobLists ?? []).flatMap((c) =>
           [...c.confirmed.map((j) => ["A", j] as const), ...c.other.map((j) => ["B", j] as const)].map(
-            ([k, j]) => `- 코어 ${c.core + 1} ${k} ${j.soc} ${j.name} ${j.match} (${(j.score * 100).toFixed(1)}%, ${j.object})`,
+            ([k, j]) => `- 코어 ${c.core + 1} ${k} ${j.soc} ${j.name} ${j.match}% (${j.object})`,
           ),
         ),
         ...(s.jobPick ? ["", "예전 방식 AI가 제외한 직업:", (s.jobPick.excluded ?? []).map((e) => `- ${e.code}: ${e.reason}`).join("\n") || "(없음)"] : []),

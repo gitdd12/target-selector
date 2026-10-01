@@ -24,8 +24,6 @@ export const SEARCH_OBJECTS = [
   "몸·건강",
 ] as const;
 export type SearchObject = (typeof SEARCH_OBJECTS)[number];
-// 대상을 넣지 않은 검색 문장(19개에 없는 대상을 잡는 안전망)
-export const NO_OBJECT = "대상 없음";
 
 // 인터뷰 끝에 팝업에서 고르는 현재 상태(셋 중 하나)
 export const SITUATIONS = ["working", "applying", "exploring"] as const;
@@ -375,47 +373,31 @@ export interface JobCandidate {
   gap: number;
 }
 
-// ── 직업 목록(새 방식, docs/직업추천_재설계) ─────────────────────
-// 업무 문장 판정 하나. 문장은 data/onet31/task_emb_texts.json의 순번(i)으로 가리킨다.
-export interface TaskJudgment {
-  s: number; // 강도(0 / 0.3 / 0.5 / 0.7 / 1)
-  f: number; // 몫(0~1)
-  o: string; // 이 업무의 대상(검색용 19개 중 하나 또는 대상 없음)
-  q: string; // 행동에 해당하는 구절(원문 그대로). 0점이면 빈 문자열
-}
-
+// ── 직업 목록(본질 유사도 방식, docs/직업매칭_본질기반_재설계_2026-09-30.md) ─────────────────────
 export interface JobEntry {
   soc: string;
   name: string; // 한국어 이름
-  desc: string; // 한 줄 설명
-  score: number; // 직업 점수(그 직업이 하는 일 중 이 행동이 차지하는 비중)
-  match: number; // 일치도(0~100)
-  object: string; // 이 직업의 대상(점수에 가장 많이 기여한 대상)
-  both?: boolean; // 두 코어 모두에서 쓰이는 일
-  evidence: { text: string; quote: string; ko?: string }[]; // 재확인을 통과한 근거 업무(원문, 구절, 번역)
+  desc: string; // 이 직업의 본질 문장(들), O*NET 기반으로 재생성됨(occupation_essence.json)
+  match: number; // 코어×본질 유사도(0~95)
+  object: string; // 이 직업의 대상(본질 기준으로 미리 태깅됨, 19개 중 하나)
+  both?: boolean; // 두 코어 모두에서 쓰이는 일(점수 높은 코어 쪽에만 남김)
 }
 
 export interface CoreJobs {
   core: number; // final.cores 순번(0부터)
   confirmed: JobEntry[]; // 확인된 대상에서 이어지는 일(A)
   other: JobEntry[]; // 아직 확인 안 된 대상에서 쓰이는 일(B−A)
-  // 직접 해 보기 후보: 아직 확인 안 된 대상마다 1등 직업(일치도 순)
+  // 직접 해 보기 후보: 아직 확인 안 된 대상마다 1등 직업(일치도 순, 문턱 이상만)
   exploreObjects: { object: string; soc: string; name: string; match: number }[];
 }
 
-// 직업 목록 만들기의 중간 상태(여러 번에 나눠 진행해도 이어서 하도록 세션에 저장)
+// 직업 목록 만들기의 중간 상태(코어마다 매칭을 한 번만 돌리면 되므로 단순함)
 export interface JobWork {
   cores: {
-    queries?: { object: string; text: string }[];
-    pending: number[]; // 아직 판정 안 한 문장 순번
-    judged: Record<number, TaskJudgment>; // 점수가 있는 판정
-    zero: number[]; // 0점으로 판정한 문장
-    expanded: boolean; // 후보 직업 확장을 했는지
-    lists?: { confirmed: string[]; other: string[] }; // 근거 재확인 전 후보 순서(직업 코드)
+    matches?: { soc: string; name: string; match: number }[]; // matchCoreToEssences 결과(일치도 순)
   }[];
-  stage: "search" | "judge" | "lists" | "evidence" | "translate" | "done";
+  stage: "match" | "lists" | "done";
   both?: string[]; // 두 코어 모두에 걸린 직업 코드
-  recheck?: Record<number, boolean>; // 근거 재확인 결과(문장 순번 → 통과 여부)
 }
 
 // finalizing: 인터뷰 끝, 이메일을 받으며 결과지 초안을 만드는 중 / complete: 초안 생성까지 끝남

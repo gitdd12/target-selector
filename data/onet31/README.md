@@ -6,7 +6,7 @@
 - 다시 만들기: `pip install openpyxl` 후 `python3 scripts/build_onet31.py <엑셀 폴더>`. 폴더에는 O*NET 31.0 엑셀 다운로드 파일과 `Job Zones.xlsx`, `Job Zone Reference.xlsx`가 있어야 한다.
 - 설계 문서: `docs/직업추천_재설계_2026-09-25.md`
 
-아직 앱 코드는 이 폴더를 쓰지 않는다. 현재 직업 추천은 `data/`의 기존 파일(`occ_core_scores_hybrid_v2.csv`, `hybrid_mapping_v2.csv`, `onet_tasks.json`)을 쓴다.
+2026-09-30부터 직업 추천은 업무 문장 커버리지 방식(`src/lib/onet31.ts`, `src/lib/embed.ts`, `tasks.json`, `task_emb_*`)을 버리고 "본질 유사도" 방식(`src/lib/coreEssenceMatch.ts`, `occupation_essence.json`)으로 바뀌었다 — 설계 로그는 `docs/직업매칭_본질기반_재설계_2026-09-30.md`. 그 두 모듈은 삭제됐다. `tasks.json`·`task_emb_*`·`dwas.json`은 더 이상 앱이 안 쓰지만, 본질 문장이 O*NET 원문을 빠뜨리지 않았는지 재확인할 때(완전성 검증, 위 로그 §25-26) 여전히 참고용으로 쓰므로 지우지 않았다.
 
 ## 파일
 
@@ -41,6 +41,6 @@
 ## 업무 임베딩 (2026-09-26)
 
 - 만든 방법: sentence-transformers로 `intfloat/e5-base-v2`를 불러 `tasks.json`의 고유 문장(가나다·ABC 정렬)마다 `"passage: " + 문장`을 임베딩하고 길이 1로 맞춘 뒤 float16으로 저장했다.
-- 앱은 검색 문장만 실행 중에 임베딩한다(`src/lib/embed.ts`, 같은 모델의 ONNX 변환본 `Xenova/e5-base-v2` fp16, 앞에 `"query: "`).
+- (2026-09-30 이후 더 안 씀) 당시엔 검색 문장만 실행 중에 임베딩했다(`src/lib/embed.ts`, 같은 모델의 ONNX 변환본 `Xenova/e5-base-v2` fp16, 앞에 `"query: "`) — 이 모듈은 삭제됐다.
 - 확인: 시험 검색 문장 65개에서 앱 쪽 검색 결과 상위 30개가 원래 모델(fp32) 결과와 평균 99.95% 같았다. 8비트 양자화 모델(q8)은 89%로 떨어져 쓰지 않는다.
 - 모델을 바꾸면 이 파일도 같은 모델로 다시 만들어야 한다. 업무 임베딩과 검색 임베딩은 같은 모델이어야 한다.
