@@ -12,7 +12,7 @@ export interface OccupationEssence {
   name: string;
   essences: { text: string; grounded_in: string[] }[];
   confidence: "high" | "medium" | "low";
-  object: string; // 검색용 대상 19개 중 하나(본질 문장 기준으로 한 번만 태깅, §27 설계 로그)
+  object: string; // 검색용 대상 18개 중 하나(본질 문장 기준으로 한 번만 태깅, §27·§31 설계 로그)
 }
 
 export interface CoreEssenceMatch {

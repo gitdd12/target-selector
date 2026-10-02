@@ -1,6 +1,8 @@
 import { z } from "zod";
 
-// 직업 검색용 대상 19개(docs/직업추천_재설계 1-1). 앞 15개는 10초 선택 화면의 대상, 뒤 4개는 검색 전용.
+// 직업 검색용 대상 18개(docs/직업추천_재설계 1-1, 2026-10-02에 "몸·건강"을 "신체"에 합쳐 19→18 —
+// 두 칸의 경계가 실제 태깅에서 반복적으로 애매했음, docs/직업매칭_본질기반_재설계_2026-09-30.md §31).
+// 앞 15개는 10초 선택 화면의 대상, 뒤 3개는 검색 전용.
 // 판정 단계가 업무마다 이 중 하나를 표시하고, 확인된 대상(A 목록)도 이 이름으로 적는다.
 export const SEARCH_OBJECTS = [
   "신체",
@@ -21,7 +23,6 @@ export const SEARCH_OBJECTS = [
   "일정·절차",
   "돈·재무",
   "조직·프로젝트",
-  "몸·건강",
 ] as const;
 export type SearchObject = (typeof SEARCH_OBJECTS)[number];
 
@@ -229,7 +230,7 @@ export const FinalJudgmentSchema = z.object({
         experience: z.string().describe("이 코어가 실제로 나온 대상(사용자 표현). 반복으로 확인된 다른 대상도 함께"),
         confirmed: z
           .array(z.enum(SEARCH_OBJECTS))
-          .describe("확인된 대상: 경험의 대상 + 반복으로 확인된 다른 대상을 검색용 대상 19개로 옮긴 것(중복 없이)"),
+          .describe("확인된 대상: 경험의 대상 + 반복으로 확인된 다른 대상을 검색용 대상 18개로 옮긴 것(중복 없이)"),
       }),
     }),
   ),
@@ -379,7 +380,7 @@ export interface JobEntry {
   name: string; // 한국어 이름
   desc: string; // 이 직업의 본질 문장(들), O*NET 기반으로 재생성됨(occupation_essence.json)
   match: number; // 코어×본질 유사도(0~95)
-  object: string; // 이 직업의 대상(본질 기준으로 미리 태깅됨, 19개 중 하나)
+  object: string; // 이 직업의 대상(본질 기준으로 미리 태깅됨, 18개 중 하나)
   both?: boolean; // 두 코어 모두에서 쓰이는 일(점수 높은 코어 쪽에만 남김)
 }
 

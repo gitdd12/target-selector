@@ -2,7 +2,7 @@ import type { Target } from "./types";
 
 // index.html의 대상 15개와 척도 문구를 그대로 가져왔다.
 export const TARGET_LIST: Target[] = [
-  { id: 1, category: "물질", name: "신체 (움직임, 자세, 체력)" },
+  { id: 1, category: "물질", name: "신체 (움직임, 자세, 체력, 건강)" },
   { id: 2, category: "물질", name: "재료 (음식, 나무, 천, 흙, 금속)" },
   { id: 3, category: "물질", name: "기계·장비 (가전, 차량, 공구, 설비)" },
   { id: 4, category: "물질", name: "공간 (방, 매장, 건물, 무대)" },
