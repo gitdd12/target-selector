@@ -379,9 +379,12 @@ export interface JobEntry {
   soc: string;
   name: string; // 한국어 이름
   desc: string; // 이 직업의 본질 문장(들), O*NET 기반으로 재생성됨(occupation_essence.json)
-  match: number; // 코어×본질 유사도(0~95)
+  match: number; // 코어×본질 유사도(0~95). 가치관 단계에서 내렸으면 내린 뒤의 값
   object: string; // 이 직업의 대상(본질 기준으로 미리 태깅됨, 18개 중 하나)
   both?: boolean; // 두 코어 모두에서 쓰이는 일(점수 높은 코어 쪽에만 남김)
+  // 가치관 판정(§32, 아직 미검증)이 명백한 충돌/부합으로 영향을 줬을 때만. 애매하거나 데이터가 없으면 없음
+  valuesFit?: "안맞음" | "잘맞음";
+  valuesNote?: string;
 }
 
 export interface CoreJobs {
@@ -395,7 +398,8 @@ export interface CoreJobs {
 // 직업 목록 만들기의 중간 상태(코어마다 매칭을 한 번만 돌리면 되므로 단순함)
 export interface JobWork {
   cores: {
-    matches?: { soc: string; name: string; match: number }[]; // matchCoreToEssences 결과(일치도 순)
+    // matchCoreToEssences 결과(일치도 순). valuesFit/valuesNote는 §32 가치관 판정이 영향을 줬을 때만
+    matches?: { soc: string; name: string; match: number; valuesFit?: "안맞음" | "잘맞음"; valuesNote?: string }[];
   }[];
   stage: "match" | "lists" | "done";
   both?: string[]; // 두 코어 모두에 걸린 직업 코드

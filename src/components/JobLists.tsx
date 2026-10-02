@@ -5,6 +5,7 @@ import styles from "./ResultView.module.css";
 // 코어 칸 안의 직업 목록(결과지 v0.28, 본질 유사도 방식으로 교체). 직업 한 줄 = 이름 + 일치도 %(이름 바로 옆) / 이 직업의 본질 업무.
 // 본질 업무는 O*NET 업무를 기반으로 재생성한 문장이라, AI가 그 자리에서 새로 지어낸 설명이 아니다.
 // 일치도는 초록 배경의 진하기로 네 단계를 보여준다(80 이상 / 60 이상 / 40 이상 / 그 아래). 45 미만은 보여주지 않는다.
+// 가치관이 명백히 영향을 줬을 때만(§32, 미검증) 한 줄 더 보여준다 — 안 맞음(주황)/잘 맞음(초록).
 const tierOf = (m: number) => (m >= 80 ? 4 : m >= 60 ? 3 : m >= 40 ? 2 : 1);
 
 function Job({ j }: { j: JobEntry }) {
@@ -18,6 +19,11 @@ function Job({ j }: { j: JobEntry }) {
         {j.both && <em className={styles.jobBoth}>{JOB_TEXT.both}</em>}
       </div>
       {j.desc && <p className={styles.jobDesc}>{j.desc}</p>}
+      {j.valuesNote && (
+        <p className={styles.jobValues} data-tone={j.valuesFit === "안맞음" ? "caution" : "fit"}>
+          {j.valuesNote}
+        </p>
+      )}
     </div>
   );
 }

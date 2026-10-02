@@ -195,6 +195,9 @@
 .jobMatch[data-tier="3"]{--mbg:#c6e8d3;--mfg:#1d5a37}
 .jobMatch[data-tier="4"]{--mbg:#2f8a57;--mfg:#fff}
 .jobEmpty{margin:8px 0 0;font-size:15px;line-height:1.65;color:var(--dim)}
+.jobValues{margin:2px 0 0;font-size:13px;line-height:1.5;word-break:keep-all}
+.jobValues[data-tone="caution"]{color:#9a4a0b}
+.jobValues[data-tone="fit"]{color:#1d5a37}
 .coreJobs{margin-top:34px}
 .coreJobsTitle{margin:0;font-size:18px;font-weight:740;letter-spacing:-.04em;line-height:1.45;word-break:keep-all}
 .doObject{display:inline-block;margin-bottom:4px;padding:2px 8px;border-radius:8px;background:var(--card);font-size:12.5px;font-weight:700;color:var(--soft)}

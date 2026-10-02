@@ -26,6 +26,8 @@ export interface CoreEssenceMatch {
   name: string;
   match: number; // 0~95
   reasoning: string;
+  valuesEffect: "" | "안맞음" | "잘맞음"; // 가치관 단계(§32, 미검증)가 영향을 줬는지. 빈 문자열이면 영향 없음
+  valuesNote: string; // valuesEffect가 있을 때만 사용자에게 보여줄 한 줄. 없으면 빈 문자열
 }
 
 const BATCH_SIZE = 40;
@@ -56,8 +58,12 @@ const MatchSchema = z.object({
   items: z.array(
     z.object({
       n: z.number().int().describe("판정할 직업 번호"),
-      match: z.number().int().min(0).max(95).describe("코어와 이 직업 본질의 유사도(0~95, 100은 과장이라 안 씀)"),
+      match: z.number().int().min(0).max(95).describe("코어와 이 직업 본질의 유사도(0~95, 100은 과장이라 안 씀). 가치관 단계에서 점수를 내렸으면 내린 뒤의 값"),
       reasoning: z.string().describe("왜 이 점수인지 한 문장(근거로 쓴 본질 문장 구절 포함)"),
+      values_effect: z
+        .enum(["", "안맞음", "잘맞음"])
+        .describe("가치관 판정(§32) 결과. 명백한 충돌로 점수를 내렸으면 '안맞음', 명백히 잘 맞아서 표시만 했으면 '잘맞음'(점수는 안 바꿈), 애매하거나 데이터가 없거나 코어와 겹치면 빈 문자열(이때는 values_note도 항상 빈 문자열)"),
+      values_note: z.string().describe("values_effect가 빈 문자열이 아닐 때만: 사용자에게 그대로 보여줄 한 줄(해요체). 왜 안 맞을 수 있는지 / 왜 잘 맞는지"),
     }),
   ),
 });
@@ -135,18 +141,42 @@ const MATCH_RULES = `당신은 "코어 찾기"의 코어-직업 유사도 판정
 **같은 코어, 다른 도메인 — shape가 리터럴 재질이 아니라 구조로 비교된다는 걸 보여주는 예시**
 - "큰 그림에서 여러 요소가 어떻게 맞물리는지 구조를 파악한다" × 시스템 아키텍트(본질: "요구사항을 파악해 시스템 전체 구조(하드웨어·소프트웨어 구성요소)를 설계하고 안정성·보안·확장성을 검증한다") → 94, × 공급망 관리자(본질: "자재·재고 흐름(구매, 창고, 보관, 운송)을 계획하고 최적화한다") → 78. 도메인(소프트웨어·하드웨어 vs 구매·물류)이 완전히 다른데도 "여러 상호의존 요소를 조율해 전체를 이룬다"는 구조가 같아서 둘 다 높음.
 
+## 가치관 판정 (§32 — 아직 실물 사례로 검증 안 됨, 그래서 보수적으로만 쓴다)
+이 사람의 가치관 신호(behaviorBlock 뒤에 "이 사람의 가치관" 섹션으로 옴)와 이 직업의 환경 데이터([환경: ...], 코드는 아래 범례)가 **둘 다 있을 때만** 본다. 하나라도 없으면 이 단계를 건너뛰고 1~7단계 점수를 그대로 쓴다(values_effect는 빈 문자열).
+- **명백한 충돌**(가치관 신호가 이 직업 환경의 뚜렷한 특징과 같은 축에서 정반대 방향을 명시적으로 말할 때만 — 반상관과 같은 엄격함으로 본다, 조금이라도 애매하면 해당 안 됨): 1~7단계로 나온 점수를 한 단계 아래 밴드로 내린다(예: 70~88이었으면 45~65로). values_effect="안맞음", values_note에 왜 이 직업이 안 맞을 수 있는지 한 문장.
+- **명백한 부합**(가치관 신호가 이 직업 환경의 뚜렷한 특징과 뚜렷하게 맞아떨어질 때만): 점수는 바꾸지 않는다 — 가치관이 잘 맞는다고 코어 부족분을 메우지 않는다. values_effect="잘맞음", values_note에 왜 잘 맞는지 한 문장.
+- **그 사이 애매한 경우, 가치관 신호가 코어·본질과 이미 겹치는 내용인 경우(예: 코어 자체가 "가르치고 돕는 걸 좋아한다"인데 가치관도 같은 얘기 — 중복이라 더 보여줄 정보가 없음)**: 아무것도 안 한다. values_effect="", values_note="". 점수를 미세하게 조정하지 않는다 — 명백한 충돌/부합 둘 중 하나가 아니면 전부 이쪽으로 처리한다.
+
+## 직업 환경 데이터 범례 (가치관 판정에만 쓴다. O*NET Work Styles·Work Context, §32)
+Work Styles(그 직업에 요구되는 성향, 대략 -1.5~3, 높을수록 더 요구됨): INV 혁신성 · ACH 성취지향 · ICU 지적호기심 · AMB 모호함에 대한 포용력 · INI 주도성 · ADP 적응력 · CNF 자신감 · PRS 인내력 · LED 리더십지향 · HUM 겸손 · SIN 진솔함 · EMP 공감 · COO 협조성 · OPT 낙관성 · SOC 사교성 · CAU 신중함 · ATD 세부사항 주의 · DEP 신뢰성(맡은 일을 믿고 맡길 수 있음) · INT 정직성·윤리성 · STR 스트레스 내구력 · SCT 자기통제
+Work Context(근무 환경, 1~5, 높을수록 그 요소가 강하거나 자주 나타남 — SCHED·DUR만 예외): COW 사람과의 접촉 빈도 · TEAM 팀 단위 작업 정도 · CUST 외부 고객 상대 · LEADO 타인 조율·리드 정도 · CONF 갈등 상황 빈도 · UNPL 무례하거나 화난 사람 상대 빈도 · IMPACT 이 결정이 동료·회사 결과에 미치는 영향 · FREQ 의사결정 빈도 · FREE 스스로 결정하는 자유 · GOALS 과업·목표를 스스로 정하는 정도 · COMP 경쟁 정도 · TIME 시간 압박 · PACE 장비 속도에 맞춰야 하는 정도 · ERR 실수의 심각성 · EXACT 정확함이 중요한 정도 · REPEAT 같은 일 반복 정도 · SCHED 근무 일정 유형(1=규칙적 고정, 2=날씨·수요에 따라 불규칙, 3=계절에만 일함) · DUR 주당 근무시간(1=40시간 미만, 2=40시간 내외, 3=40시간 초과)
+
 ## 출력
 - 주어진 모든 직업에 대해 판정합니다(건너뛰지 않습니다). reasoning에는 근거로 쓴 본질 문장의 핵심 구절을 짧게 인용합니다.`;
 
-function behaviorBlock(b: Behavior): string {
-  return `## 이 사람의 코어(행동 방식)\n- 동작: ${b.action}\n- 다루는 것의 모양: ${b.shape}\n- 영어로: ${b.en}`;
+// 가치관 원문(힘들었던 경험·조언 창에서 나온 values_signal). 둘 다 없으면 가치관 판정은 건너뛴다(§32).
+function valuesBlock(s?: Session): string {
+  const lines = [s?.records.hardship?.values_signal, s?.records.advice?.values_signal].filter(Boolean);
+  if (!lines.length) return "";
+  return `\n\n## 이 사람의 가치관(참고 — 모든 직업 판정에 똑같이 적용)\n${lines.map((l) => `- ${l}`).join("\n")}`;
 }
 
-function batchUser(b: Behavior, occs: OccupationEssence[]): string {
+function behaviorBlock(b: Behavior, s?: Session): string {
+  return `## 이 사람의 코어(행동 방식)\n- 동작: ${b.action}\n- 다루는 것의 모양: ${b.shape}\n- 영어로: ${b.en}${valuesBlock(s)}`;
+}
+
+// 직업의 환경 데이터(가치관 판정용, §32). 둘 다 없는 직업(916개 중 일부)은 빈 문자열.
+function envLine(o: OccupationEssence): string {
+  const fmt = (m?: Record<string, number>) => (m ? Object.entries(m).map(([k, v]) => `${k}:${v}`).join(" ") : "");
+  const parts = [fmt(o.work_styles), fmt(o.work_context)].filter(Boolean);
+  return parts.length ? ` [환경: ${parts.join(" / ")}]` : "";
+}
+
+function batchUser(b: Behavior, occs: OccupationEssence[], s?: Session): string {
   const list = occs
-    .map((o, i) => `${i + 1}. [${o.name}] 본질: ${o.essences.map((e) => e.text).join(" / ")}`)
+    .map((o, i) => `${i + 1}. [${o.name}] 본질: ${o.essences.map((e) => e.text).join(" / ")}${envLine(o)}`)
     .join("\n");
-  return `${behaviorBlock(b)}\n\n## 판정할 직업들\n${list}\n\n각 직업에 match(0~95)와 reasoning을 매기세요.`;
+  return `${behaviorBlock(b, s)}\n\n## 판정할 직업들\n${list}\n\n각 직업에 match(0~95)·reasoning·values_effect·values_note를 매기세요.`;
 }
 
 async function pool<T>(items: T[], limit: number, fn: (x: T) => Promise<void>) {
@@ -170,11 +200,18 @@ export async function matchCoreToEssences(behavior: Behavior, s?: Session): Prom
 
   const results: CoreEssenceMatch[] = [];
   await pool(batches, CONCURRENCY, async (batch) => {
-    const out = await callJson("jobs", MatchSchema, [cached(MATCH_RULES)], batchUser(behavior, batch), s);
+    const out = await callJson("jobs", MatchSchema, [cached(MATCH_RULES)], batchUser(behavior, batch, s), s);
     for (const it of out.items) {
       const occ = batch[it.n - 1];
       if (!occ) continue;
-      results.push({ soc: occ.soc, name: occ.name, match: it.match, reasoning: it.reasoning });
+      results.push({
+        soc: occ.soc,
+        name: occ.name,
+        match: it.match,
+        reasoning: it.reasoning,
+        valuesEffect: it.values_effect,
+        valuesNote: it.values_note,
+      });
     }
   });
 

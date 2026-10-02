@@ -21,6 +21,8 @@ interface Scored {
   name: string;
   match: number;
   object: string;
+  valuesFit?: "안맞음" | "잘맞음";
+  valuesNote?: string;
 }
 
 /** w.matches(일치도 순으로 이미 정렬됨)에 사전 태깅된 대상을 붙이고 문턱으로 거른다. */
@@ -40,7 +42,12 @@ async function matchStage(s: Session) {
     if (w.matches) continue;
     const b: Behavior = cores[ci].behavior;
     const out = await matchCoreToEssences(b, s);
-    w.matches = out.map((m) => ({ soc: m.soc, name: m.name, match: m.match }));
+    w.matches = out.map((m) => ({
+      soc: m.soc,
+      name: m.name,
+      match: m.match,
+      ...(m.valuesEffect ? { valuesFit: m.valuesEffect, valuesNote: m.valuesNote } : {}),
+    }));
   }
   work.stage = "lists";
 }
@@ -88,6 +95,7 @@ function listsStage(s: Session) {
       match: o.match,
       object: o.object,
       ...(work.both?.includes(o.soc) ? { both: true } : {}),
+      ...(o.valuesFit ? { valuesFit: o.valuesFit, valuesNote: o.valuesNote } : {}),
     });
     const confirmedJobs = confirmedList.slice(0, size).map(toEntry);
     const otherJobs = otherList.slice(0, size).map(toEntry);
