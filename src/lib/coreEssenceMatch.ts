@@ -1,6 +1,8 @@
 // 코어×직업 "본질 유사도" 매칭(재설계, docs/직업매칭_본질기반_재설계_2026-09-30.md 참고).
 // 업무 문장 커버리지 대신, 코어(행동 방식, HOW)를 직업의 본질(1~3문장, data/onet31/occupation_essence.json)과
-// 직접 비교해 유사도를 판정한다. 아직 "코어" 축만 다룬다 — 대상·가치관 반영은 다음 단계.
+// 직접 비교해 유사도를 판정한다. 대상(object)은 이 판정과 무관하게 jobfinder.ts에서 태그 일치로만 가른다(§32).
+// 가치관은 이 판정 안에 함께 들어간다 — 별도 가중치 공식 없이, 코어 판정과 같은 방식(LLM이 데이터를 보고
+// 한 번에 녹여서 점수 하나를 냄)으로 처리한다. §32 설계 로그 참고.
 import fs from "node:fs";
 import path from "node:path";
 import { z } from "zod";
@@ -13,6 +15,10 @@ export interface OccupationEssence {
   essences: { text: string; grounded_in: string[] }[];
   confidence: "high" | "medium" | "low";
   object: string; // 검색용 대상 18개 중 하나(본질 문장 기준으로 한 번만 태깅, §27·§31 설계 로그)
+  // 가치관 판정용 O*NET Work Styles·Work Context 데이터(§32). 약어 범례는 MATCH_RULES 안에 있다.
+  // 두 다 없는 직업(916개 중 일부, O*NET이 아직 평가 안 함)은 가치관 단계를 건너뛰고 코어만으로 본다.
+  work_styles?: Record<string, number>;
+  work_context?: Record<string, number>;
 }
 
 export interface CoreEssenceMatch {
