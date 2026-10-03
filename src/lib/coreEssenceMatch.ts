@@ -31,7 +31,10 @@ export interface CoreEssenceMatch {
 }
 
 const BATCH_SIZE = 40;
-const CONCURRENCY = 4;
+// 코어가 여럿이면(최대 3개) 예전엔 코어마다 순서대로(동시성 4) 916개를 다 돌아서, 세션 하나에 Vercel 함수
+// 시간제한(300초)을 넘는 경우가 실제로 나왔다(가치관 판정이 합쳐지며 배치당 응답이 길어진 영향도 있음).
+// 코어 전체의 배치를 한 풀에 섞어 동시에 돌리는 쪽(matchCoresToEssences)으로 바꿔서 전체 시간을 줄인다.
+const CONCURRENCY = 10;
 
 let essenceData: OccupationEssence[] | null = null;
 let essenceBySoc: Map<string, OccupationEssence> | null = null;
@@ -188,23 +191,27 @@ async function pool<T>(items: T[], limit: number, fn: (x: T) => Promise<void>) {
   );
 }
 
-/** 코어 하나를 직업 916개 전체의 본질과 비교해 유사도 순으로 정렬한 목록을 돌려준다. */
 export function matchRulesText(): string {
   return MATCH_RULES;
 }
 
-export async function matchCoreToEssences(behavior: Behavior, s?: Session): Promise<CoreEssenceMatch[]> {
+/** 코어 여러 개를 직업 916개 전체의 본질과 한 번에 비교한다(코어마다 유사도 순으로 정렬해 돌려줌).
+ * 코어별로 순서대로 돌리지 않고 모든 코어×배치를 하나의 동시성 풀에 섞어 돌려서, 코어가 여럿일 때도
+ * 전체 걸리는 시간이 코어 수에 비례해 늘지 않게 한다(세션 하나가 Vercel 함수 시간제한을 넘던 문제, §37). */
+export async function matchCoresToEssences(behaviors: Behavior[], s?: Session): Promise<CoreEssenceMatch[][]> {
   const all = loadEssences();
   const batches: OccupationEssence[][] = [];
   for (let i = 0; i < all.length; i += BATCH_SIZE) batches.push(all.slice(i, i + BATCH_SIZE));
 
-  const results: CoreEssenceMatch[] = [];
-  await pool(batches, CONCURRENCY, async (batch) => {
+  const results: CoreEssenceMatch[][] = behaviors.map(() => []);
+  const tasks = behaviors.flatMap((behavior, ci) => batches.map((batch) => ({ ci, behavior, batch })));
+
+  await pool(tasks, CONCURRENCY, async ({ ci, behavior, batch }) => {
     const out = await callJson("jobs", MatchSchema, [cached(MATCH_RULES)], batchUser(behavior, batch, s), s);
     for (const it of out.items) {
       const occ = batch[it.n - 1];
       if (!occ) continue;
-      results.push({
+      results[ci].push({
         soc: occ.soc,
         name: occ.name,
         match: it.match,
@@ -215,5 +222,5 @@ export async function matchCoreToEssences(behavior: Behavior, s?: Session): Prom
     }
   });
 
-  return results.sort((a, b) => b.match - a.match);
+  return results.map((r) => r.sort((a, b) => b.match - a.match));
 }
