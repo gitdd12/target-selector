@@ -5,7 +5,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { OFF_TOPIC, participantSays, pickPersona, pickTargets } from "./persona";
 import { interviewTurn } from "../src/lib/interview";
-import { advance, applyRestatement, applyTurnResult, chooseExtra, finalizeStep, logEvent, startWindow } from "../src/lib/pipeline";
+import { advance, applyRestatement, applyTurnResult, chooseExtra, finalizeStep, logEvent, recordInto, startWindow } from "../src/lib/pipeline";
 import { getStore, newSession, save } from "../src/lib/store";
 import { COVERAGE_KEYS, WINDOW_ORDER, type Situation } from "../src/lib/types";
 
@@ -74,7 +74,13 @@ async function main() {
       w.closeReason = "turn_limit";
       say(`(시험 스크립트가 ${MAX_TURNS}턴에서 강제로 닫음)`);
     }
-    await advance(s);
+    // advance()는 실제 서버에서 응답을 막지 않으려고 기록을 뒤로 미룬다(pending) — 서버는 after()로
+    // 뒤에서 recordWindow를 부르지만, 이 스크립트는 세션 객체를 그대로 쓰니 바로 이어서 처리한다.
+    const pending = await advance(s);
+    if (pending) {
+      await recordInto(s, pending.kind, pending.messages);
+      s.windows[pending.kind].recorded = true;
+    }
     // 경험 2 뒤 선택 카드: EXTRA=yes면 경험 3을 연다(기본: 참가자 설정에 경험 C가 있으면 yes)
     if (s.extraOffer === "pending") {
       const choice = (process.env.EXTRA ?? (pickPersona().includes("경험 C") ? "yes" : "no")) === "yes" ? "yes" : "no";

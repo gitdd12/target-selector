@@ -74,8 +74,11 @@ export function chooseExtra(s: Session, choice: "yes" | "no") {
   }
 }
 
-/** 기록 정리(분석) 하나: 판정 기록 AI 호출 결과를 target.records[kind]에 쓰고 로그를 남긴다. */
-async function recordInto(target: Session, kind: WindowKind, messages: ChatMessage[]) {
+/** 기록 정리(분석) 하나: 판정 기록 AI 호출 결과를 target.records[kind]에 쓰고 로그를 남긴다.
+ * advance()가 응답을 막지 않으려고 기록을 미룰 때(§pending), 호출한 쪽이 뒤에서 이걸 불러 잇는다 —
+ * 실제 서버는 recordWindow(세션을 다시 읽어와서)로, 시험 스크립트처럼 세션 객체를 그대로 쓰는 쪽은
+ * 이 함수를 바로 불러도 된다(export됨). */
+export async function recordInto(target: Session, kind: WindowKind, messages: ChatMessage[]) {
   if (isExpWindow(kind)) {
     const rec = await callJson(
       "recorder",
@@ -113,11 +116,12 @@ export async function advance(s: Session): Promise<{ kind: WindowKind; messages:
     !w.recorded && w.status === "done" && hasUserText && w.closeReason !== "no_experience" && w.closeReason !== "misuse";
 
   if (kind === "exp2" && !s.flagged && w.status === "done" && w.closeReason !== "no_experience") {
-    if (needsRecording) await recordInto(s, kind, w.messages);
-    w.recorded = true;
+    // 경험 3 제안 카드는 s.extraOffer만 보고 뜬다(public.ts) — 기록 정리(AI 호출, 느림)를 기다릴 필요가
+    // 없다. 다음 창을 여는 경우(위 next 분기)와 똑같이 바로 보여주고, 기록은 뒤에서 이어서 한다.
+    if (!needsRecording) w.recorded = true;
     s.extraOffer = "pending";
     logEvent(s, "extra_offered");
-    return null;
+    return needsRecording ? { kind, messages: [...w.messages] } : null;
   }
 
   let next: WindowKind | undefined = WINDOW_ORDER[WINDOW_ORDER.indexOf(kind) + 1];

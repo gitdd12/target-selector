@@ -8,7 +8,7 @@
 //   finalize <sessionId> [situation]  결과지 초안까지 전체 진행
 //   dump <sessionId>               세션 상태 요약 출력
 import { interviewTurn } from "../src/lib/interview";
-import { advance, applyRestatement, applyTurnResult, chooseExtra, finalizeStep, logEvent, startWindow } from "../src/lib/pipeline";
+import { advance, applyRestatement, applyTurnResult, chooseExtra, finalizeStep, logEvent, recordInto, startWindow } from "../src/lib/pipeline";
 import { newSession, save, getStore } from "../src/lib/store";
 import { COVERAGE_KEYS, COVERAGE_LABEL, WINDOW_ORDER, type Situation, type Target } from "../src/lib/types";
 
@@ -100,7 +100,13 @@ async function main() {
     const s = await getStore().get(id);
     if (!s) throw new Error("세션을 찾을 수 없습니다: " + id);
     const prevKind = s.currentWindow;
-    await advance(s);
+    // advance()는 실제 서버에서 응답을 막지 않으려고 기록을 뒤로 미룬다(pending) — 서버는 after()로
+    // 뒤에서 recordWindow를 부르지만, 이 스크립트는 세션 객체를 그대로 쓰니 바로 이어서 처리한다.
+    const pending = await advance(s);
+    if (pending) {
+      await recordInto(s, pending.kind, pending.messages);
+      s.windows[pending.kind].recorded = true;
+    }
     await save(s);
     if ((s.phase as string) === "finalizing") {
       console.log(`(${prevKind} 종료 → 모든 창 끝, 결과지 단계로 넘어갑니다. finalize 명령을 쓰세요)`);
