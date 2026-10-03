@@ -76,6 +76,11 @@ async function call(path: string, body?: unknown, method = "POST") {
     }
   }
 
+  // 마지막 창의 기록 정리(AI 호출)는 advance 응답을 막지 않고 뒤에서 처리된다(pipeline.ts). 실제 화면은
+  // 그 사이 사용자가 "현재 상태"를 고르는 시간이 버퍼가 되지만, 이 스크립트는 situation 단계를 건너뛰고
+  // 바로 email → finalize를 부르니 그 버퍼가 없다 — judge가 빈 기록을 볼 일이 없도록 잠깐 기다려준다.
+  await new Promise((r) => setTimeout(r, 8000));
+
   console.log("\n== 이메일 + 결과지 초안 ==");
   const em = await call(`${base}/email`, { email: "test-e2e@example.com" });
   console.log("이메일 접수:", em.status === 200 ? "OK" : em.status);

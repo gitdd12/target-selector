@@ -103,8 +103,9 @@ export async function recordInto(target: Session, kind: WindowKind, messages: Ch
 
 /** 창 하나가 끝난 뒤: 다음 질문으로 이어지는 경우에는 그 창을 먼저 열고, 방금 끝난 창의 기록 정리(AI 호출, 느림)는
  * 여기서 기다리지 않고 { kind, messages }를 돌려줘서 부른 쪽(advance 라우트)이 응답을 막지 않고 recordWindow로 뒤에서 잇게 한다.
- * "경험 하나 더" 선택 카드로 멈추거나(같은 창이 그대로라 recorded 값으로 카드가 뜨니 미루면 화면이 멈춰 있다), 인터뷰가
- * 끝나는 경우(결과지 초안이 이 기록에 바로 의존한다)는 새 질문을 열지 않으니 기다리는 이점이 없어 그 자리에서 끝낸다. */
+ * 인터뷰가 끝나는 경우도 마찬가지다 — 화면은 phase만 보고 바로 "현재 상태 고르기·이메일" 단계로 넘어가고(판정은
+ * 아직 안 쓰임), 실제 코어 판정(judge)은 그보다 한 번 더 뒤(situation 선택 후 runFinalize)에야 시작되므로
+ * 그 사이 사용자가 고르고 입력하는 시간이 자연스러운 버퍼가 된다. */
 export async function advance(s: Session): Promise<{ kind: WindowKind; messages: ChatMessage[] } | null> {
   const kind = s.currentWindow;
   const w = s.windows[kind];
@@ -147,12 +148,11 @@ export async function advance(s: Session): Promise<{ kind: WindowKind; messages:
     return needsRecording ? { kind, messages: [...w.messages] } : null;
   }
 
-  if (needsRecording) await recordInto(s, kind, w.messages);
-  w.recorded = true;
+  if (!needsRecording) w.recorded = true;
   s.phase = "finalizing";
   s.finalizeStep = "judge";
   logEvent(s, "interview_complete");
-  return null;
+  return needsRecording ? { kind, messages: [...w.messages] } : null;
 }
 
 /** advance()가 다음 창을 이미 연 뒤, 방금 끝난 창의 대화를 기록 필드로 정리한다(응답을 막지 않고 뒤에서 부른다).
