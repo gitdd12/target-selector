@@ -51,8 +51,8 @@ async function call(path: string, body?: unknown, method = "POST") {
       }
       s = r.data;
       if (s.pendingRestatement) {
-        // 재진술 카드: 첫 창과 셋째 창에서는 "더 할 얘기 있어요"를 한 번 눌러보고, 그 뒤에는 "다음 질문으로 넘어갈게요"
-        const action = !pressedMore && (kind === "exp1" || kind === "hardship") ? "more" : "next";
+        // 재진술 카드: 경험 1·2 창에서는 "더 할 얘기 있어요"를 한 번 눌러보고, 그 뒤에는 "다음 질문으로 넘어갈게요"
+        const action = !pressedMore && (kind === "exp1" || kind === "exp2") ? "more" : "next";
         if (action === "more") pressedMore = true;
         const b = await call(`${base}/restatement`, { action });
         if (b.status !== 200) return console.log("재진술 버튼 실패로 중단");

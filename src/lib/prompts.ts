@@ -1,4 +1,4 @@
-import type { ChatMessage, CoverageKey, CoverageValue, ExperienceFields, FinalJudgment, Session, TargetSelection, ValuesFields, WindowKind } from "./types";
+import type { ChatMessage, CoverageKey, CoverageValue, ExperienceFields, FinalJudgment, Session, TargetSelection, WindowKind } from "./types";
 import { EXP_WINDOWS, SITUATION_LABEL, WINDOW_LABEL, WINDOW_ORDER, isExpWindow } from "./types";
 import { celebSpec, judgeSpec, recorderSpec, writerSpec } from "./specs";
 import { explorePlan, shownCandidates } from "./explore";
@@ -109,8 +109,11 @@ const EXP_PRINCIPLES = `## 이 인터뷰의 목적
 - 힘들었던 기억이 나오면 캐묻지 않고 참가자가 말한 만큼만 받습니다.
 - 재진술을 참가자가 바로잡으면("그런 뜻 아니에요") 어디가 다른지 묻고, 앞의 이해는 버리고 새로 받습니다.
 
+## 가치관·성향 신호 (보조 — 코어 확정에는 안 쓰임, coverage에도 안 들어감)
+네 가지가 모두 "확보"나 "답 없음"이 되면, 재진술 카드를 띄우기 전에 딱 한 번만 더 묻습니다: "그때 그 일을 하던 상황 중에 유독 좋았거나 힘들었던 조건이 있었어요? 아니면 그 안에서 본인도 모르게 드러난 모습이 있었어요?" 이미 앞의 대화에서 이런 내용이 자연스럽게 나왔으면 다시 묻지 않습니다. 답이 없거나 "모르겠다"면 그대로 받고 캐묻지 않습니다. 이건 코어와 무관한 가치관 신호라, 답이 없어도 마무리를 막지 않습니다.
+
 ## 마무리
-네 가지가 모두 "확보"나 "답 없음"이 되면 restatement로 이 경험을 사실 그대로 정리합니다. 참가자가 그만하고 싶어 하면 그 자리에서 정리합니다.`;
+네 가지(그리고 위 가치관 질문)가 끝나면 restatement로 이 경험을 사실 그대로 정리합니다. 참가자가 그만하고 싶어 하면 그 자리에서 정리합니다.`;
 
 // 가치관 창(가치관 1·2)
 const VALUES_PRINCIPLES = `## 이 창의 목적
@@ -183,7 +186,8 @@ const RECORDER_RULES = `당신은 "코어 찾기"의 분석 담당입니다. 인
 - 이 기록은 한 개의 대화창만 본 것입니다. 다른 경험과의 반복 여부는 여기서 판단하지 않습니다. status는 "확정(단일 경험)", "후보", "근거 부족" 중 하나이며 스펙의 확정 조건(기본 조건 + 무게 신호 세 가지 중 두 개 이상)에 따릅니다. 먼저 기본 조건(구체적인 행동이 확보됨)을 concrete_action_confirmed에 적습니다. 다음으로 무게 신호 세 가지 — 보탬(added), 만족(satisfaction), 반복(repeated) — 를 weight_signals에 각각 present(true/false)와 근거(사용자 표현 인용)로 적습니다. 같은 발화를 두 신호의 근거로 겹쳐 쓰지 않습니다. 보탬은 그 일이 원래 요구하는 것 말고 본인이 정하거나 더 한 부분이 있을 때 true입니다(그 일을 하기로 한 것 자체와 마감·평가 때문에 한 것은 제외). 만족은 좋았던 이유가 "하려던 게 됐다"거나 "하는 동안 재미있었다"이고 어느 순간 무엇이 좋았는지 짚었을 때 true입니다(남의 평가나 끝난 후련함뿐이면 false). 반복은 이번 방식이 다른 때에, 그 방식을 시키지 않았는데 다시 나왔을 때 true입니다(일 자체는 시켰어도 되고, 대상은 같아도 됩니다). 해야 해서 다시 한 것은 false입니다. 비교 선호(comparison_preference)와 다른 대상 표시(other_object)는 확정 신호가 아닌 기록으로 따로 적습니다. 신호는 대화에 실제로 나온 것만 true로 하고, 의향("하고 싶다")이나 마감·평가 때문에 한 일, 요구된 분량이 원래 많아서 오래 걸렸다는 사실만으로는 true로 하지 않습니다. 인터뷰어가 예시를 들어 물었고 답이 예시를 그대로 따라 한 것 같은데 실제로 있었던 일이 확인되지 않았으면 반복은 false입니다. status는 코드가 이 값으로 다시 계산하니, 근거에 정직하게 적는 것이 중요합니다.
 - 그 행동이 그 분야에서 흔한지, 다른 사람도 보통 그렇게 하는지는 판단에 쓰지 않습니다. 흔한 행동이라는 이유만으로 근거 부족으로 하지 않습니다. 대신 이 사람에게 그 행동이 얼마나 무게가 있었는지를 무게 신호로 봅니다.
 - 지능이 필요해 보이는 방식이라는 이유만으로 제외하지 않습니다.
-- candidate_interpretations에는 이 경험에서 뒷받침되는 코어 후보만 넣습니다. 후보는 이름이 아니라 스펙 "행동 설명을 쓰는 법"의 세 요소(동작·다루는 것의 모양·기준)로 짧게 적고, 대상 이름은 넣지 않습니다. 근거가 약하면 비워둡니다.`;
+- candidate_interpretations에는 이 경험에서 뒷받침되는 코어 후보만 넣습니다. 후보는 이름이 아니라 스펙 "행동 설명을 쓰는 법"의 세 요소(동작·다루는 것의 모양·기준)로 짧게 적고, 대상 이름은 넣지 않습니다. 근거가 약하면 비워둡니다.
+- values_signal(코어 확정과 무관, 직업 매칭의 가치관 단계에서만 쓰임)에는 이 경험에서 유독 좋았거나 힘들었던 주변 조건(사람, 속도, 혼자/같이, 반복 여부 등), 또는 본인도 의식 못 한 성향이 드러난 부분을 사용자 표현으로 적습니다. 대화에 안 나왔거나 애매하면 빈 문자열로 둡니다(억지로 채우지 않습니다).`;
 
 export function recorderSystem(kind: WindowKind) {
   return `${RECORDER_RULES}\n\n# [스펙]\n\n${recorderSpec(kind)}`;
@@ -335,11 +339,8 @@ ${JSON.stringify({ ...final, candidates: shownCandidates(final) }, null, 1)}
 ## 해 볼 일 칸 (직접 해 보기용. 코드가 정한 칸마다 하나씩 쓴다)
 ${exploreText(s)}
 
-## 경험별 분석 기록
+## 경험별 분석 기록 (values_signal은 가치관 신호 — 코어 근거로 안 씀)
 ${JSON.stringify({ exp1: s.records.exp1 ?? null, exp2: s.records.exp2 ?? null, ...(s.records.exp3 ? { exp3: s.records.exp3 } : {}) }, null, 1)}
-
-## 가치관 기록 (values_signal)
-${JSON.stringify({ hardship: (s.records.hardship as ValuesFields | undefined) ?? null, advice: (s.records.advice as ValuesFields | undefined) ?? null }, null, 1)}
 
 ## 사용자 원문
 ${userQuotes}

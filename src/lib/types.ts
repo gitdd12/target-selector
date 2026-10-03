@@ -43,8 +43,10 @@ export const SITUATION_SHORT: Record<Situation, string> = {
 };
 
 // 경험 3은 선택이다(v0.32): 경험 2가 끝나면 참가자가 "경험 하나 더 이야기하기"를 고를 때만 연다. 로직은 경험 2와 같다.
+// hardship·advice는 2026-10-03부터 안 쓴다(§35) — 가치관 신호는 경험 1~3 안에서 ExperienceFields.values_signal로 받는다.
+// 타입·기록은 예전 세션 호환을 위해 남겨둔다(WINDOW_ORDER에서만 뺌, 새 세션은 이 두 창을 절대 열지 않는다).
 export type WindowKind = "exp1" | "exp2" | "exp3" | "hardship" | "advice";
-export const WINDOW_ORDER: WindowKind[] = ["exp1", "exp2", "exp3", "hardship", "advice"];
+export const WINDOW_ORDER: WindowKind[] = ["exp1", "exp2", "exp3"];
 export const EXP_WINDOWS = ["exp1", "exp2", "exp3"] as const;
 export type ExpWindow = (typeof EXP_WINDOWS)[number];
 export const isExpWindow = (k: WindowKind): k is ExpWindow => (EXP_WINDOWS as readonly string[]).includes(k);
@@ -168,6 +170,9 @@ export const ExperienceFieldsSchema = z.object({
     objects: z.string().describe("그 다른 대상(사용자 표현)과 이번 대상과 비슷한지·거리가 먼지. 없으면 빈 문자열"),
     evidence: z.string().describe("사용자 표현 인용. 없으면 빈 문자열"),
   }),
+  // 가치관 신호(§35, 2026-10-03부터). 코어 확정과 무관 — 직업 매칭의 가치관 단계(coreEssenceMatch.ts §32)에서만 쓴다.
+  // 이 경험에서 유독 좋았거나 힘들었던 주변 조건, 또는 본인도 의식 못 한 성향이 드러났으면 사용자 표현으로 적는다. 없으면 빈 문자열(미묘하거나 애매하면 억지로 채우지 않는다).
+  values_signal: z.string().describe("이 경험에서 드러난 가치관·성향 신호(사용자 표현 인용). 없으면 빈 문자열"),
   next_question_and_reason: z.string(),
   status: z.enum(["근거 부족", "후보", "확정(단일 경험)"]),
 });

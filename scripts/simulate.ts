@@ -11,7 +11,7 @@ import { COVERAGE_KEYS, WINDOW_ORDER, type Situation } from "../src/lib/types";
 
 const MAX_TURNS = 40;
 // 재진술 카드에서 "더 할 얘기 있어요"를 한 번 눌러보는 창(버튼 두 가지 경로를 모두 시험)
-const PRESS_MORE_ONCE = new Set(["exp1", "hardship"]);
+const PRESS_MORE_ONCE = new Set(["exp1", "exp2"]);
 
 async function main() {
   // RESUME=<세션id>: 중간에 멈춘 시험을 저장된 지점부터 이어서 한다(같은 PERSONA로)

@@ -154,9 +154,9 @@ Work Context(근무 환경, 1~5, 높을수록 그 요소가 강하거나 자주 
 ## 출력
 - 주어진 모든 직업에 대해 판정합니다(건너뛰지 않습니다). reasoning에는 근거로 쓴 본질 문장의 핵심 구절을 짧게 인용합니다.`;
 
-// 가치관 원문(힘들었던 경험·조언 창에서 나온 values_signal). 둘 다 없으면 가치관 판정은 건너뛴다(§32).
+// 가치관 원문(경험 1~3 안에서 받은 values_signal, §35). 하나도 없으면 가치관 판정은 건너뛴다(§32).
 function valuesBlock(s?: Session): string {
-  const lines = [s?.records.hardship?.values_signal, s?.records.advice?.values_signal].filter(Boolean);
+  const lines = [s?.records.exp1?.values_signal, s?.records.exp2?.values_signal, s?.records.exp3?.values_signal].filter(Boolean);
   if (!lines.length) return "";
   return `\n\n## 이 사람의 가치관(참고 — 모든 직업 판정에 똑같이 적용)\n${lines.map((l) => `- ${l}`).join("\n")}`;
 }

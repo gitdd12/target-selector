@@ -60,7 +60,7 @@ function skipExtra(s: Session) {
   s.windows.exp3 = { kind: "exp3", status: "skipped", closeReason: "declined", messages: [], recorded: true };
 }
 
-/** 경험 2 뒤 선택 카드: yes면 경험 3 창을 열고, no면 건너뛰고 가치관 질문으로 간다. AI를 부르지 않는다. */
+/** 경험 2 뒤 선택 카드: yes면 경험 3 창을 열고, no면 건너뛰고 인터뷰를 끝낸다(exp2는 이미 기록됨). AI를 부르지 않는다. */
 export function chooseExtra(s: Session, choice: "yes" | "no") {
   if (s.extraOffer !== "pending") return;
   s.extraOffer = choice;
@@ -68,7 +68,9 @@ export function chooseExtra(s: Session, choice: "yes" | "no") {
   if (choice === "yes") startWindow(s, "exp3");
   else {
     skipExtra(s);
-    startWindow(s, "hardship");
+    s.phase = "finalizing";
+    s.finalizeStep = "judge";
+    logEvent(s, "interview_complete");
   }
 }
 
@@ -118,10 +120,11 @@ export async function advance(s: Session): Promise<{ kind: WindowKind; messages:
     return null;
   }
 
-  let next = WINDOW_ORDER[WINDOW_ORDER.indexOf(kind) + 1];
+  let next: WindowKind | undefined = WINDOW_ORDER[WINDOW_ORDER.indexOf(kind) + 1];
   if (kind === "exp2" && !s.flagged) {
+    // exp2가 "no_experience"나 "skipped"로 끝난 경우(위 분기를 안 탄 경우) — 경험 3을 건너뛰고 바로 마무리한다.
     skipExtra(s);
-    next = "hardship";
+    next = undefined;
   }
 
   if (s.flagged === "misuse") {
