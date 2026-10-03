@@ -8,6 +8,8 @@
 
 2026-09-30부터 직업 추천은 업무 문장 커버리지 방식(`src/lib/onet31.ts`, `src/lib/embed.ts`, `tasks.json`, `task_emb_*`)을 버리고 "본질 유사도" 방식(`src/lib/coreEssenceMatch.ts`, `occupation_essence.json`)으로 바뀌었다 — 설계 로그는 `docs/직업매칭_본질기반_재설계_2026-09-30.md`. 그 두 모듈은 삭제됐다. `tasks.json`·`task_emb_*`·`dwas.json`은 더 이상 앱이 안 쓰지만, 본질 문장이 O*NET 원문을 빠뜨리지 않았는지 재확인할 때(완전성 검증, 위 로그 §25-26) 여전히 참고용으로 쓰므로 지우지 않았다.
 
+2026-10-03: `occupations_ko.json`의 한국어 이름·설명을 O*NET의 "Job Titles"(Alternate Titles, 직업당 대체 명칭 다수)·"Sample of Reported Titles"(My Next Move에 노출되는 더 추려진 흔한 이름, Y/N 플래그)로 다시 검토했다 — 전에는 "Occupation Data"의 공식 명칭 하나만 보고 지었어서, 실제로 그 직업을 부르는 이름과 동떨어진 경우가 있었다(예: EMT를 "응급구조사"로만 적어 1급(Paramedics)과 구분이 안 됐던 것, "테크니컬 라이터"처럼 음차만 한 것). 20개 서브에이전트로 1,016개를 나눠 검토해 96개를 고쳤다(API 비용 없음). 변경분은 `occupation_essence.json`의 916개 쪽 `name` 필드에도 동기화했다 — 설계 로그 `직업매칭_본질기반_재설계_2026-09-30.md` §34 참고.
+
 ## 파일
 
 | 파일 | 내용 | 원본 |
@@ -17,7 +19,7 @@
 | `tasks.json` | 업무 문장 18,838개. 아래 필드 참고 | Task Statements, Task Ratings, Tasks to DWAs |
 | `excluded_occupations.json` | 직업 추천에서 빼는 직업 8개(종교 3, 장례 5). 직업 코드로 정확히 제외 | 결정 2026-09-25 |
 | `dwas.json` | 업무 활동 계층 2,087행(GWA 41 → IWA 332 → DWA 2,087) | GWAs to IWAs to DWAs |
-| `occupations_ko.json` | 직업 1,016개의 한국어 이름과 한 줄 설명. `{직업코드: {name, desc}}`. 결과지 직업 목록에 그대로 보여준다(설명은 "…하는 일" 꼴). 원문 title·desc를 보고 직접 썼다(API 번역 아님). 이름은 모두 다르다 | 직접 작성 2026-09-26 |
+| `occupations_ko.json` | 직업 1,016개의 한국어 이름과 한 줄 설명. `{직업코드: {name, desc}}`. 실제 서비스는 이 파일을 직접 안 읽는다(916개는 occupation_essence.json에 복사된 값을 쓴다) — 전체 1,016개짜리 정본 기록용. 설명은 "…하는 일" 꼴. 이름은 모두 다르다 | 직접 작성 2026-09-26, 2026-10-03 재검토 |
 | `task_emb_e5.f16` | 업무 문장 임베딩. 고유 문장 17,579개 × 768차원, float16(리틀엔디언) 그대로 이어 붙인 파일(약 27MB). 모델 intfloat/e5-base-v2, 문장 앞에 "passage: "를 붙이고 길이 1로 맞춤 | 직접 생성 2026-09-26 |
 | `task_emb_texts.json` | 위 임베딩의 문장 순서(n번째 줄 = n번째 문장). `tasks.json`의 `text`와 같은 문자열이라 이것으로 업무·직업을 찾는다 | 직접 생성 2026-09-26 |
 
