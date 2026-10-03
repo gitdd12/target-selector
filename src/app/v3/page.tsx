@@ -1,17 +1,17 @@
-import LandingSimple from "@/components/LandingSimple";
+import LandingV2 from "@/components/LandingV2";
 import { env } from "@/lib/env";
 import { MAX_SESSIONS } from "@/lib/config";
 import { getStore } from "@/lib/store";
 
-// 참가자 수 상한을 매번 확인해야 해서 미리 만들어 두지 않고 요청 때마다 그린다.
+// 스크롤 연출이 있던 랜딩. 기본 첫 화면(/) 자리를 더 단순한 버전(LandingSimple)에 내주고 여기로 옮겨와 보존한다.
 export const dynamic = "force-dynamic";
 
-export default async function Home() {
+export default async function V3() {
   let full = false;
   try {
     full = (await getStore().count()) >= MAX_SESSIONS;
   } catch {
     // 저장소를 못 읽어도 첫 화면은 보여준다(시작할 때 다시 확인됨)
   }
-  return <LandingSimple needsCode={Boolean(env("BETA_CODE"))} full={full} />;
+  return <LandingV2 needsCode={Boolean(env("BETA_CODE"))} contact={env("CONTACT_EMAIL")} full={full} />;
 }
