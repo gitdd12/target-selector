@@ -182,11 +182,13 @@ function batchUser(b: Behavior, occs: OccupationEssence[], s?: Session): string 
   return `${behaviorBlock(b, s)}\n\n## 판정할 직업들\n${list}\n\n각 직업에 match(0~95)·reasoning·values_effect·values_note를 매기세요.`;
 }
 
-async function pool<T>(items: T[], limit: number, fn: (x: T) => Promise<void>) {
+/** limit개씩 동시에 돌린다. deadline(Date.now() 기준 ms)을 넘기면 새 항목을 더 안 받고, 이미 시작된
+ * 항목만 끝낸 뒤 돌아온다 — 호출 하나가 Vercel 함수 시간제한을 넘지 않게 중간에 멈추는 용도(§38). */
+async function pool<T>(items: T[], limit: number, deadline: number, fn: (x: T) => Promise<void>) {
   let next = 0;
   await Promise.all(
     Array.from({ length: Math.min(limit, items.length) }, async () => {
-      while (next < items.length) await fn(items[next++]);
+      while (next < items.length && Date.now() < deadline) await fn(items[next++]);
     }),
   );
 }
@@ -195,23 +197,46 @@ export function matchRulesText(): string {
   return MATCH_RULES;
 }
 
-/** 코어 여러 개를 직업 916개 전체의 본질과 한 번에 비교한다(코어마다 유사도 순으로 정렬해 돌려줌).
- * 코어별로 순서대로 돌리지 않고 모든 코어×배치를 하나의 동시성 풀에 섞어 돌려서, 코어가 여럿일 때도
- * 전체 걸리는 시간이 코어 수에 비례해 늘지 않게 한다(세션 하나가 Vercel 함수 시간제한을 넘던 문제, §37). */
-export async function matchCoresToEssences(behaviors: Behavior[], s?: Session): Promise<CoreEssenceMatch[][]> {
+/** 916개 직업을 BATCH_SIZE씩 나눴을 때 배치가 몇 개인지(코어 하나를 끝내려면 이만큼의 배치가 다 끝나야 함). */
+export function totalBatchCount(): number {
+  return Math.ceil(loadEssences().length / BATCH_SIZE);
+}
+
+export interface PendingCore {
+  ci: number;
+  behavior: Behavior;
+  doneBatches: number[]; // 이 코어에서 이미 끝낸 배치 번호(순서 무관, §38 중간 저장)
+}
+
+export interface MatchProgress {
+  byCore: { ci: number; items: CoreEssenceMatch[]; doneBatches: number[] }[];
+}
+
+/** 코어 여러 개를 직업 916개 전체의 본질과 한 번에 비교한다. 코어별로 순서대로 돌리지 않고 모든
+ * 코어×배치를 하나의 동시성 풀에 섞어 돌려서, 코어가 여럿일 때도 전체 걸리는 시간이 코어 수에 비례해
+ * 늘지 않게 한다(§37). 이미 끝낸 배치(doneBatches)는 다시 안 하고, deadline을 넘기면 나머지는 다음
+ * 호출(jobfinder.ts가 doneBatches를 보고 이어받음)로 미룬다(§38) — 결과는 배치가 끝나는 대로 누적된다. */
+export async function matchCoresToEssences(pending: PendingCore[], deadline: number, s?: Session): Promise<MatchProgress> {
   const all = loadEssences();
   const batches: OccupationEssence[][] = [];
   for (let i = 0; i < all.length; i += BATCH_SIZE) batches.push(all.slice(i, i + BATCH_SIZE));
 
-  const results: CoreEssenceMatch[][] = behaviors.map(() => []);
-  const tasks = behaviors.flatMap((behavior, ci) => batches.map((batch) => ({ ci, behavior, batch })));
+  const byCore = pending.map((p) => ({ ci: p.ci, items: [] as CoreEssenceMatch[], doneBatches: [] as number[] }));
+  const byCi = new Map(byCore.map((c) => [c.ci, c]));
 
-  await pool(tasks, CONCURRENCY, async ({ ci, behavior, batch }) => {
+  type Task = { ci: number; behavior: Behavior; batchIndex: number; batch: OccupationEssence[] };
+  const tasks: Task[] = pending.flatMap((p) => {
+    const done = new Set(p.doneBatches);
+    return batches.map((batch, bi) => ({ ci: p.ci, behavior: p.behavior, batchIndex: bi, batch })).filter((t) => !done.has(t.batchIndex));
+  });
+
+  await pool(tasks, CONCURRENCY, deadline, async ({ ci, behavior, batchIndex, batch }) => {
     const out = await callJson("jobs", MatchSchema, [cached(MATCH_RULES)], batchUser(behavior, batch, s), s);
+    const entry = byCi.get(ci)!;
     for (const it of out.items) {
       const occ = batch[it.n - 1];
       if (!occ) continue;
-      results[ci].push({
+      entry.items.push({
         soc: occ.soc,
         name: occ.name,
         match: it.match,
@@ -220,7 +245,8 @@ export async function matchCoresToEssences(behaviors: Behavior[], s?: Session): 
         valuesNote: it.values_note,
       });
     }
+    entry.doneBatches.push(batchIndex);
   });
 
-  return results.map((r) => r.sort((a, b) => b.match - a.match));
+  return { byCore };
 }

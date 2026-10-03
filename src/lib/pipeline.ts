@@ -181,8 +181,9 @@ function emptyJudgment(s: Session): boolean {
  * 직업 목록은 결과지의 "직접 해 보기"(아직 확인 안 된 대상)에 쓰여서 결과지 작성보다 먼저 만든다.
  * 직업 목록은 판정할 문장이 많아 여러 번의 호출에 나눠 진행한다(중간 상태는 s.jobWork).
  * 실패해도 같은 단계부터 다시 할 수 있다. 결과는 참가자에게 보이지 않고, 운영자 검토용으로만 저장된다.
+ * deadline(기본 4분 뒤)을 넘기면 jobs 단계는 중간 상태로 멈춘다 — runFinalize가 이어서 호출을 예약한다(§38).
  */
-export async function finalizeStep(s: Session) {
+export async function finalizeStep(s: Session, deadline = Date.now() + 240_000) {
   switch (s.finalizeStep) {
     case "judge": {
       s.final = await callJson("judge", FinalJudgmentSchema, [cached(judgeSystem())], judgeUser(s), s);
@@ -207,7 +208,7 @@ export async function finalizeStep(s: Session) {
       break;
     }
     case "jobs": {
-      const done = await jobsStep(s);
+      const done = await jobsStep(s, deadline);
       logEvent(s, done ? "jobs_listed" : "jobs_progress", `${s.jobWork?.stage ?? "-"} · ${jobWorkSummary(s.jobWork)}`);
       if (done) s.finalizeStep = "write";
       break;
@@ -243,13 +244,40 @@ export async function finalizeStep(s: Session) {
   }
 }
 
+// jobs 단계가 916개 직업을 다 훑으려면 Vercel 함수 시간제한(300초)보다 오래 걸릴 수 있다(§37에서 실제로 겪음).
+// deadline을 넘기면 중간 상태(doneBatches)를 저장해두고, 스스로를 다시 호출해 새 시간 예산으로 이어받는다(§38).
+// 버그로 끝없이 이어지는 걸 막는 안전장치로 이어서 호출 횟수를 제한한다.
+const MAX_CONTINUATIONS = 8;
+
+async function continueLater(s: Session, sessionId: string, baseUrl?: string) {
+  const n = (s.finalizeContinuations ?? 0) + 1;
+  if (!baseUrl || n > MAX_CONTINUATIONS) {
+    console.error(`[runFinalize] 이어서 호출 ${baseUrl ? n + "번째" : "불가(baseUrl 없음)"} — 멈춤:`, sessionId);
+    return;
+  }
+  s.finalizeContinuations = n;
+  await save(s);
+  try {
+    await fetch(`${baseUrl}/api/sessions/${sessionId}/continue`, { method: "POST" });
+  } catch (e) {
+    console.error("[runFinalize] 이어서 호출 실패", e);
+  }
+}
+
 /** 현재 상태를 고른 뒤(situation 라우트가 응답을 보낸 뒤) 결과지 초안이 끝까지 자동으로 이어지게 한다.
  * 예전에는 참가자 화면(탭)이 열려 있는 동안만 한 걸음씩 진행됐는데, 탭을 닫으면(특히 이메일만 입력하고 나가면)
  * 거기서 멈춰서 운영자가 npm run review로 직접 마무리해야 했다. 단계마다 세션을 다시 읽고 바로 저장해서,
  * 도중에 서버가 멈추거나 운영자가 review 스크립트로 동시에 손대도 이미 끝난 단계는 남는다.
+ * baseUrl이 있으면 시간제한에 걸렸을 때 자기 자신(/continue)을 다시 호출해 새 시간 예산으로 이어간다(§38).
  */
-export async function runFinalize(sessionId: string) {
+export async function runFinalize(sessionId: string, baseUrl?: string) {
+  const deadline = Date.now() + 240_000;
   for (let i = 0; i < 40; i++) {
+    if (Date.now() >= deadline) {
+      const s = await getStore().get(sessionId).catch(() => null);
+      if (s && s.phase === "finalizing") await continueLater(s, sessionId, baseUrl);
+      return;
+    }
     let s: Session | null;
     try {
       s = await getStore().get(sessionId);
@@ -259,7 +287,7 @@ export async function runFinalize(sessionId: string) {
     }
     if (!s || s.phase !== "finalizing") return;
     try {
-      await finalizeStep(s);
+      await finalizeStep(s, deadline);
     } catch (e) {
       console.error("[runFinalize] step", s.finalizeStep, e);
       return; // 여기서 멈춰도 방금까지 성공한 단계는 이미 저장돼 있다. npm run review로 이어서 마무리할 수 있다.
@@ -267,7 +295,8 @@ export async function runFinalize(sessionId: string) {
     await save(s);
     if (s.phase !== "finalizing") return;
   }
-  console.error("[runFinalize] 40번을 넘겨 멈춤:", sessionId);
+  const s = await getStore().get(sessionId).catch(() => null);
+  if (s && s.phase === "finalizing") await continueLater(s, sessionId, baseUrl);
 }
 
 const MORE_REPLY = "네, 더 들려주세요. 다르게 이해한 부분이 있으면 그것도 편하게 말해주세요.";

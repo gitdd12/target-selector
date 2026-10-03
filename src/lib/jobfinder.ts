@@ -1,7 +1,7 @@
 // 직업 목록 만들기(본질 유사도 방식, docs/직업매칭_본질기반_재설계_2026-09-30.md).
 // 확정 코어마다: matchCoresToEssences(코어×직업 916개 본질 유사도, 코어 전체를 한 번에) → 대상(사전 태깅)으로 A/B 분류 → 목록.
 // 옛 방식(업무 문장 판정 → 직업 점수 → 근거 재확인 → 번역)은 완전히 대체됐다 — 더 이상 쓰지 않는다.
-import { getEssence, essenceDesc, matchCoresToEssences } from "./coreEssenceMatch";
+import { getEssence, essenceDesc, matchCoresToEssences, totalBatchCount } from "./coreEssenceMatch";
 import { JOBS } from "./config";
 import type { CoreJobs, JobEntry, JobWork, Session } from "./types";
 
@@ -35,23 +35,41 @@ function scoredOf(w: JobWork["cores"][number]): Scored[] {
 
 // ── 단계 1: 코어×본질 매칭 ─────────────────────────────────────
 // 코어가 여럿이어도 순서대로 하나씩 돌리지 않고 한 번에 묻는다 — 세션 하나가 코어마다 순서대로
-// 916개를 다 돌면 Vercel 함수 시간제한(300초)을 넘는 경우가 실제로 나왔다(§37).
-async function matchStage(s: Session) {
+// 916개를 다 돌면 Vercel 함수 시간제한(300초)을 넘는 경우가 실제로 나왔다(§37). deadline을 넘기면
+// 끝낸 배치만큼만 doneBatches에 쌓아두고 돌아온다 — 다음 호출(이어서 실행, §38)이 나머지를 이어받는다.
+async function matchStage(s: Session, deadline: number): Promise<boolean> {
   const cores = s.final?.cores ?? [];
   const work = s.jobWork!;
-  const pending = cores.map((c, ci) => ({ ci, behavior: c.behavior })).filter(({ ci }) => !work.cores[ci].matches);
+  const total = totalBatchCount();
+  const pending = cores
+    .map((c, ci) => ({ ci, behavior: c.behavior, doneBatches: work.cores[ci].doneBatches ?? [] }))
+    .filter(({ doneBatches }) => doneBatches.length < total);
+
   if (pending.length > 0) {
-    const out = await matchCoresToEssences(pending.map((p) => p.behavior), s);
-    pending.forEach(({ ci }, i) => {
-      work.cores[ci].matches = out[i].map((m) => ({
-        soc: m.soc,
-        name: m.name,
-        match: m.match,
-        ...(m.valuesEffect ? { valuesFit: m.valuesEffect, valuesNote: m.valuesNote } : {}),
-      }));
-    });
+    const { byCore } = await matchCoresToEssences(pending, deadline, s);
+    for (const { ci, items, doneBatches } of byCore) {
+      const entry = work.cores[ci];
+      entry.matches = [
+        ...(entry.matches ?? []),
+        ...items.map((m) => ({
+          soc: m.soc,
+          name: m.name,
+          match: m.match,
+          ...(m.valuesEffect ? { valuesFit: m.valuesEffect, valuesNote: m.valuesNote } : {}),
+        })),
+      ];
+      entry.doneBatches = [...(entry.doneBatches ?? []), ...doneBatches];
+    }
   }
-  work.stage = "lists";
+
+  const done = cores.every((_, ci) => (work.cores[ci].doneBatches?.length ?? 0) >= total);
+  if (done) {
+    // 배치가 끝나는 순서는 일치도 순이 아니다(동시성 풀이라 뒤섞임) — scoredOf/topPerObject가 기대하는
+    // "match 내림차순" 전제를 여기서 한 번 맞춰준다.
+    cores.forEach((_, ci) => work.cores[ci].matches?.sort((a, b) => b.match - a.match));
+    work.stage = "lists";
+  }
+  return done;
 }
 
 // ── 단계 2: A/B 목록 + 탐색 대상 ─────────────────────────────────
@@ -108,13 +126,17 @@ function listsStage(s: Session) {
   work.stage = "done";
 }
 
-/** 직업 목록 단계를 한 걸음 진행한다. 끝나면 true. */
-export async function jobsStep(s: Session): Promise<boolean> {
+/** 직업 목록 단계를 한 걸음 진행한다. deadline을 넘기면 중간 상태로 false를 반환 — 호출한 쪽이
+ * 이어서 실행(§38)을 예약한다. 끝나면 true. */
+export async function jobsStep(s: Session, deadline: number): Promise<boolean> {
   const cores = s.final?.cores ?? [];
   if (cores.length === 0) return true;
   s.jobWork ??= { stage: "match", cores: cores.map(() => ({})) };
   const work = s.jobWork;
-  if (work.stage === "match") await matchStage(s);
+  if (work.stage === "match") {
+    const done = await matchStage(s, deadline);
+    if (!done) return false;
+  }
   if (work.stage === "lists") listsStage(s);
   return work.stage === "done";
 }

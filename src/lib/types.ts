@@ -403,8 +403,11 @@ export interface CoreJobs {
 // 직업 목록 만들기의 중간 상태(코어마다 매칭을 한 번만 돌리면 되므로 단순함)
 export interface JobWork {
   cores: {
-    // matchCoreToEssences 결과(일치도 순). valuesFit/valuesNote는 §32 가치관 판정이 영향을 줬을 때만
+    // matchCoresToEssences 결과(배치가 끝날 때마다 누적됨, 최종 정렬은 다 끝난 뒤 jobfinder.ts가 함).
+    // valuesFit/valuesNote는 §32 가치관 판정이 영향을 줬을 때만
     matches?: { soc: string; name: string; match: number; valuesFit?: "안맞음" | "잘맞음"; valuesNote?: string }[];
+    // 916개 직업을 나눈 배치 중 몇 번째까지 끝났는지(§38, 중간 저장). 전체 배치 수와 같아지면 이 코어는 끝남
+    doneBatches?: number[];
   }[];
   stage: "match" | "lists" | "done";
   both?: string[]; // 두 코어 모두에 걸린 직업 코드
@@ -461,5 +464,8 @@ export interface Session {
   // 마지막 단계 진행 상황(새로고침해도 이어서 하도록)
   // 새 순서: judge → jobs → write → celeb. 직업 목록은 결과지 작성(직접 해 보기)에 쓰여서 먼저 만든다.
   finalizeStep?: "judge" | "write" | "jobs" | "celeb" | "done";
+  // 직업 매칭이 한 번의 서버 호출(Vercel 함수 시간제한) 안에 못 끝나서 스스로 이어서 호출한 횟수(§38).
+  // 무한 반복 방지용 — 이 값이 너무 커지면(진짜 끝나지 않는 문제) 더 이상 스스로 잇지 않고 멈춘다.
+  finalizeContinuations?: number;
   log: { at: string; event: string; detail?: string }[];
 }

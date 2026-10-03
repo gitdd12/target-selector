@@ -25,6 +25,9 @@ export async function POST(req: Request, { params }: Ctx) {
     }
     return json(toPublic(s));
   });
-  if (started) after(() => runFinalize(id));
+  if (started) {
+    const baseUrl = new URL(req.url).origin;
+    after(() => runFinalize(id, baseUrl));
+  }
   return res;
 }
