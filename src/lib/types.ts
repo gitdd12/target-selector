@@ -420,6 +420,9 @@ export interface Session {
   id: string;
   createdAt: string;
   updatedAt: string;
+  // 저장 경쟁(같은 세션에 동시에 두 요청이 들어와 하나가 다른 하나를 덮어쓰는 것) 방지용 버전 번호(§40).
+  // 없으면(예전 세션) 0으로 본다. store.ts의 put()이 저장할 때마다 1씩 올리고, 불러온 값과 다르면 거부한다.
+  rev?: number;
   consent: { at: string; version: string };
   specVersions: { interview: string; result: string };
   models: Record<string, string>;

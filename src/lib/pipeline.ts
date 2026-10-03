@@ -2,7 +2,7 @@ import { cached, callJson } from "./llm";
 import { jobsStep, jobWorkSummary } from "./jobfinder";
 import { computeReliability } from "./reliability";
 import { explorePlan, shownCandidates } from "./explore";
-import { getStore, save } from "./store";
+import { ConflictError, getStore, save } from "./store";
 import type { TurnResult } from "./interview";
 import {
   celebSystem,
@@ -28,6 +28,7 @@ import {
   type ChatMessage,
   type ExperienceFields,
   type Session,
+  type ValuesFields,
   type WindowKind,
 } from "./types";
 
@@ -156,14 +157,44 @@ export async function advance(s: Session): Promise<{ kind: WindowKind; messages:
 }
 
 /** advance()가 다음 창을 이미 연 뒤, 방금 끝난 창의 대화를 기록 필드로 정리한다(응답을 막지 않고 뒤에서 부른다).
- * 그 사이 세션이 더 진행됐을 수 있어서 저장 직전에 세션을 다시 읽어와, 이 창의 기록만 그 위에 얹는다. */
+ * AI 호출(recordInto)은 한 번만 한다 — 저장이 §40의 저장 경쟁으로 실패하면, 세션을 다시 읽어와 이미 나온
+ * 결과만 그 위에 다시 얹어서 저장을 재시도한다(AI를 다시 부르지 않는다). */
 export async function recordWindow(sessionId: string, kind: WindowKind, messages: ChatMessage[]) {
   try {
-    const fresh = await getStore().get(sessionId);
-    if (!fresh) return;
-    await recordInto(fresh, kind, messages);
-    if (fresh.windows[kind]) fresh.windows[kind].recorded = true;
-    await save(fresh);
+    const base = await getStore().get(sessionId);
+    if (!base) return;
+    const before = { ...base.usage };
+    await recordInto(base, kind, messages);
+    const rec = base.records[kind];
+    const usedDelta = {
+      calls: base.usage.calls - before.calls,
+      input: base.usage.input - before.input,
+      output: base.usage.output - before.output,
+      cacheRead: base.usage.cacheRead - before.cacheRead,
+      cacheWrite: base.usage.cacheWrite - before.cacheWrite,
+    };
+
+    for (let attempt = 1; ; attempt++) {
+      const target = attempt === 1 ? base : await getStore().get(sessionId);
+      if (!target) return;
+      if (attempt > 1) {
+        if (isExpWindow(kind)) target.records[kind] = rec as ExperienceFields;
+        else target.records[kind] = rec as ValuesFields;
+        target.usage.calls += usedDelta.calls;
+        target.usage.input += usedDelta.input;
+        target.usage.output += usedDelta.output;
+        target.usage.cacheRead += usedDelta.cacheRead;
+        target.usage.cacheWrite += usedDelta.cacheWrite;
+        logEvent(target, "recorded", kind);
+      }
+      if (target.windows[kind]) target.windows[kind].recorded = true;
+      try {
+        await save(target);
+        return;
+      } catch (e) {
+        if (!(e instanceof ConflictError) || attempt >= 3) throw e;
+      }
+    }
   } catch (e) {
     console.error("[recordWindow]", kind, e);
   }

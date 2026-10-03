@@ -32,6 +32,14 @@ export interface Store {
 // 링크에 들어가는 비밀 코드 형식. 폴더 경로 조작 같은 것을 막는 검사도 겸한다.
 export const isValidId = (id: string) => /^[A-Za-z0-9_-]{24,64}$/.test(id);
 
+// put()이 저장하려는 세션의 rev가 이미 저장소에 있는 값과 다를 때 던진다(§40) — 그 사이 다른 요청이
+// 먼저 저장했다는 뜻이다. 부른 쪽은 세션을 다시 읽어와 같은 작업을 그 위에 다시 적용해야 한다.
+export class ConflictError extends Error {
+  constructor() {
+    super("세션이 그 사이 다른 곳에서 저장됐어요(저장 경쟁)");
+  }
+}
+
 class FileStore implements Store {
   private root = path.join(process.cwd(), ".data");
   private file(kind: "sessions" | "contacts", id: string) {
@@ -52,6 +60,11 @@ class FileStore implements Store {
     return this.read<Session>("sessions", id);
   }
   async put(s: Session) {
+    // 로컬 시험용이라 완벽한 원자성은 없지만(파일 시스템), 같은 rev일 때만 쓰게 해서 §40의 저장 경쟁을 재현·시험할 수 있게 한다.
+    const expected = s.rev ?? 0;
+    const current = this.read<Session>("sessions", s.id);
+    if (current && (current.rev ?? 0) !== expected) throw new ConflictError();
+    s.rev = expected + 1;
     this.write("sessions", s.id, s);
   }
   async del(id: string) {
@@ -113,10 +126,32 @@ class SupabaseStore implements Store {
     return (data?.data as Session | undefined) ?? null;
   }
   async put(s: Session) {
-    const { error } = await this.db
+    // §40: rev가 저장소의 값과 같을 때만 쓴다(동시에 두 요청이 같은 세션을 읽고 저장하면, 먼저 저장한 쪽만
+    // 성공하고 나중 쪽은 ConflictError를 받아 다시 읽어와서 다시 시도해야 한다 — 안 그러면 늦게 도착한 쪽이
+    // 먼저 저장된 내용을 그냥 덮어써서 조용히 사라진다. 실제로 이메일 제출이 이렇게 사라진 사례가 있었다).
+    const expected = s.rev ?? 0;
+    const newRev = expected + 1;
+    const { data, error } = await this.db
       .from("sessions")
-      .upsert({ id: s.id, data: s, updated_at: new Date().toISOString() });
+      .update({ data: { ...s, rev: newRev }, rev: newRev, updated_at: new Date().toISOString() })
+      .eq("id", s.id)
+      .eq("rev", expected)
+      .select("id");
     if (error) throw new Error(`저장소 쓰기 실패: ${error.message}`);
+    if (!data || data.length === 0) {
+      // 업데이트된 행이 없다 — 이 세션이 아직 없거나(첫 저장), rev가 달라서(저장 경쟁)다. 구분해서 처리한다.
+      const { data: existing, error: selErr } = await this.db.from("sessions").select("rev").eq("id", s.id).maybeSingle();
+      if (selErr) throw new Error(`저장소 읽기 실패: ${selErr.message}`);
+      if (existing) throw new ConflictError();
+      const { error: insErr } = await this.db
+        .from("sessions")
+        .insert({ id: s.id, data: { ...s, rev: newRev }, rev: newRev, updated_at: new Date().toISOString() });
+      if (insErr) {
+        if (insErr.code === "23505") throw new ConflictError(); // 그 사이 다른 요청이 먼저 만들었다
+        throw new Error(`저장소 쓰기 실패: ${insErr.message}`);
+      }
+    }
+    s.rev = newRev;
   }
   async del(id: string) {
     const c = await this.db.from("contacts").delete().eq("session_id", id);
@@ -182,6 +217,7 @@ export function newSession(profile: Session["profile"] = {}): Session {
     id: randomBytes(24).toString("base64url"),
     createdAt: now,
     updatedAt: now,
+    rev: 0,
     consent: { at: now, version: CONSENT_VERSION },
     specVersions: specVersions(),
     models: { ...MODELS },

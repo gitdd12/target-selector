@@ -1,6 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { ConfigError, LlmRefusal } from "./llm";
-import { getStore, isValidId, save } from "./store";
+import { ConflictError, getStore, isValidId, save } from "./store";
 import type { Session } from "./types";
 
 export const json = (body: unknown, status = 200) => Response.json(body, { status });
@@ -17,8 +17,18 @@ export function errorResponse(e: unknown): Response {
   if (e instanceof Anthropic.RateLimitError || (e instanceof Anthropic.APIError && (e.status ?? 0) >= 500)) {
     return json({ error: "busy", message: "지금 AI가 바빠요. 잠시 뒤에 다시 시도해주세요." }, 503);
   }
+  if (e instanceof ConflictError) {
+    return json({ error: "busy", message: "방금 다른 요청과 겹쳤어요. 다시 시도해주세요." }, 409);
+  }
   return json({ error: "server", message: "잠시 문제가 생겼어요. 다시 시도해주세요." }, 500);
 }
+
+// 같은 세션에 두 요청이 거의 동시에 들어오면(중복 클릭, 네트워크 재시도 등) 먼저 저장한 쪽만 성공하고
+// 나중 쪽은 store.ts의 ConflictError를 받는다 — 그래서 세션을 다시 읽어와 fn을 다시 돌린다(§40).
+// 예전엔 나중 요청이 그냥 자기가 읽은(이미 낡은) 상태로 덮어써서, 그 사이 먼저 저장된 내용(예: 이메일 제출)이
+// 조용히 사라졌다. fn 안에 AI 호출이 있는 라우트(chat, finalize)는 재시도 때 그 호출도 다시 돈다 —
+// 거의 안 일어나는 경쟁 상황에서만 드는 비용이라, 데이터가 조용히 사라지는 것보다 훨씬 낫다고 본다.
+const MAX_SAVE_ATTEMPTS = 3;
 
 /** 세션을 불러와 처리하고 저장까지 한다. 링크의 비밀 코드가 곧 접근 권한이다. */
 export async function withSession(
@@ -27,11 +37,17 @@ export async function withSession(
 ): Promise<Response> {
   if (!isValidId(id)) return json({ error: "not_found" }, 404);
   try {
-    const s = await getStore().get(id);
-    if (!s) return json({ error: "not_found" }, 404);
-    const res = await fn(s);
-    await save(s);
-    return res ?? json({ ok: true });
+    for (let attempt = 1; ; attempt++) {
+      const s = await getStore().get(id);
+      if (!s) return json({ error: "not_found" }, 404);
+      const res = await fn(s);
+      try {
+        await save(s);
+        return res ?? json({ ok: true });
+      } catch (e) {
+        if (!(e instanceof ConflictError) || attempt >= MAX_SAVE_ATTEMPTS) throw e;
+      }
+    }
   } catch (e) {
     return errorResponse(e);
   }
