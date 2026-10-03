@@ -133,6 +133,10 @@ export async function interviewTurn(s: Session, kind: WindowKind): Promise<TurnR
         ),
       ],
       messages: toApiMessages(s, kind),
+      // 창 하나 안에서 매 턴마다 그 창의 대화 전체를 다시 보낸다(API가 상태를 안 가지고 있어서 어쩔 수 없음) —
+      // 이전 턴까지의 대화는 안 바뀌니, 맨 끝에 캐시 경계를 하나 더 둬서(top-level cache_control, 시스템 프롬프트와
+      // 별개) 다음 턴부터는 그만큼을 캐시 요금으로 재사용한다. 턴이 쌓일수록 안 캐시하면 비용이 턴 수의 제곱에 가깝게 는다.
+      cache_control: { type: "ephemeral" as const },
     });
 
     let res;
